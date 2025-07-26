@@ -32,7 +32,14 @@ export function EcommerceSearch() {
     };
     message: string;
     status: number;
-  } | null>(null)
+  } | null>({
+    intent: {
+      title: 'Blazer',
+      attrs: ['Lightweight', 'Professional', 'Wrinkle-Resistant', 'Linen']
+    },
+    message: 'Based on your search for work attire that balances packability with professional style.',
+    status: 200
+  })
 
 // Initialize with shuffled products
 useEffect(() => {
