@@ -292,7 +292,7 @@ useEffect(() => {
       )}
       {/* Products Grid */}
       {searchState.hasSearched && (
-        <div className="relative z-10 pt-24 pb-32">
+        <div className="relative z-10 pt-8 pb-32">
           <div className="container mx-auto px-4">
             <div className="mb-8 text-center">
               {/* <h2 className="text-2xl md:text-3xl font-light text-gray-900 mb-2">
