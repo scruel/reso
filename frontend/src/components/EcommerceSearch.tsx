@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { SearchBox } from './SearchBox'
 import { ProductGrid } from './ProductGrid'
+import { TypewriterText } from './TypewriterText'
 import { mockProducts } from '@/data/products'
 import { Product, SearchState } from '@/types/product'
 import { shuffleArray, debounce } from '@/lib/utils'
@@ -181,16 +182,7 @@ useEffect(() => {
             </div>
           </div>
           <div className="ml-auto bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-md">
-            <p className="text-sm text-gray-700 mb-2">{backendResponse.message}</p>
-            <div className="flex justify-between items-center text-xs text-gray-500">
-              <span>Status: {backendResponse.status}</span>
-              <button 
-                onClick={() => setBackendResponse(null)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                ✕
-              </button>
-            </div>
+            <TypewriterText text={backendResponse.message} speed={30} />
           </div>
         </div>
       )}
