@@ -160,7 +160,7 @@ async def vibe(id: int = None):
   }
 
 @app.get("/api/products")
-async def vibe(id: int = None):
+async def vibe():
     return {
         "threads": [
             {
