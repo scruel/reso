@@ -36,6 +36,7 @@ def query(text: str):
     article_collection = client.collections.get(collection_name)
     vector = qwen.get_embedding(text)
     response = article_collection.query.near_vector(
+      
         # 指定目标向量
         target_vector="detail",
         # 文本向量
@@ -52,3 +53,4 @@ def query(text: str):
         print(o.metadata.distance)
 
     client.close()  # Free up resources
+    return response.objects
