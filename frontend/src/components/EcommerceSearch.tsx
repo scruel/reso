@@ -220,18 +220,22 @@ useEffect(() => {
   }
 
   return (
-    <div className="relative min-h-screen z-20">
-      {/* RESO */}
-      <div className="absolute top-2 left-8 z-50 text-2xl font-light tracking-wider text-gray-700">
-        RESO
+    <>
+      {/* Purple Top Navigation Bar - Separate from page content */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-purple-600 h-12 flex items-center px-6">
+        <div className="text-white text-xl font-medium tracking-wide">
+          Reso
+        </div>
       </div>
 
-      {/* Background with subtle pattern */}
-      <div className="absolute inset-0 bg-gray-100" />
+      {/* Main Page Content */}
+      <div className="relative min-h-screen z-20 pt-12">
+        {/* Background with subtle pattern */}
+        <div className="absolute inset-0 bg-gray-100" />
       
       {/* Hero section with branding */}
       {!searchState.hasSearched && (
-        <div className="relative z-10 pt-20 pb-32 text-center">
+        <div className="relative z-10 pt-32 pb-32 text-center">
           <div className="animate-fade-in">
             <h1 className="text-5xl md:text-6xl font-light text-gray-900 mb-4 tracking-tight">
               RESO
@@ -290,20 +294,24 @@ useEffect(() => {
           </div>
         </div>
       )}
-      {/* Products Grid */}
-      {searchState.hasSearched && (
-        <div className="relative z-10 pt-2 pb-8">
-          <div className="container mx-auto px-4">
-            
-            <ProductGrid 
-              products={displayProducts} 
-              isLoading={searchState.isSearching}
-              searchQuery={searchState.query}
-            />
+        {/* Products Grid */}
+        {searchState.hasSearched && (
+          <div className="relative z-10 pt-2 pb-8">
+            <div className="container mx-auto px-4">
+              
+              <ProductGrid 
+                products={displayProducts} 
+                isLoading={searchState.isSearching}
+                searchQuery={searchState.query}
+              />
+            </div>
           </div>
-        </div>
-      )}
-      
-    </div>
+        )}
+        
+        {/* Bottom fade overlay for dreamy effect */}
+        <div className="fixed bottom-0 left-0 right-0 h-24 pointer-events-none z-30 bg-gradient-to-t from-gray-100 via-gray-100/60 to-transparent" />
+        
+      </div>
+    </>
   )
 }
