@@ -58,7 +58,7 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
   return (
     <div
       ref={cardRef}
-      className="w-full group cursor-pointer animate-fade-in transition-all duration-300 hover:scale-[1.015] hover:shadow-xl"
+      className="w-full group cursor-pointer animate-fade-in transition-transform hover:scale-[1.015]"
       style={{ animationDelay: `${delay}ms` }}
       onClick={handleVisit}
     >

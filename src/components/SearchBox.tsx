@@ -61,9 +61,9 @@ export function SearchBox({ onSearch, onReset, isSearching, hasSearched, query }
             onChange={handleInputChange}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            placeholder="Search..."
+            placeholder="Text whatever you want"
             className={cn(
-              "w-full pl-14 pr-24 py-4",
+              "w-full pl-8 pr-24 py-4",
               "bg-white/10 backdrop-blur-md",
               "border border-white/30",
               "rounded-[2rem]",
@@ -75,7 +75,7 @@ export function SearchBox({ onSearch, onReset, isSearching, hasSearched, query }
             disabled={isSearching}
           />
           
-          {/* Search Icon */}
+          {/* Search Icon
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
             {isSearching ? (
               <div className="animate-spin">
@@ -84,7 +84,7 @@ export function SearchBox({ onSearch, onReset, isSearching, hasSearched, query }
             ) : (
               <Search className="w-5 h-5" />
             )}
-          </div>
+          </div> */}
           
           {/* Clear/Reset Button */}
           {(inputValue || hasSearched) && (

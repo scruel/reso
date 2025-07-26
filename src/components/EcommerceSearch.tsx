@@ -86,6 +86,11 @@ export function EcommerceSearch() {
 
   return (
     <div className="relative min-h-screen">
+      {/* RESO */}
+      <div className="absolute top-4 left-4 z-50 text-2xl font-light tracking-wider text-gray-700">
+        RESO
+      </div>
+
       {/* Background with subtle pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50/30" />
       
@@ -94,10 +99,10 @@ export function EcommerceSearch() {
         <div className="relative z-10 pt-20 pb-32 text-center">
           <div className="animate-fade-in">
             <h1 className="text-5xl md:text-6xl font-light text-gray-900 mb-4 tracking-tight">
-              AI 精選購物
+              RESO
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-12 font-light">
-              由人工智慧策劃的現代購物體驗
+              由 AI 策劃的現代購物體驗
             </p>
           </div>
         </div>
@@ -117,12 +122,12 @@ export function EcommerceSearch() {
         <div className="relative z-10 pt-24 pb-32">
           <div className="container mx-auto px-4">
             <div className="mb-8 text-center">
-              <h2 className="text-2xl md:text-3xl font-light text-gray-900 mb-2">
+              {/* <h2 className="text-2xl md:text-3xl font-light text-gray-900 mb-2">
                 {searchState.query ? `「${searchState.query}」的搜尋結果` : '精選商品'}
-              </h2>
-              <p className="text-gray-600">
+              </h2> */}
+              {/* <p className="text-gray-600">
                 找到 {displayProducts.length} 個符合的商品
-              </p>
+              </p> */}
             </div>
             
             <ProductGrid 
