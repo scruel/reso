@@ -11,3 +11,4 @@ htmlcov
 qwen_embeddings_cache.pkl
 *.egg-info
 frontend/.next/
+frontend_original/
