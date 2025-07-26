@@ -257,33 +257,37 @@ useEffect(() => {
       {/* Backend Response Display */}
       {backendResponse && searchState.hasSearched && (
         <div className="relative z-40 mt-20">
-        <div className="flex justify-between items-start flex-wrap gap-6 px-6 py-8 bg-gray-50">
-          {/* 左：Blazer + tags 在同一個卡片 */}
-          <div className="bg-white shadow-sm rounded-xl px-6 py-4 flex flex-wrap gap-4 items-center max-w-[60%]">
-            {/* Icon + Title */}
-            <div className="flex items-center gap-3">
-              <span className="text-4xl">🧥</span>
-              <span className="text-2xl font-bold text-gray-800">{backendResponse.intent.title}</span>
-            </div>
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2">
-              {backendResponse.intent.attrs.map((attr, index) => (
-                <span
-                  key={index}
-                  className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full"
-                >
-                  {attr}
-                </span>
-              ))}
-            </div>
-          </div>
+          <div className="flex justify-between items-start gap-6 px-6 py-8 bg-gray-50 flex-wrap">
+            {/* 左區：Title + Tags 區塊（白底卡） */}
+            <div className="bg-white rounded-2xl shadow-sm px-6 py-4 flex w-full max-w-[60%]">
+              {/* 左側 Icon + Title */}
+              <div className="flex-shrink-0 flex flex-col items-start pt-1">
+                <div className="w-12 h-12 mb-1 flex items-center justify-center text-3xl">🧥</div>
+                <h1 className="text-2xl font-bold text-gray-800">{backendResponse.intent.title}</h1>
+              </div>
 
-          {/* 右：動態訊息 */}
-          <div className="bg-white p-4 rounded-xl shadow-md max-w-[35%] min-w-[280px] text-sm text-gray-700 leading-relaxed flex gap-2">
-            <Sparkles className="text-purple-500 mt-0.5 shrink-0" size={18} />
-            <p className="transition-all duration-500">{backendResponse.message}</p>
+              {/* 右側 Tags - 對齊 Title 的上緣 */}
+              <div className="ml-6 flex flex-wrap items-start gap-2">
+                {backendResponse.intent.attrs.map((tag, i) => (
+                  <span
+                    key={i}
+                    className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-md"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* 右區：AI message 區塊 */}
+            <div className="bg-white p-4 rounded-2xl shadow-sm max-w-[35%] min-w-[280px] text-sm text-gray-700 leading-relaxed flex gap-2">
+              <span className="text-purple-500 text-xl">✨</span>
+              <p>
+                <strong>{dynamicMessages[messageIndex]}</strong><br />
+                {backendResponse.message}
+              </p>
+            </div>
           </div>
-        </div>
         </div>
       )}
       {/* Products Grid */}
