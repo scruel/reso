@@ -266,7 +266,7 @@ useEffect(() => {
       
       setDisplayThreads(shuffleArray(mockThreads))
     }
-  }, 500)
+  }, 200)
 
   // Get or create persistent user UUID
   const getUserUuid = () => {

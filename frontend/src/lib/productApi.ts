@@ -6,8 +6,7 @@ export async function fetchProductDetail(threadId: string): Promise<ProductDetai
   // const response = await fetch(`/api/product/${threadId}`);
   // return response.json();
   
-  // 模擬 API 響應
-  await new Promise(resolve => setTimeout(resolve, 800)); // 模擬網路延遲
+  // 使用实时数据，无需模拟延迟
   
   // 基於 threadId 返回不同的模擬數據
   const mockResponses: Record<string, ProductDetailResponse> = {

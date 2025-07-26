@@ -63,8 +63,7 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Remove artificial delay for better performance
     
     const threadDetail = mockThreadDetails[id];
     
