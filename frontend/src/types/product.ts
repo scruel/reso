@@ -9,8 +9,8 @@ export interface Product {
   rating: number;
   url: string;
 
-  flowImage: string;
-  author: string;
+  flowImage?: string;
+  author?: string;
 }
 
 export interface SearchState {

@@ -222,7 +222,7 @@ useEffect(() => {
   return (
     <div className="relative min-h-screen z-20">
       {/* RESO */}
-      <div className="absolute top-8 left-8 z-50 text-2xl font-light tracking-wider text-gray-700">
+      <div className="absolute top-2 left-8 z-50 text-2xl font-light tracking-wider text-gray-700">
         RESO
       </div>
 
