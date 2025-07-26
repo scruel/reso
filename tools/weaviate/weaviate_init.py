@@ -29,11 +29,12 @@ client = weaviate.connect_to_custom(
 
 
 collection_name = "ResoGoods"
+client.collections.delete(collection_name)
 client.collections.create(
     name=collection_name,
     # 定义文本属性
     properties=[
-        Property(name="id", data_type=DataType.INT),
+        Property(name="goodId", data_type=DataType.INT),
         Property(name="name", data_type=DataType.TEXT),
         Property(name="price", data_type=DataType.TEXT),
         Property(name="brandName", data_type=DataType.TEXT),
@@ -46,7 +47,7 @@ client.collections.create(
     # 定义向量属性
     vectorizer_config=[
         Configure.NamedVectors.none(name="name"),
-        Configure.NamedVectors.none(name="goodName"),
+        Configure.NamedVectors.none(name="detail"),
     ]
 )
 
@@ -58,13 +59,14 @@ def insert(item):
     article_collection = client.collections.get(collection_name)
     
     # 检查是否已存在相同 ID 的数据
+    from weaviate.classes.query import Filter
     existing_items = article_collection.query.fetch_objects(
-        where=article_collection.query.where.equal("id", item["id"]),
+        filters=Filter.by_property("goodId").equal(item["goodId"]),
         limit=1
     )
     
     if existing_items.objects:
-        print(f"跳过插入: ID {item['id']} 已存在")
+        print(f"跳过插入: ID {item['goodId']} 已存在")
         return
 
     # 如果不存在，则插入新数据
@@ -100,14 +102,14 @@ def process_goods_directory(base_path="/home/scruel/reso/resource/good"):
             # 读取 clean_data.json
             with open(clean_data_path, 'r', encoding='utf-8') as f:
                 clean_data = json.load(f)
-            
+
             # 读取 detail.txt
             with open(detail_path, 'r', encoding='utf-8') as f:
                 detail_content = f.read()
             
             # 转换数据格式以匹配 weaviate_init.py 中的 insert 方法
             item = {
-                "id": int(subdir),  # 使用文件夹名作为 id
+                "goodId": int(subdir),  # 使用文件夹名作为 id
                 "name": clean_data.get("good_short_name", ""),
                 "price": clean_data.get("price", ""),
                 "brandName": clean_data.get("brand_name", ""),
@@ -123,6 +125,7 @@ def process_goods_directory(base_path="/home/scruel/reso/resource/good"):
             insert(item)
             print(f"成功插入商品 {subdir}")
         except Exception as e:
+            raise e
             print(f"处理文件夹 {subdir} 时出错: {str(e)}")
             continue
 
