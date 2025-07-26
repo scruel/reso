@@ -155,7 +155,7 @@ useEffect(() => {
   }
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen z-20">
       {/* RESO */}
       <div className="absolute top-4 left-4 z-50 text-2xl font-light tracking-wider text-gray-700">
         RESO
@@ -191,6 +191,7 @@ useEffect(() => {
       
       {/* Backend Response Display */}
       {backendResponse && (
+        <div className="relative z-40 mt-20">
         <div className="flex justify-between items-start flex-wrap gap-6 px-6 py-8 bg-gray-50">
           {/* 左側：Title + Tags */}
           <div className="flex flex-wrap items-center gap-3 max-w-[65%]">
@@ -218,6 +219,7 @@ useEffect(() => {
               <TypewriterText text={backendResponse.message} speed={30} />
             </div>
           </div>
+        </div>
         </div>
       )}
       {/* Products Grid */}
