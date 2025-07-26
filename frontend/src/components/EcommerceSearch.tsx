@@ -134,7 +134,16 @@ useEffect(() => {
       query: '',
       results: []
     })
-    setBackendResponse(null)
+    // Keep backend response visible after reset
+    const defaultBackendResponse = {
+      intent: {
+        title: '精選商品',
+        attrs: ['精選', '品質', '設計', '實用']
+      },
+      message: `為您精選 ${mockProducts.length} 個優質商品，涵蓋各種風格與需求。`,
+      status: 200
+    }
+    setBackendResponse(defaultBackendResponse)
     setDisplayProducts(shuffleArray(mockProducts))
   }
 
@@ -174,7 +183,7 @@ useEffect(() => {
       </div>
       
       {/* Backend Response Display */}
-      {backendResponse && searchState.hasSearched && (
+      {backendResponse && (
         <div className="flex justify-between items-start flex-wrap gap-6 px-6 py-8 bg-gray-50">
           {/* 左側：Title + Tags */}
           <div className="flex flex-wrap items-center gap-3 max-w-[65%]">
