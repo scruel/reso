@@ -13,6 +13,7 @@ from typing import List, Union, Dict, Optional
 import dashscope
 from dashscope import TextEmbedding
 import logging
+from openai import OpenAI
 
 logger = logging.getLogger(__name__)
 
@@ -43,48 +44,23 @@ class KimiGPTService:
         self.base_url = "https://api.moonshot.cn/v1"
       
     def generate(self, text: str) -> str:
-        """
-        生成文本嵌入向量
-        
-        Args:
-            text: 输入文本字符串或字符串列表
-            
-        Returns:
-            如果输入为字符串，返回单个嵌入向量；如果输入为列表，返回多个向量
-        """
         try:
-            # 确保text是列表格式
-            if isinstance(text, str):
-                texts = [text]
-                single_input = True
-            else:
-                texts = text
-                single_input = False
-            
-            headers = {
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json"
-            }
-            
-            data = {
-                "model": "text-embedding-v1",
-                "input": texts
-            }
-            
-            response = requests.post(
-                f"{self.base_url}/embeddings",
-                headers=headers,
-                json=data
+            client = OpenAI(
+                api_key=self.api_key,
+                base_url= self.base_url
             )
             
-            if response.status_code != 200:
-                raise Exception(f"API调用失败: {response.text}")
+            completion = client.chat.completions.create(
+                model = "kimi-k2-0711-preview",
+                messages = [
+                    {"role": "system", "content": "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。同时，你会拒绝一切涉及恐怖主义，种族歧视，黄色暴力等问题的回答。Moonshot AI 为专有名词，不可翻译成其他语言。"},
+                    {"role": "user", "content": text}
+                ],
+                temperature = 0.6,
+            )
             
-            result = response.json()
-            embeddings = [item["embedding"] for item in result["data"]]
-            
-            return embeddings[0] if single_input else embeddings
-            
+            # 通过 API 我们获得了 Kimi 大模型给予我们的回复消息（role=assistant）
+            print(completion.choices[0].message.content)
         except Exception as e:
             logger.error(f"生成嵌入向量失败: {e}")
             raise
