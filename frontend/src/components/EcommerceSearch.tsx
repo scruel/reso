@@ -26,6 +26,15 @@ export function EcommerceSearch() {
   }, []);
 
   const [displayProducts, setDisplayProducts] = useState<Product[]>([])
+  // Dynamic messages that change every 5 seconds
+  const dynamicMessages = [
+    'Based on your search for work attire that balances packability with professional style.',
+    'Analyzing fashion intent for professional occasions...',
+    'AI is selecting versatile blazers for work and travel.',
+    'Recommending wrinkle-resistant styles based on your taste...',
+  ];
+  
+  const [messageIndex, setMessageIndex] = useState(0);
   const [backendResponse, setBackendResponse] = useState<{
     intent: {
       title: string;
@@ -39,6 +48,25 @@ export function EcommerceSearch() {
 useEffect(() => {
   setDisplayProducts(shuffleArray(mockProducts));
 }, [])
+
+// Dynamic message switching every 5 seconds
+useEffect(() => {
+  const interval = setInterval(() => {
+    setMessageIndex((prev) => (prev + 1) % dynamicMessages.length)
+  }, 5000)
+
+  return () => clearInterval(interval)
+}, [])
+
+// Update backend response message when index changes
+useEffect(() => {
+  if (backendResponse) {
+    setBackendResponse((prev) => prev ? {
+      ...prev,
+      message: dynamicMessages[messageIndex],
+    } : null)
+  }
+}, [messageIndex, backendResponse])
 
   // Debounced search function
   const debouncedSearch = debounce(async (query: string) => {
@@ -210,31 +238,30 @@ useEffect(() => {
       {backendResponse && searchState.hasSearched && (
         <div className="relative z-40 mt-20">
         <div className="flex justify-between items-start flex-wrap gap-6 px-6 py-8 bg-gray-50">
-          {/* 左側：Title + Tags */}
-          <div className="flex flex-wrap items-center gap-3 max-w-[65%]">
-            {/* 標題卡片 */}
-            <div className="flex items-center bg-white px-4 py-2 rounded-xl shadow-sm">
-              <span className="text-4xl mr-2">🧥</span>
+          {/* 左：Blazer + tags 在同一個卡片 */}
+          <div className="bg-white shadow-sm rounded-xl px-6 py-4 flex flex-wrap gap-4 items-center max-w-[60%]">
+            {/* Icon + Title */}
+            <div className="flex items-center gap-3">
+              <span className="text-4xl">🧥</span>
               <span className="text-2xl font-bold text-gray-800">{backendResponse.intent.title}</span>
             </div>
-
-            {/* 標籤群 */}
-            {backendResponse.intent.attrs.map((attr, index) => (
-              <span
-                key={index}
-                className="bg-white text-gray-700 text-sm px-3 py-1 rounded-full shadow-sm border border-gray-200"
-              >
-                {attr}
-              </span>
-            ))}
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2">
+              {backendResponse.intent.attrs.map((attr, index) => (
+                <span
+                  key={index}
+                  className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full"
+                >
+                  {attr}
+                </span>
+              ))}
+            </div>
           </div>
 
-          {/* 右側：Insight 提示框 */}
-          <div className="bg-white p-4 rounded-xl shadow-md max-w-[30%] min-w-[280px] text-sm text-gray-700 leading-relaxed flex gap-2">
+          {/* 右：動態訊息 */}
+          <div className="bg-white p-4 rounded-xl shadow-md max-w-[35%] min-w-[280px] text-sm text-gray-700 leading-relaxed flex gap-2">
             <Sparkles className="text-purple-500 mt-0.5 shrink-0" size={18} />
-            <div>
-              <TypewriterText text={backendResponse.message} speed={30} />
-            </div>
+            <p className="transition-all duration-500">{backendResponse.message}</p>
           </div>
         </div>
         </div>
