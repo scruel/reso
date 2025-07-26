@@ -1,0 +1,19 @@
+# 商品数据导入 PGVector 工具依赖包
+
+# 数据库相关
+psycopg2-binary>=2.9.0
+
+# 机器学习和向量处理
+torch>=2.0.0
+transformers>=4.30.0
+numpy>=1.21.0
+
+# 工具库
+pathlib2>=2.3.0
+
+# 可选：如果需要使用 CUDA 加速
+# torch-audio  # 如果模型需要
+# torch-vision # 如果模型需要
+
+# 日志和配置
+# python-dotenv>=0.19.0  # 如果需要从 .env 文件读取配置

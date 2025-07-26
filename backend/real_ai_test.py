@@ -39,9 +39,9 @@ class RealAITester:
             print("📝 正在创建Agent实例...")
             
             # IntentAgent
-            from agents.intent_agent.camel_intent_agent import IntentUnderstandingAgent
+            from agents.intent_agent.camel_intent_agent import create_intent_agent
             from agents.orchestrator.multi_agent_orchestrator import AgentType
-            intent_agent = IntentUnderstandingAgent()
+            intent_agent = await create_intent_agent()
             self.orchestrator.register_agent(AgentType.INTENT_AGENT, intent_agent)
             print("   ✅ IntentAgent 已注册")
             
@@ -88,7 +88,7 @@ class RealAITester:
     async def start_interactive_session(self):
         """开始强制真实AI交互"""
         print("\n" + "="*60)
-        print("🎯 真实AI Agents油烟机推荐系统")
+        print("🎯 Reso")
         print("="*60)
         print("💡 系统特点:")
         print("   ✅ 使用真实AI模型分析")

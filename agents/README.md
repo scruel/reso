@@ -25,3 +25,4 @@ cp .env.template .env
 ```bash
 # 真实AI模式
 python real_ai_test.py
+
