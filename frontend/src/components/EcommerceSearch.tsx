@@ -227,7 +227,7 @@ useEffect(() => {
       </div>
 
       {/* Background with subtle pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50/30" />
+      <div className="absolute inset-0 bg-gray-100" />
       
       {/* Hero section with branding */}
       {!searchState.hasSearched && (
@@ -257,9 +257,9 @@ useEffect(() => {
       {/* Backend Response Display */}
       {backendResponse && searchState.hasSearched && (
         <div className="relative z-40 mt-20">
-          <div className="flex justify-between items-start gap-6 px-6 py-8 bg-gray-50 flex-wrap">
-            {/* 左區：Title + Tags 區塊（白底卡） */}
-            <div className="bg-white rounded-2xl shadow-sm px-6 py-4 w-full max-w-[60%] flex items-start gap-6">
+          <div className="flex justify-between items-start gap-6 px-6 py-8 flex-wrap">
+            {/* 左區：Title + Tags 區塊 */}
+            <div className="px-6 py-4 w-full max-w-[60%] flex items-start gap-6">
               {/* 左側：Icon + Title 水平排列 */}
               <div className="flex-shrink-0 flex items-center gap-3">
                 <div className="w-12 h-12 flex items-center justify-center text-3xl">🧥</div>
