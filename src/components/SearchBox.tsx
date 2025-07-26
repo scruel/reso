@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Search, X, Sparkles } from 'lucide-react'
+import { Search, X, Sparkles, ArrowUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface SearchBoxProps {
@@ -61,12 +61,17 @@ export function SearchBox({ onSearch, onReset, isSearching, hasSearched, query }
             onChange={handleInputChange}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            placeholder="搜尋任意商品、品牌或類別..."
+            placeholder="Search..."
             className={cn(
-              "search-input pr-24 pl-14",
-              isFocused && "ring-2 ring-primary-500/30 shadow-xl",
-              hasSearched && "shadow-2xl border border-white/20"
-            )}
+              "w-full pl-14 pr-24 py-4",
+              "bg-white/10 backdrop-blur-md",
+              "border border-white/30",
+              "rounded-[2rem]",
+              "shadow-[inset_0_0_0.5px_rgba(255,255,255,0.5),0_4px_30px_rgba(0,0,0,0.1)]",
+              "text-gray-900 placeholder-gray-500",
+              "transition-all duration-300",
+              isFocused && "scale-[1.015] outline-none ring-0"
+            )}                                                                   
             disabled={isSearching}
           />
           
@@ -94,7 +99,7 @@ export function SearchBox({ onSearch, onReset, isSearching, hasSearched, query }
           )}
           
           {/* Search Button */}
-          <button
+          {/* <button
             type="submit"
             disabled={isSearching || !inputValue.trim()}
             className={cn(
@@ -104,7 +109,27 @@ export function SearchBox({ onSearch, onReset, isSearching, hasSearched, query }
             title="搜尋"
           >
             <Search className="w-5 h-5" />
+          </button> */}
+          <button
+            type="submit"
+            disabled={isSearching && !query.trim()}
+            className={cn(
+              "absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10",
+              "rounded-full bg-black/30 backdrop-blur-sm",
+              "flex items-center justify-center text-white",
+              "hover:bg-black/40 transition-all duration-200"
+            )}
+          >
+            {isSearching ? (
+              <X className="w-5 h-5" />
+            ) : query.trim() ? (
+              <ArrowUp className="w-5 h-5" />
+            ) : (
+              <Search className="w-5 h-5" />
+            )}
           </button>
+
+
         </div>
         
         {/* Search suggestions/hints */}

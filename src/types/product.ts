@@ -7,6 +7,9 @@ export interface Product {
   brand: string;
   rating: number;
   url: string;
+
+  flowImage: string;
+  author: string;
 }
 
 export interface SearchState {

@@ -60,7 +60,19 @@ export function EcommerceSearch() {
   const handleSearch = (query: string) => {
     setSearchState(prev => ({ ...prev, query, hasSearched: true }))
     debouncedSearch(query)
+  
+    fetch('/api/log-search', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query,
+        timestamp: new Date().toISOString(),
+      }),
+    }).catch((err) => console.error('Failed to log search:', err))
   }
+  
 
   const handleReset = () => {
     setSearchState({

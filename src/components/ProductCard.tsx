@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Product } from '@/types/product'
 import { formatPrice } from '@/lib/utils'
-import { Star, ExternalLink, Heart } from 'lucide-react'
+import { Star, ExternalLink } from 'lucide-react'
 import Image from 'next/image'
+import { ProductReviewPreview } from './ProductReviewPreview'
 
 interface ProductCardProps {
   product: Product
@@ -14,98 +15,130 @@ interface ProductCardProps {
 export function ProductCard({ product, delay = 0 }: ProductCardProps) {
   const [isImageLoaded, setIsImageLoaded] = useState(false)
   const [isImageError, setIsImageError] = useState(false)
-  const [isLiked, setIsLiked] = useState(false)
+  const [cardWidth, setCardWidth] = useState<number | undefined>(undefined)
+  const cardRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!cardRef.current) return
+
+    const updateWidth = () => {
+      if (cardRef.current) {
+        setCardWidth(cardRef.current.offsetWidth)
+      }
+    }
+
+    updateWidth()
+
+    const resizeObserver = new ResizeObserver(updateWidth)
+    resizeObserver.observe(cardRef.current)
+
+    return () => resizeObserver.disconnect()
+  }, [])
 
   const handleVisit = () => {
-    // In a real app, this would navigate to the product page
+    fetch('/api/log-click', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        productId: product.id,
+        title: product.title,
+        brand: product.brand,
+        category: product.category,
+        price: product.price,
+        url: product.url,
+        timestamp: new Date().toISOString(),
+      }),
+    }).catch((err) => console.error('Failed to log click:', err))
+
     window.open(product.url, '_blank')
   }
 
-  const handleLike = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setIsLiked(!isLiked)
-  }
-
   return (
-    <div 
-      className="product-card group cursor-pointer animate-fade-in"
+    <div
+      ref={cardRef}
+      className="w-full group cursor-pointer animate-fade-in transition-all duration-300 hover:scale-[1.015] hover:shadow-xl"
       style={{ animationDelay: `${delay}ms` }}
       onClick={handleVisit}
     >
-      {/* Product Image */}
-      <div className="relative aspect-square overflow-hidden rounded-t-2xl bg-gradient-to-br from-gray-100 to-gray-200">
-        {!isImageError ? (
-          <Image
-            src={product.image}
-            alt={product.title}
-            fill
-            className={`object-cover transition-all duration-500 group-hover:scale-105 ${
-              isImageLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
-            onLoad={() => setIsImageLoaded(true)}
-            onError={() => setIsImageError(true)}
-            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
-          />
-        ) : (
+      <div className="rounded-2xl overflow-visible">
+        {/* Top product info */}
+        <div className="rounded-2xl bg-white shadow-sm relative z-10">
           <div className="w-full h-full flex items-center justify-center text-6xl text-gray-300">
-            📦
+            {!isImageError ? (
+              <Image
+                src={product.image}
+                alt={product.title}
+                width={600}
+                height={600}
+                className={`w-full h-auto object-cover transition-all duration-500 group-hover:scale-105 ${
+                  isImageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+                onLoad={() => setIsImageLoaded(true)}
+                onError={() => setIsImageError(true)}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-6xl text-gray-300">
+                📦
+              </div>
+            )}
+
+            {!isImageLoaded && !isImageError && (
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse" />
+            )}
           </div>
-        )}
-        
-        {/* Loading skeleton */}
-        {!isImageLoaded && !isImageError && (
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse" />
-        )}
-        
-        {/* Wishlist button */}
-        <button
-          onClick={handleLike}
-          className="absolute top-3 right-3 p-2 rounded-full bg-white/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white hover:scale-110"
-          title={isLiked ? '已加入心願單' : '加入心願單'}
-        >
-          <Heart className={`w-4 h-4 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
-        </button>
-        
-        {/* Rating badge */}
-        <div className="absolute bottom-3 left-3 flex items-center space-x-1 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
-          <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-          <span className="text-xs font-medium text-gray-800">{product.rating}</span>
+
+          <div className="p-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] text-primary-600 font-medium bg-primary-50 px-2 py-0.5 rounded">
+                {product.category}
+              </span>
+              <span className="text-[11px] text-gray-500">{product.brand}</span>
+            </div>
+
+            <h3 className="product-title mb-2 text-sm font-medium text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2">
+              {product.title}
+            </h3>
+
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-base font-semibold text-orange-500">{formatPrice(product.price)}</span>
+            </div>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                handleVisit()
+              }}
+              className="w-full py-2 text-sm font-semibold text-white bg-orange-500 rounded-xl hover:bg-orange-600 transition"
+            >
+              <span className="flex items-center justify-center space-x-2">
+                <span>立即購買</span>
+                <ExternalLink className="w-4 h-4" />
+              </span>
+            </button>
+          </div>
         </div>
-      </div>
-      
-      {/* Product Info */}
-      <div className="p-4">
-        {/* Category & Brand */}
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs text-primary-600 font-medium bg-primary-50 px-2 py-1 rounded-md">
-            {product.category}
-          </span>
-          <span className="text-xs text-gray-500">{product.brand}</span>
+
+        {/* Review preview with connector */}
+        {/* 細線 + 節點（疊在同一條線） */}
+        {/* 線 + 節點（一條線中央有節點） */}
+        <div className="mx-auto w-px h-4 bg-gray-200 relative">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                          w-1.5 h-1.5 bg-gray-400 rounded-full" />
         </div>
-        
-        {/* Title */}
-        <h3 className="product-title mb-3 group-hover:text-primary-600 transition-colors">
-          {product.title}
-        </h3>
-        
-        {/* Price */}
-        <div className="flex items-center justify-between mb-4">
-          <span className="product-price">{formatPrice(product.price)}</span>
+
+        {/* 流程圖 + 作者 */}
+        <div className="mt-2 bg-white rounded-2xl shadow-sm overflow-hidden">
+          <img
+            src={product.flowImage}
+            alt={`${product.title} 流程示意`}
+            className="w-full h-auto object-cover"
+          />
+          <div className="px-3 py-2 text-sm font-semibold text-gray-800">
+            by {product.author}
+          </div>
         </div>
-        
-        {/* Visit Button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation()
-            handleVisit()
-          }}
-          className="visit-button group/btn"
-        >
-          <span className="flex items-center justify-center space-x-2">
-            <span>立即購買</span>
-            <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
-          </span>
-        </button>
       </div>
     </div>
   )

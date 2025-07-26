@@ -12,9 +12,11 @@ interface ProductGridProps {
 export function ProductGrid({ products, isLoading }: ProductGridProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 md:gap-6">
+      <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
         {Array.from({ length: 30 }).map((_, index) => (
-          <ProductCardSkeleton key={index} delay={index * 50} />
+          <div key={index} className="mb-6 break-inside-avoid">
+            <ProductCardSkeleton delay={index * 50} />
+          </div>
         ))}
       </div>
     )
@@ -35,13 +37,11 @@ export function ProductGrid({ products, isLoading }: ProductGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 md:gap-6">
+    <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
       {products.map((product, index) => (
-        <ProductCard 
-          key={product.id} 
-          product={product} 
-          delay={index * 30}
-        />
+        <div key={product.id} className="mb-6 break-inside-avoid">
+          <ProductCard product={product} delay={index * 30} />
+        </div>
       ))}
     </div>
   )
