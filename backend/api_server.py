@@ -113,21 +113,6 @@ async def health_check():
         "timestamp": datetime.now().isoformat()
     }
 
-@app.post("/api/vibe")
-async def vibe(query: Optional[str] = None):
-    return {
-        "intent": {
-            "title": "string",
-            "attrs": [
-                "string"
-            ],
-            "pic_url": "string"
-        },
-        "message": f"查询参数: {query}" if query else "string",
-        "status": 0
-    }
-
-
 @app.post("/api/home")
 async def home():
     return {
@@ -142,13 +127,26 @@ async def home():
         "status": 0
     }
 
-    
+@app.post("/api/vibe")
+async def vibe(query: Optional[str] = None):
+    return {
+        "intent": {
+            "title": "string",
+            "attrs": [
+                "string"
+            ],
+            "pic_url": "string"
+        },
+        "message": f"查询参数: {query}" if query else "string",
+        "status": 0
+    }
+
 @app.post("/api/clear")
 async def clear():
     return {
     "status": 0
     }
-    
+
 @app.get("/api/thread")
 async def vibe(id: int = None):
     return {
@@ -160,6 +158,31 @@ async def vibe(id: int = None):
       },
       "reference_links": "string"
   }
+
+@app.get("/api/products")
+async def vibe(id: int = None):
+    return {
+        "threads": [
+            {
+                "id": "string",
+                "good": {
+                    "id": 0,
+                    "title": "string",
+                    "pic_url": "string",
+                    "brand": "string",
+                    "category": "string",
+                    "categoryColor": "string",
+                    "price": "string"
+                },
+                "dchain": {
+                    "tbn_url": "string",
+                    "user_nick": "string",
+                    "user_pic_url": "string"
+                }
+            }
+        ],
+        "status": "string"
+    }
     
 if __name__ == "__main__":
     import uvicorn
