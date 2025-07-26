@@ -11,6 +11,7 @@ import { shuffleArray, debounce } from '@/lib/utils'
 import { initTracker } from '@/lib/tracker';
 import { useInfiniteScroll } from '@/lib/useInfiniteScroll';
 import { v4 as uuidv4 } from 'uuid';
+import Cookies from 'js-cookie';
 
 export function EcommerceSearch() {
   const [searchState, setSearchState] = useState<SearchState>({
@@ -139,14 +140,33 @@ useEffect(() => {
     }
   }, 500)
 
-  // Async logging function with UUID
+  // Get or create persistent user UUID
+  const getUserUuid = () => {
+    const COOKIE_KEY = 'reso_user_uuid';
+    let uuid = Cookies.get(COOKIE_KEY);
+    
+    if (!uuid) {
+      uuid = uuidv4();
+      // Set cookie to expire in 1 year
+      Cookies.set(COOKIE_KEY, uuid, { 
+        expires: 365, 
+        sameSite: 'Lax',
+        secure: window.location.protocol === 'https:'
+      });
+    }
+    
+    return uuid;
+  };
+
+  // Async logging function with persistent UUID
   const logUserAction = async (actionType: string, data: any = {}) => {
-    const uuid = uuidv4();
+    const uuid = getUserUuid(); // Use persistent UUID
     const payload = {
       uuid,
       actionType,
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
+      sessionId: uuid, // Use same UUID as session ID
       ...data
     };
 
