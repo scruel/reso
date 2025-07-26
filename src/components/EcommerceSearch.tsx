@@ -1,145 +1,98 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { SearchBox } from './SearchBox'
-import { ProductGrid } from './ProductGrid'
-import { mockProducts } from '@/data/products'
-import { Product, SearchState } from '@/types/product'
-import { shuffleArray, debounce } from '@/lib/utils'
+import { useEffect, useRef, useState } from 'react';
+import { SearchBox } from './SearchBox';
+import { ProductCard } from './ProductCard';
+import { ProductCardSkeleton } from './ProductCardSkeleton';
+import { mockProducts } from '@/data/products';
+import { Product } from '@/types/product';
 
-export function EcommerceSearch() {
-  const [searchState, setSearchState] = useState<SearchState>({
-    isSearching: false,
-    hasSearched: false,
-    query: '',
-    results: []
-  })
+/* ---------- 1. 无限瀑布流 Hook ---------- */
+const LIMIT = 20;
+const useInfiniteScroll = (keyword = '') => {
+  const [items, setItems] = useState<Product[]>([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
-  const [displayProducts, setDisplayProducts] = useState<Product[]>([])
+  const fetchProducts = async (p: number, kw: string) => {
+    setLoading(true);
+    const res = await fetch(`/api/products?page=${p}&limit=${LIMIT}&keyword=${encodeURIComponent(kw)}`);
+    const json = await res.json();
+    setItems((prev) => (p === 1 ? json.products : [...prev, ...json.products]));
+    setHasMore(json.hasMore);
+    setLoading(false);
+  };
 
-  // Initialize with shuffled products
+  const lastRef = (node: HTMLDivElement | null) => {
+    if (observerRef.current) observerRef.current.disconnect();
+    observerRef.current = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && !loading && hasMore && setPage((p) => p + 1),
+      { threshold: 0.5 }
+    );
+    if (node) observerRef.current.observe(node);
+  };
+
+  /* keyword 变化时重置 */
   useEffect(() => {
-    setDisplayProducts(shuffleArray(mockProducts))
-  }, [])
+    setItems([]);
+    setPage(1);
+    setHasMore(true);
+  }, [keyword]);
 
-  // Debounced search function
-  const debouncedSearch = debounce(async (query: string) => {
-    setSearchState(prev => ({ ...prev, isSearching: true }))
-    
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 800))
-    
-    if (query.trim()) {
-      // Filter products based on query
-      const filtered = mockProducts.filter(product => 
-        product.title.toLowerCase().includes(query.toLowerCase()) ||
-        product.category.toLowerCase().includes(query.toLowerCase()) ||
-        product.brand.toLowerCase().includes(query.toLowerCase())
-      )
-      
-      setSearchState(prev => ({
-        ...prev,
-        isSearching: false,
-        hasSearched: true,
-        results: shuffleArray(filtered)
-      }))
-      
-      setDisplayProducts(shuffleArray(filtered.length > 0 ? filtered : mockProducts))
-    } else {
-      setSearchState(prev => ({
-        ...prev,
-        isSearching: false,
-        hasSearched: true,
-        results: mockProducts
-      }))
-      
-      setDisplayProducts(shuffleArray(mockProducts))
-    }
-  }, 500)
+  /* 拉取数据 */
+  useEffect(() => {
+    fetchProducts(page, keyword);
+  }, [page, keyword]);
 
-  const handleSearch = (query: string) => {
-    setSearchState(prev => ({ ...prev, query, hasSearched: true }))
-    debouncedSearch(query)
-  
-    fetch('/api/log-search', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query,
-        timestamp: new Date().toISOString(),
-      }),
-    }).catch((err) => console.error('Failed to log search:', err))
-  }
-  
+  return { items, loading, hasMore, lastRef };
+};
 
-  const handleReset = () => {
-    setSearchState({
-      isSearching: false,
-      hasSearched: false,
-      query: '',
-      results: []
-    })
-    setDisplayProducts(shuffleArray(mockProducts))
-  }
+/* ---------- 2. 主组件 ---------- */
+export function EcommerceSearch() {
+  const [keyword, setKeyword] = useState('');
+  const { items, loading, hasMore, lastRef } = useInfiniteScroll(keyword);
 
   return (
     <div className="relative min-h-screen">
-      {/* RESO */}
-      <div className="absolute top-4 left-4 z-50 text-2xl font-light tracking-wider text-gray-700">
+      {/* RESO Logo */}
+      <div className="absolute top-4 left-4 z-50 text-2xl font-light text-gray-700">
         RESO
       </div>
 
-      {/* Background with subtle pattern */}
+      {/* 背景 */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50/30" />
-      
-      {/* Hero section with branding */}
-      {!searchState.hasSearched && (
-        <div className="relative z-10 pt-20 pb-32 text-center">
-          <div className="animate-fade-in">
-            <h1 className="text-5xl md:text-6xl font-light text-gray-900 mb-4 tracking-tight">
-              RESO
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-12 font-light">
-              由 AI 策劃的現代購物體驗
-            </p>
-          </div>
-        </div>
-      )}
-      
-      {/* Search Box */}
+
+      {/* 搜索框 */}
       <SearchBox
-        onSearch={handleSearch}
-        onReset={handleReset}
-        isSearching={searchState.isSearching}
-        hasSearched={searchState.hasSearched}
-        query={searchState.query}
+        onSearch={setKeyword}
+        onReset={() => setKeyword('')}
+        isSearching={loading}
+        hasSearched={keyword !== ''}
+        query={keyword}
       />
-      
-      {/* Products Grid */}
-      {searchState.hasSearched && (
-        <div className="relative z-10 pt-24 pb-32">
-          <div className="container mx-auto px-4">
-            <div className="mb-8 text-center">
-              {/* <h2 className="text-2xl md:text-3xl font-light text-gray-900 mb-2">
-                {searchState.query ? `「${searchState.query}」的搜尋結果` : '精選商品'}
-              </h2> */}
-              {/* <p className="text-gray-600">
-                找到 {displayProducts.length} 個符合的商品
-              </p> */}
+
+      {/* 无限瀑布流 */}
+      <div className="container mx-auto px-4 pb-32">
+        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
+          {items.map((p, i) => (
+            <div
+              key={p.id}
+              className="mb-6 break-inside-avoid"
+              data-product-id={p.id}
+              ref={i === items.length - 1 ? lastRef : null}
+            >
+              <ProductCard product={p} delay={i * 30} />
             </div>
-            
-            <ProductGrid 
-              products={displayProducts} 
-              isLoading={searchState.isSearching}
-            />
-          </div>
+          ))}
+          {loading && (
+            <div className="col-span-full text-center py-4">
+              <div className="inline-block animate-spin rounded-full h-5 w-5 border border-orange-500 border-t-transparent" />
+            </div>
+          )}
         </div>
-      )}
-      
-      {/* Spacer for bottom search */}
-      {searchState.hasSearched && <div className="h-24" />}
+      </div>
     </div>
-  )
+  );
 }
