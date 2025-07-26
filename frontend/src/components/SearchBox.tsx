@@ -48,8 +48,8 @@ export function SearchBox({ onSearch, onReset, isSearching, hasSearched, query }
     <div className={cn(
       "transition-all duration-800 ease-out",
       hasSearched 
-        ? "fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-2xl"
-        : "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-11/12 max-w-2xl"
+        ? "fixed bottom-16 left-1/2 transform -translate-x-1/2 z-[25] w-11/12 max-w-2xl"
+        : "fixed top-[45%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-11/12 max-w-2xl"
     )}>
       <form onSubmit={handleSubmit} className="relative group">
         {/* Search Input */}
@@ -64,14 +64,14 @@ export function SearchBox({ onSearch, onReset, isSearching, hasSearched, query }
             placeholder="Text whatever you want"
             className={cn(
               "w-full pl-8 pr-24 py-4",
-              "bg-white/10 backdrop-blur-md",
-              "border border-white/30",
+              "bg-white",
+              "border border-gray-200",
               "rounded-[2rem]",
-              "shadow-[inset_0_0_0.5px_rgba(255,255,255,0.5),0_4px_30px_rgba(0,0,0,0.1)]",
+              "shadow-lg",
               "text-gray-900 placeholder-gray-500",
               "transition-all duration-300",
-              isFocused && "scale-[1.015] outline-none ring-0"
-            )}                                                                   
+              isFocused && "scale-[1.015] outline-none ring-0 shadow-xl"
+            )}
             disabled={isSearching}
           />
           
@@ -115,9 +115,9 @@ export function SearchBox({ onSearch, onReset, isSearching, hasSearched, query }
             disabled={isSearching && !query.trim()}
             className={cn(
               "absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10",
-              "rounded-full bg-black/30 backdrop-blur-sm",
+              "rounded-full bg-black",
               "flex items-center justify-center text-white",
-              "hover:bg-black/40 transition-all duration-200"
+              "hover:bg-gray-800 transition-all duration-200"
             )}
           >
             {isSearching ? (

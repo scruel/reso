@@ -3,9 +3,12 @@
 import { useState, useRef, useEffect } from 'react'
 import { Product } from '@/types/product'
 import { formatPrice } from '@/lib/utils'
-import { Star, ExternalLink } from 'lucide-react'
+import { Star } from 'lucide-react'
 import Image from 'next/image'
 import { ProductReviewPreview } from './ProductReviewPreview'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import Cookies from 'js-cookie'
 
 interface ProductCardProps {
   product: Product
@@ -17,6 +20,7 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
   const [isImageError, setIsImageError] = useState(false)
   const [cardWidth, setCardWidth] = useState<number | undefined>(undefined)
   const cardRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
   
   // 使用後端提供的顏色或預設顏色
   const categoryColor = product.categoryColor || '#6B7280' // 預設為灰色
@@ -38,7 +42,11 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
     return () => resizeObserver.disconnect()
   }, [])
 
-  const handleVisit = () => {
+  const handleClick = () => {
+    console.log('ProductCard clicked, navigating to product:', product.id);
+    
+    // Log click in background
+    const userUuid = Cookies.get('reso_user_uuid') || 'anonymous';
     fetch('/api/log-click', {
       method: 'POST',
       headers: {
@@ -52,22 +60,26 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
         price: product.price,
         url: product.url,
         timestamp: new Date().toISOString(),
+        uuid: userUuid
       }),
     }).catch((err) => console.error('Failed to log click:', err))
-
-    window.open(product.url, '_blank')
+    
+    // Force navigation using window.location
+    if (typeof window !== 'undefined') {
+      window.location.href = `/product/${product.id}`;
+    }
   }
 
   return (
-    <div
-      ref={cardRef}
-      className="w-full group cursor-pointer animate-fade-in transition-transform hover:scale-[1.015]"
-      style={{ animationDelay: `${delay}ms` }}
-      onClick={handleVisit}
-    >
+      <div
+        ref={cardRef}
+        className="w-full group cursor-pointer animate-fade-in transition-transform hover:scale-[1.015]"
+        style={{ animationDelay: `${delay}ms` }}
+        onClick={handleClick}
+      >
       <div className="rounded-2xl overflow-visible">
         {/* Top product info */}
-        <div className="rounded-2xl bg-white shadow-sm relative z-10">
+        <div className="rounded-2xl bg-white/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-shadow duration-300 relative z-50">
           <div className="w-full h-full flex items-center justify-center text-6xl text-gray-300">
             {!isImageError ? (
               <Image
@@ -111,48 +123,52 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
             </h3>
 
             <div className="flex items-center justify-between mb-3">
-              <span className="text-base font-semibold text-orange-500">{formatPrice(product.price)}</span>
+              <span className="text-base font-semibold text-gray-700">{formatPrice(product.price)}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* 流程圖 + 作者 - 僅在有 flowImage 時顯示 */}
+        {product.flowImage && (
+          <>
+            {/* Review preview with connector */}
+            {/* 細線 + 節點（疊在同一條線） */}
+            {/* 線 + 節點（一條線中央有節點） */}
+            <div 
+              className="mx-auto w-px h-4 relative animate-fade-in"
+              style={{ 
+                backgroundColor: `${categoryColor}80`,
+                animationDelay: `${delay}ms`
+              }} // 50% 透明度的連接線
+            >
+              <div 
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full animate-fade-in"
+                style={{ 
+                  backgroundColor: categoryColor,
+                  animationDelay: `${delay}ms`
+                }} // 節點使用完整顏色
+              />
             </div>
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                handleVisit()
-              }}
-              className="w-full py-2 text-sm font-semibold text-white bg-orange-500 rounded-xl hover:bg-orange-600 transition"
-            >
-              <span className="flex items-center justify-center space-x-2">
-                <span>立即購買</span>
-                <ExternalLink className="w-4 h-4" />
-              </span>
-            </button>
-          </div>
-        </div>
-
-        {/* Review preview with connector */}
-        {/* 細線 + 節點（疊在同一條線） */}
-        {/* 線 + 節點（一條線中央有節點） */}
-        <div 
-          className="mx-auto w-px h-4 relative"
-          style={{ backgroundColor: `${categoryColor}80` }} // 50% 透明度的連接線
-        >
-          <div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
-            style={{ backgroundColor: categoryColor }} // 節點使用完整顏色
-          />
-        </div>
-
-        {/* 流程圖 + 作者 */}
-        <div className="mt-2 bg-white rounded-2xl shadow-sm overflow-hidden">
-          <img
-            src={product.flowImage}
-            alt={`${product.title} 流程示意`}
-            className="w-full h-auto object-cover"
-          />
-          <div className="px-3 py-2 text-sm font-semibold text-gray-800">
-            by {product.author}
-          </div>
-        </div>
+            {/* 流程圖 + 作者 */}
+            <div className="bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm group-hover:shadow-lg transition-shadow duration-300 overflow-hidden animate-fade-in relative" style={{ animationDelay: `${delay}ms` }}>
+              <img
+                src={product.flowImage}
+                alt={`${product.title} 流程示意`}
+                className="w-full h-auto object-cover"
+              />
+              {/* Author avatar and name overlay */}
+              <div className="absolute bottom-2 right-2 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 shadow-sm">
+                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-medium">
+                  {product.author ? product.author.charAt(0).toUpperCase() : 'A'}
+                </div>
+                <span className="text-xs font-medium text-gray-700 pr-1">
+                  {product.author || 'Anonymous'}
+                </span>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   )

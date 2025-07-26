@@ -12,8 +12,8 @@ export const mockProducts: Product[] = [
     rating: 4.9,
     url: '#',
     
-    flowImage: 'https://source.unsplash.com/random/500x280?sig=flow1',
-    author: 'Alex'
+    flowImage: 'https://source.unsplash.com/600x300?phone,workflow&sig=flow1',
+    author: 'TechReviewer Alex'
   },
   {
     id: '2',
@@ -24,10 +24,8 @@ export const mockProducts: Product[] = [
     categoryColor: '#10B981', // 綠色
     brand: 'Keychron',
     rating: 4.8,
-    url: '#',
-    
-    flowImage: 'https://source.unsplash.com/random/500x280?sig=flow1',
-    author: 'Alex'
+    url: '#'
+    // 沒有 flowImage - 此產品不顯示流程圖
   },
   {
     id: '3',
@@ -40,8 +38,8 @@ export const mockProducts: Product[] = [
     rating: 4.7,
     url: '#',
         
-    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow1',
-    "author": 'Alex'
+    flowImage: 'https://source.unsplash.com/600x300?headphones,review&sig=flow2',
+    author: 'AudioExpert Sarah'
   },
   {
     "id": "4",
@@ -51,10 +49,8 @@ export const mockProducts: Product[] = [
     "category": "電子產品",
     "brand": "Samsung",
     "rating": 4.8,
-    "url": "#",
-        
-    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow1',
-    "author": 'Alex'
+    "url": "#"
+    // 沒有 flowImage - 此產品不顯示流程圖
   },
   {
     "id": "5",
@@ -66,8 +62,8 @@ export const mockProducts: Product[] = [
     "rating": 4.5,
     "url": "#",
         
-    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow1',
-    "author": 'Alex'
+    "flowImage": 'https://source.unsplash.com/600x300?audio,review&sig=flow5',
+    "author": 'AudioTech Mike'
   },
   {
     "id": "6",
@@ -77,10 +73,8 @@ export const mockProducts: Product[] = [
     "category": "電子產品",
     "brand": "Nintendo",
     "rating": 4.4,
-    "url": "#",
-        
-    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow1',
-    "author": 'Alex'
+    "url": "#"
+    // 沒有 flowImage - 此產品不顯示流程圖
   },
   {
     "id": "7",
