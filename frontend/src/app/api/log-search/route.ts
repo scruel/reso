@@ -12,11 +12,14 @@ export async function POST(request: NextRequest) {
     
     const logEntry = {
       id: Date.now().toString(),
+      uuid: body.uuid || body.sessionId, // Use UUID from body
+      actionType: body.actionType || 'search',
       query: body.query,
+      searchType: body.searchType,
       timestamp: body.timestamp || new Date().toISOString(),
-      userAgent: request.headers.get('user-agent'),
-      ip: request.headers.get('x-forwarded-for') || 'localhost',
-      sessionId: request.headers.get('x-session-id') || 'anonymous'
+      userAgent: body.userAgent || request.headers.get('user-agent'),
+      ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '::1',
+      sessionId: body.uuid || body.sessionId || 'anonymous' // Use UUID as sessionId
     };
     
     // Store search log

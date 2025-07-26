@@ -6,6 +6,7 @@ import { formatPrice } from '@/lib/utils'
 import { Star, ExternalLink } from 'lucide-react'
 import Image from 'next/image'
 import { ProductReviewPreview } from './ProductReviewPreview'
+import * as jsCookie from 'js-cookie'
 
 interface ProductCardProps {
   product: Product
@@ -39,6 +40,7 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
   }, [])
 
   const handleVisit = () => {
+    const userUuid = jsCookie.get('reso_user_uuid') || 'anonymous';
     fetch('/api/log-click', {
       method: 'POST',
       headers: {
@@ -52,6 +54,7 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
         price: product.price,
         url: product.url,
         timestamp: new Date().toISOString(),
+        uuid: userUuid
       }),
     }).catch((err) => console.error('Failed to log click:', err))
 
