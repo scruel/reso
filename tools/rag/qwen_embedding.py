@@ -40,9 +40,54 @@ class KimiGPTService:
         self.api_key = self.api_key
         self.cache_path = cache_path
         self.base_url = "https://api.moonshot.cn/v1"
+    def generate_embeddings(self, text: Union[str, List[str]]) -> Union[List[float], List[List[float]]]:
+        """
+        生成文本嵌入向量
+        
+        Args:
+            text: 输入文本字符串或字符串列表
+            
+        Returns:
+            如果输入为字符串，返回单个嵌入向量；如果输入为列表，返回多个向量
+        """
+        try:
+            # 确保text是列表格式
+            if isinstance(text, str):
+                texts = [text]
+                single_input = True
+            else:
+                texts = text
+                single_input = False
+            
+            headers = {
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            data = {
+                "model": "text-embedding-v1",
+                "input": texts
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/embeddings",
+                headers=headers,
+                json=data
+            )
+            
+            if response.status_code != 200:
+                raise Exception(f"API调用失败: {response.text}")
+            
+            result = response.json()
+            embeddings = [item["embedding"] for item in result["data"]]
+            
+            return embeddings[0] if single_input else embeddings
+            
+        except Exception as e:
+            logger.error(f"生成嵌入向量失败: {e}")
+            raise
       
-    def geneate(text: str):
-      return ''
+    
 
 class QwenEmbeddingService:
     """
