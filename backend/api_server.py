@@ -122,34 +122,52 @@ async def health_check():
     }
 
 @app.post("/api/vibe")
-async def vibe():
+async def vibe(query: Optional[str] = None):
     return {
-    "intent": {
-        "title": "string",
-        "attrs": [
-            "string"
-        ],
-        "pic_url": "string"
-    },
-    "message": "string",
-    "status": 0
-}
+        "intent": {
+            "title": "string",
+            "attrs": [
+                "string"
+            ],
+            "pic_url": "string"
+        },
+        "message": f"查询参数: {query}" if query else "string",
+        "status": 0
+    }
 
 
-@app.post("/api/vibe")
-async def vibe():
+@app.post("/api/home")
+async def home():
     return {
-    "intent": {
-        "title": "string",
-        "attrs": [
-            "string"
-        ],
-        "pic_url": "string"
-    },
-    "message": "string",
-    "status": 0
-}
+        "intent": {
+            "title": "string",
+            "attrs": [
+                "string"
+            ],
+            "pic_url": "string"
+        },
+        "message": "string",
+        "status": 0
+    }
 
+    
+@app.post("/api/clear")
+async def clear():
+    return {
+    "status": 0
+    }
+    
+@app.get("/api/thread")
+async def vibe(id: int = None):
+    return {
+      "title": "string",
+      "pic_url": "string",
+      "dchain": {
+          "id": id,
+          "descpriton": "string"
+      },
+      "reference_links": "string"
+  }
     
 if __name__ == "__main__":
     import uvicorn
