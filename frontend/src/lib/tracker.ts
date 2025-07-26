@@ -1,8 +1,9 @@
 /* lib/tracker.ts */
 import Cookies from 'js-cookie';
 import { v4 as uuidv4 } from 'uuid';
+import { getApiUrl } from './api';
 
-const TRACK_URL = '/api/client-log';
+const TRACK_URL = getApiUrl('/api/client-log');
 const SESSION_KEY = 'reso_session';
 const FLUSH_IDLE = 5_000; // 5 秒闲置即发送
 
@@ -21,7 +22,7 @@ let flushTimer: NodeJS.Timeout;
 
 const send = async () => {
   if (!queue.length) return;
-  fetch(TRACK_URL, {
+  fetch(getApiUrl('/api/client-log'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(queue.splice(0)),
@@ -34,14 +35,33 @@ const scheduleFlush = () => {
 };
 
 export const log = (type: string, payload?: any) => {
-  queue.push({
-    type,
-    ts: Date.now(),
-    userId: getUserId(),
-    url: location.href,
-    ua: navigator.userAgent,
-    payload,
-  });
+  const userId = getUserId();
+  let message = '';
+  
+  switch(type) {
+    case 'pageview':
+      message = `用戶 ${userId} 瀏覽了頁面`;
+      break;
+    case 'scroll':
+      message = `用戶 ${userId} 滾動到 ${payload?.depth || 0}% 位置`;
+      break;
+    case 'click':
+      message = `用戶 ${userId} 點擊了商品 ${payload?.productId || '未知'}`;
+      break;
+    case 'hover':
+      message = `用戶 ${userId} 懸停在商品 ${payload?.productId || '未知'} 上`;
+      break;
+    case 'search':
+      message = `用戶 ${userId} 搜索了 "${payload?.query || '空搜索'}"`;
+      break;
+    default:
+      message = `用戶 ${userId} 執行了 ${type} 操作`;
+  }
+  
+  // 在console中打印用戶操作
+  console.log(`📊 ${message}`);
+  
+  queue.push({ message });
   scheduleFlush();
 };
 

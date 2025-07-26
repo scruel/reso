@@ -116,7 +116,7 @@ export default function AnalyticsPage() {
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-sm font-medium text-gray-500">用戶行為事件</h3>
-            <p className="text-2xl font-bold text-purple-600">{data.summary.totalClientEvents}</p>
+            <p className="text-2xl font-bold text-sky-600">{data.summary.totalClientEvents}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-sm font-medium text-gray-500">獨立用戶</h3>
@@ -169,7 +169,7 @@ export default function AnalyticsPage() {
                 <div key={item.productId} className="border rounded-lg p-4">
                   <div className="flex justify-between items-start mb-2">
                     <span className="font-medium text-gray-900">#{index + 1}</span>
-                    <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">{item.count} 次點擊</span>
+                    <span className="bg-sky-100 text-sky-800 px-2 py-1 rounded text-sm">{item.count} 次點擊</span>
                   </div>
                   <p className="text-gray-700 text-sm">{item.title}</p>
                 </div>

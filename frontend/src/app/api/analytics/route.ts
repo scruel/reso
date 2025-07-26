@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
     
     const topClickedProducts = Object.values(productCount)
       .sort((a: any, b: any) => b.count - a.count)
-      .slice(0, 5);
+      .slice(0, 5) as { productId: string; title: string; count: number; }[];
     
     // 計算時間線數據（按小時統計）
     const now = new Date();

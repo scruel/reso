@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Product } from '@/types/product'
+import { Thread } from '@/types/product'
 import { formatPrice } from '@/lib/utils'
 import { Star } from 'lucide-react'
 import Image from 'next/image'
@@ -10,12 +10,12 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Cookies from 'js-cookie'
 
-interface ProductCardProps {
-  product: Product
+interface ThreadCardProps {
+  thread: Thread
   delay?: number
 }
 
-export function ProductCard({ product, delay = 0 }: ProductCardProps) {
+export function ProductCard({ thread, delay = 0 }: ThreadCardProps) {
   const [isImageLoaded, setIsImageLoaded] = useState(false)
   const [isImageError, setIsImageError] = useState(false)
   const [cardWidth, setCardWidth] = useState<number | undefined>(undefined)
@@ -23,7 +23,7 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
   const router = useRouter()
   
   // 使用後端提供的顏色或預設顏色
-  const categoryColor = product.categoryColor || '#6B7280' // 預設為灰色
+  const categoryColor = thread.good.categoryColor || '#6B7280' // 預設為灰色
 
   useEffect(() => {
     if (!cardRef.current) return
@@ -43,30 +43,29 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
   }, [])
 
   const handleClick = () => {
-    console.log('ProductCard clicked, navigating to product:', product.id);
+    console.log('ProductCard clicked, navigating to thread:', thread.id);
     
     // Log click in background
     const userUuid = Cookies.get('reso_user_uuid') || 'anonymous';
-    fetch('/api/log-click', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        productId: product.id,
-        title: product.title,
-        brand: product.brand,
-        category: product.category,
-        price: product.price,
-        url: product.url,
-        timestamp: new Date().toISOString(),
-        uuid: userUuid
-      }),
-    }).catch((err) => console.error('Failed to log click:', err))
+    const priceNumber = parseFloat(thread.good.price) || 0;
+    const message = `用戶 ${userUuid} 點擊了商品 "${thread.good.title}" (品牌: ${thread.good.brand}, 價格: $${priceNumber.toFixed(0)})`;
+    
+    // 在console中打印點擊操作
+    console.log(`👆 ${message}`);
+    
+    import('../lib/api').then(({ getApiUrl }) => {
+      fetch(getApiUrl('/api/log-click'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      }).catch(() => {/* silent */});
+    });
     
     // Force navigation using window.location
     if (typeof window !== 'undefined') {
-      window.location.href = `/product/${product.id}`;
+      window.location.href = `/product/${thread.id}`;
     }
   }
 
@@ -83,8 +82,8 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
           <div className="w-full h-full flex items-center justify-center text-6xl text-gray-300">
             {!isImageError ? (
               <Image
-                src={product.image}
-                alt={product.title}
+                src={thread.good.pic_url}
+                alt={thread.good.title}
                 width={600}
                 height={600}
                 className={`w-full h-auto object-cover transition-all duration-500 group-hover:scale-105 ${
@@ -113,23 +112,23 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
                   backgroundColor: `${categoryColor}15` // 15% 透明度背景
                 }}
               >
-                {product.category}
+                {thread.good.category}
               </span>
-              <span className="text-[11px] text-gray-500">{product.brand}</span>
+              <span className="text-[11px] text-gray-500">{thread.good.brand}</span>
             </div>
 
             <h3 className="product-title mb-2 text-sm font-medium text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2">
-              {product.title}
+              {thread.good.title}
             </h3>
 
             <div className="flex items-center justify-between mb-3">
-              <span className="text-base font-semibold text-gray-700">{formatPrice(product.price)}</span>
+              <span className="text-base font-semibold text-gray-700">${parseFloat(thread.good.price).toFixed(2)}</span>
             </div>
           </div>
         </div>
 
-        {/* 流程圖 + 作者 - 僅在有 flowImage 時顯示 */}
-        {product.flowImage && (
+        {/* 流程圖 + 作者 - 僅在有 dchain 時顯示 */}
+        {thread.dchain && (
           <>
             {/* Review preview with connector */}
             {/* 細線 + 節點（疊在同一條線） */}
@@ -153,17 +152,17 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
             {/* 流程圖 + 作者 */}
             <div className="bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm group-hover:shadow-lg transition-shadow duration-300 overflow-hidden animate-fade-in relative" style={{ animationDelay: `${delay}ms` }}>
               <img
-                src={product.flowImage}
-                alt={`${product.title} 流程示意`}
+                src={thread.dchain.tbn_url}
+                alt={`${thread.good.title} 流程示意`}
                 className="w-full h-auto object-cover"
               />
               {/* Author avatar and name overlay */}
               <div className="absolute bottom-2 right-2 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 shadow-sm">
-                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-medium">
-                  {product.author ? product.author.charAt(0).toUpperCase() : 'A'}
+                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white text-xs font-medium">
+                  {thread.dchain.user_nick ? thread.dchain.user_nick.charAt(0).toUpperCase() : 'A'}
                 </div>
                 <span className="text-xs font-medium text-gray-700 pr-1">
-                  {product.author || 'Anonymous'}
+                  {thread.dchain.user_nick || 'Anonymous'}
                 </span>
               </div>
             </div>

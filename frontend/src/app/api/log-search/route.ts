@@ -30,7 +30,19 @@ export async function POST(request: NextRequest) {
       searchLogs = searchLogs.slice(-100);
     }
     
-    console.log('🔍 Search log:', logEntry);
+    // Check if this is the new simplified message format
+    let searchMessage;
+    if (body.message) {
+      // New format: direct message
+      searchMessage = body.message;
+    } else {
+      // Old format: construct message
+      searchMessage = logEntry.query 
+        ? `用戶 ${logEntry.uuid} 搜索了 "${logEntry.query}"`
+        : `用戶 ${logEntry.uuid} 執行了空搜索`;
+    }
+    
+    console.log(`🔍 ${searchMessage}`);
     
     return NextResponse.json({ 
       success: true, 

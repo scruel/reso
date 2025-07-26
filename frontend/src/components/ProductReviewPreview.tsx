@@ -1,11 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Product } from '@/types/product'
 import Image from 'next/image'
 
 interface Props {
-  product: Product
+  product: any // 保持舊的Product結構以避免破壞性改變
 }
 
 export function ProductReviewPreview({ product }: Props) {

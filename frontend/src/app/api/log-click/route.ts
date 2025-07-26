@@ -33,7 +33,17 @@ export async function POST(request: NextRequest) {
       clickLogs = clickLogs.slice(-100);
     }
     
-    console.log('👆 點擊日誌:', logEntry);
+    // Check if this is the new simplified message format
+    let clickMessage;
+    if (body.message) {
+      // New format: direct message
+      clickMessage = body.message;
+    } else {
+      // Old format: construct message
+      clickMessage = `用戶 ${logEntry.uuid} 點擊了商品 "${logEntry.title}" (品牌: ${logEntry.brand}, 價格: $${(logEntry.price / 100).toFixed(0)})`;
+    }
+    
+    console.log(`👆 ${clickMessage}`);
     
     return NextResponse.json({ 
       success: true, 

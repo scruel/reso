@@ -26,17 +26,18 @@ export async function POST(request: NextRequest) {
       
       clientLogs.push(...processedLogs);
       
-      // Log each type of behavior
+      // Log each type of behavior with simplified message in Next.js terminal
       processedLogs.forEach(log => {
-        const emoji = {
-          'pageview': '📄',
-          'scroll': '📜',
-          'click': '👆',
-          'hover': '👀',
-          'search': '🔍'
-        }[log.type] || '📊';
+        const messages: Record<string, string> = {
+          'pageview': `用戶 ${log.userId} 瀏覽了頁面`,
+          'scroll': `用戶 ${log.userId} 滿動到 ${log.payload?.depth || 0}% 位置`,
+          'click': `用戶 ${log.userId} 點擊了商品 ${log.payload?.productId || '未知'}`,
+          'hover': `用戶 ${log.userId} 懸停在商品 ${log.payload?.productId || '未知'} 上`,
+          'search': `用戶 ${log.userId} 搜索了 "${log.payload?.query || '空搜索'}"`
+        };
         
-        console.log(`${emoji} Client behavior [${log.type}]:`, log.payload || 'Page view');
+        const message = messages[log.type as string] || `用戶 ${log.userId} 執行了 ${log.type} 操作`;
+        console.log(`📊 ${message}`);
       });
       
       // Keep latest 200 records

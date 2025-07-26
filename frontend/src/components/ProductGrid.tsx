@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { ProductCard } from './ProductCard';
 import { ProductCardSkeleton } from './ProductCardSkeleton';
-import { Product } from '@/types/product';
-import { mockProducts } from '@/data/products';
+import { Thread } from '@/types/product';
+import { mockThreads } from '@/data/threads';
 
-interface ProductGridProps {
-  products: Product[];
+interface ThreadGridProps {
+  products: Thread[];  // 保持products參數名稱與EcommerceSearch一致
   isLoading: boolean;
   searchQuery?: string; // 搜尋查詢
 }
@@ -15,46 +15,46 @@ interface ProductGridProps {
 const INITIAL_LOAD = 30; // 初始加載數量
 const LOAD_MORE = 20; // 每次加載更多數量
 
-export function ProductGrid({ products, isLoading, searchQuery }: ProductGridProps) {
-  const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
+export function ProductGrid({ products: threads, isLoading, searchQuery }: ThreadGridProps) {
+  const [displayedThreads, setDisplayedThreads] = useState<Thread[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  // 初始化或搜尋結果變更時重設顯示的商品
+  // 初始化或搜尋結果變更時重設顯示的threads
   useEffect(() => {
-    if (products.length > 0) {
-      const initialProducts = products.slice(0, INITIAL_LOAD);
-      setDisplayedProducts(initialProducts);
-      setHasMore(products.length > INITIAL_LOAD);
+    if (threads.length > 0) {
+      const initialThreads = threads.slice(0, INITIAL_LOAD);
+      setDisplayedThreads(initialThreads);
+      setHasMore(threads.length > INITIAL_LOAD);
     } else {
-      setDisplayedProducts([]);
+      setDisplayedThreads([]);
       setHasMore(false);
     }
-  }, [products]);
+  }, [threads]);
 
-  // 加載更多商品
+  // 加載更多Threads
   const loadMore = useCallback(() => {
     if (loadingMore || !hasMore) return;
     
     setLoadingMore(true);
     
-    // 模擬網絡延遲
+    // 模擬網路延遲
     setTimeout(() => {
-      const currentLength = displayedProducts.length;
-      const nextProducts = products.slice(currentLength, currentLength + LOAD_MORE);
+      const currentLength = displayedThreads.length;
+      const nextThreads = threads.slice(currentLength, currentLength + LOAD_MORE);
       
-      if (nextProducts.length > 0) {
-        setDisplayedProducts(prev => [...prev, ...nextProducts]);
-        setHasMore(currentLength + nextProducts.length < products.length);
+      if (nextThreads.length > 0) {
+        setDisplayedThreads(prev => [...prev, ...nextThreads]);
+        setHasMore(currentLength + nextThreads.length < threads.length);
       } else {
         setHasMore(false);
       }
       
       setLoadingMore(false);
     }, 800); // 模擬 800ms 加載時間
-  }, [displayedProducts.length, products, loadingMore, hasMore]);
+  }, [displayedThreads.length, threads, loadingMore, hasMore]);
 
   // 設置 Intersection Observer
   useEffect(() => {
@@ -82,8 +82,8 @@ export function ProductGrid({ products, isLoading, searchQuery }: ProductGridPro
     };
   }, [hasMore, loadingMore, loadMore]);
 
-  // 如果正在加載且沒有商品，顯示骨架屏
-  if (isLoading && displayedProducts.length === 0) {
+  // 如果正在加載且沒有threads，顯示骨架屏
+  if (isLoading && displayedThreads.length === 0) {
     return (
       <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
         {Array.from({ length: INITIAL_LOAD }).map((_, i) => (
@@ -95,8 +95,8 @@ export function ProductGrid({ products, isLoading, searchQuery }: ProductGridPro
     );
   }
 
-  // 如果沒有商品，顯示空狀態
-  if (!isLoading && displayedProducts.length === 0) {
+  // 如果沒有threads，顯示空狀態
+  if (!isLoading && displayedThreads.length === 0) {
     return (
       <div className="text-center py-20">
         <span className="text-2xl text-gray-400">🔍</span>
@@ -108,17 +108,17 @@ export function ProductGrid({ products, isLoading, searchQuery }: ProductGridPro
     );
   }
 
-  // 渲染商品網格
+  // 渲染threads網格
   return (
     <div>
       <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
-        {displayedProducts.map((product, i) => (
+        {displayedThreads.map((thread, i) => (
           <div
-            key={product.id}
+            key={thread.id}
             className="mb-6 break-inside-avoid"
-            data-product-id={product.id}
+            data-thread-id={thread.id}
           >
-            <ProductCard product={product} delay={i * 30} />
+            <ProductCard thread={thread} delay={i * 30} />
           </div>
         ))}
       </div>
@@ -140,11 +140,11 @@ export function ProductGrid({ products, isLoading, searchQuery }: ProductGridPro
         </div>
       )}
       
-      {/* 已加載完所有商品 */}
-      {!hasMore && displayedProducts.length > INITIAL_LOAD && (
+      {/* 已加載完所有threads */}
+      {!hasMore && displayedThreads.length > INITIAL_LOAD && (
         <div className="text-center py-8">
           <p className="text-gray-500 text-sm">🎉 所有商品已加載完成</p>
-          <p className="text-gray-400 text-xs mt-1">共 {displayedProducts.length} 個商品</p>
+          <p className="text-gray-400 text-xs mt-1">共 {displayedThreads.length} 個商品</p>
         </div>
       )}
     </div>

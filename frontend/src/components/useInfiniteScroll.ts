@@ -1,6 +1,6 @@
 // src/lib/useInfiniteScroll.ts
 import { useEffect, useState } from 'react'
-import { Product } from '@/types/product'
+import { Thread } from '@/types/product'
 
 const COOKIE_KEY = 'reso_uid'
 const getCookie = (k: string) =>
@@ -11,8 +11,8 @@ const setCookie = (k: string, v: string, days = 7) => {
   document.cookie = `${k}=${v};expires=${d.toUTCString()};path=/`
 }
 
-export function useInfiniteScroll(initial: Product[]) {
-  const [list, setList] = useState<Product[]>(initial)
+export function useInfiniteScroll(initial: Thread[]) {
+  const [list, setList] = useState<Thread[]>(initial)
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)

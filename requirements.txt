@@ -5,7 +5,7 @@ fastapi>=0.116.0
 uvicorn>=0.35.0
 
 # 核心AI框架
-camel-ai>=0.2.0
+camel-ai
 dashscope>=1.14.0
 python-dotenv>=1.0.0
 
