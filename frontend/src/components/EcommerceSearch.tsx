@@ -271,7 +271,7 @@ useEffect(() => {
                 {backendResponse.intent.attrs.map((tag, i) => (
                   <span
                     key={i}
-                    className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-md"
+                    className="bg-white text-gray-700 text-xs px-3 py-1 rounded-md"
                   >
                     {tag}
                   </span>

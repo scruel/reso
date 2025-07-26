@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Product } from '@/types/product'
 import { formatPrice } from '@/lib/utils'
-import { Star, ExternalLink } from 'lucide-react'
+import { Star } from 'lucide-react'
 import Image from 'next/image'
 import { ProductReviewPreview } from './ProductReviewPreview'
 import * as jsCookie from 'js-cookie'
@@ -114,21 +114,8 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
             </h3>
 
             <div className="flex items-center justify-between mb-3">
-              <span className="text-base font-semibold text-orange-500">{formatPrice(product.price)}</span>
+              <span className="text-base font-semibold text-gray-700">{formatPrice(product.price)}</span>
             </div>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                handleVisit()
-              }}
-              className="w-full py-2 text-sm font-semibold text-white bg-orange-500 rounded-xl hover:bg-orange-600 transition"
-            >
-              <span className="flex items-center justify-center space-x-2">
-                <span>立即購買</span>
-                <ExternalLink className="w-4 h-4" />
-              </span>
-            </button>
           </div>
         </div>
 
