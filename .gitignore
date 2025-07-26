@@ -8,3 +8,4 @@ htmlcov
 .cache
 .venv
 .env
+qwen_embeddings_cache.pkl
