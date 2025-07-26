@@ -8,7 +8,7 @@ from weaviate.auth import AuthApiKey
 from weaviate.classes.config import Property, DataType
 from weaviate.collections.classes.config import Configure
 from weaviate.collections.classes.grpc import MetadataQuery
-from tools.embeddings.qwen_embedding import QwenEmbeddingService
+from tools.rag.qwen_embedding import QwenEmbeddingService
 
 # Best practice: store your credentials in environment variables
 load_dotenv()

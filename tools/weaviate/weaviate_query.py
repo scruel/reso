@@ -8,7 +8,7 @@ from weaviate.auth import AuthApiKey
 from weaviate.classes.config import Property, DataType
 from weaviate.collections.classes.config import Configure
 from weaviate.collections.classes.grpc import MetadataQuery
-from tools.embeddings.qwen_embedding import QwenEmbeddingService
+from tools.rag.qwen_embedding import QwenEmbeddingService
 
 # Best practice: store your credentials in environment variables
 load_dotenv()
@@ -36,15 +36,11 @@ def query(text: str):
     article_collection = client.collections.get(collection_name)
     vector = qwen.get_embedding(text)
     response = article_collection.query.near_vector(
-      
-        # 指定目标向量
         target_vector="detail",
-        # 文本向量
         near_vector=vector,
-        # 限制输出的数量
         limit=10,
-        # 设置返回的数据是否显示距离
-        return_metadata=MetadataQuery(distance=True)
+        return_metadata=MetadataQuery(distance=True),
+        return_properties=["goodId", "name", "price", "brandName", "catagory", "subCatagory", "itemCatagory", "picUrl"]
     )
 
     # 展示数据
@@ -54,3 +50,7 @@ def query(text: str):
 
     client.close()  # Free up resources
     return response.objects
+
+
+if __name__ == "__main__":
+    query("小米充电宝")
