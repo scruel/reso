@@ -9,6 +9,7 @@ numpy>=1.21.0
 # 网络请求
 requests>=2.28.0
 httpx>=0.24.0
+elasticsearch
 
 # 开发和测试
 pytest>=7.0.0
