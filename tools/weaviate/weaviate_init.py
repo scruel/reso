@@ -51,9 +51,7 @@ client.collections.create(
     ]
 )
 
-load_dotenv()
-key = os.getenv("DASHSCOPE_API_KEY")
-qwen = QwenEmbeddingService(key)
+qwen = QwenEmbeddingService()
 
 def insert(item):
     article_collection = client.collections.get(collection_name)

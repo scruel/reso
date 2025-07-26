@@ -28,9 +28,7 @@ client = weaviate.connect_to_custom(
 )
 
 collection_name = "ResoGoods"
-load_dotenv()
-key = os.getenv("DASHSCOPE_API_KEY")
-qwen = QwenEmbeddingService(key)
+qwen = QwenEmbeddingService()
 
 def query(text: str):
     article_collection = client.collections.get(collection_name)

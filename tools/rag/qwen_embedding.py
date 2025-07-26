@@ -5,6 +5,7 @@ Qwen文本嵌入服务封装
 
 import os
 import pickle
+from dotenv import load_dotenv
 import pandas as pd
 import numpy as np
 from typing import List, Union, Dict, Optional
@@ -14,12 +15,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+load_dotenv()
 
-class KimiEmbeddingService:
+class KimiGPTService:
     """
     Kimi文本嵌入服务
     
-    使用Kimi的text-embedding模型生成文本嵌入向量
     支持缓存机制，避免重复计算
     """
     
@@ -38,8 +39,10 @@ class KimiEmbeddingService:
         
         self.api_key = self.api_key
         self.cache_path = cache_path
-        self.embedding_cache = self._load_cache()
         self.base_url = "https://api.moonshot.cn/v1"
+      
+    def geneate(text: str):
+      return ''
 
 class QwenEmbeddingService:
     """

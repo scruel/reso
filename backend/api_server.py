@@ -149,7 +149,8 @@ async def thread(tid: int):
     try:
         print(tid)
         good = query_good(tid)
-        # kimi = KimiService(key)
+        
+        # kimi = KimiGPTService()
         return {
           "title": good['name'],
           "pic_url": good['picUrl'],
