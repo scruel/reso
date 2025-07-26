@@ -113,14 +113,6 @@ async def health_check():
         "timestamp": datetime.now().isoformat()
     }
 
-@app.get("/health")
-async def health_check():
-    return {
-        "status": "healthy",
-        "ai_system_ready": orchestrator is not None,
-        "timestamp": datetime.now().isoformat()
-    }
-
 @app.post("/api/vibe")
 async def vibe(query: Optional[str] = None):
     return {
