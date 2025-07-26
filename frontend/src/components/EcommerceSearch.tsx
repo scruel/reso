@@ -123,6 +123,7 @@ useEffect(() => {
       query: '',
       results: []
     })
+    setBackendResponse(null)
     setDisplayProducts(shuffleArray(mockProducts))
   }
 
@@ -162,8 +163,8 @@ useEffect(() => {
       </div>
       
       {/* Backend Response Display */}
-{backendResponse && (
-        <div className="flex justify-between items-center mt-4 mx-8">
+      {backendResponse && searchState.hasSearched && (
+        <div className="relative z-20 flex justify-between items-center mt-4 mx-8 py-4">
           <div className="flex items-center gap-4">
             <h3 className="text-lg font-semibold text-gray-900">
               {backendResponse.intent.title}
@@ -179,7 +180,7 @@ useEffect(() => {
               ))}
             </div>
           </div>
-          <div className="ml-auto bg-white rounded-lg shadow-lg border border-gray-200 p-4">
+          <div className="ml-auto bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-md">
             <p className="text-sm text-gray-700 mb-2">{backendResponse.message}</p>
             <div className="flex justify-between items-center text-xs text-gray-500">
               <span>Status: {backendResponse.status}</span>
