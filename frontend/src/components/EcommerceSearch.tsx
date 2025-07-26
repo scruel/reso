@@ -292,16 +292,8 @@ useEffect(() => {
       )}
       {/* Products Grid */}
       {searchState.hasSearched && (
-        <div className="relative z-10 pt-8 pb-32">
+        <div className="relative z-10 pt-2 pb-8">
           <div className="container mx-auto px-4">
-            <div className="mb-8 text-center">
-              {/* <h2 className="text-2xl md:text-3xl font-light text-gray-900 mb-2">
-                {searchState.query ? `「${searchState.query}」的搜尋結果` : '精選商品'}
-              </h2> */}
-              {/* <p className="text-gray-600">
-                找到 {displayProducts.length} 個符合的商品
-              </p> */}
-            </div>
             
             <ProductGrid 
               products={displayProducts} 
@@ -312,8 +304,6 @@ useEffect(() => {
         </div>
       )}
       
-      {/* Spacer for bottom search */}
-      {searchState.hasSearched && <div className="h-24" />}
     </div>
   )
 }

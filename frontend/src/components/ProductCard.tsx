@@ -70,7 +70,7 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
     >
       <div className="rounded-2xl overflow-visible">
         {/* Top product info */}
-        <div className="rounded-2xl bg-white/50 backdrop-blur-sm shadow-sm relative z-10">
+        <div className="rounded-2xl bg-white/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-shadow duration-300 relative z-10">
           <div className="w-full h-full flex items-center justify-center text-6xl text-gray-300">
             {!isImageError ? (
               <Image
@@ -136,7 +136,7 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
             </div>
 
             {/* 流程圖 + 作者 */}
-            <div className="mt-2 bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm overflow-hidden">
+            <div className="bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm group-hover:shadow-lg transition-shadow duration-300 overflow-hidden">
               <img
                 src={product.flowImage}
                 alt={`${product.title} 流程示意`}
