@@ -45,15 +45,13 @@ const mockThreadDetails: Record<string, any> = {
 
 export async function GET(request: NextRequest) {
   try {
-    // Validate required parameters
-    const validationError = validateRequest(request, ['id']);
-    if (validationError) {
-      return createErrorResponse('validation', validationError, 400);
-    }
-
-    // Get the thread ID from query parameters
+    // Validate required parameters (support both 'id' and 'tid' for compatibility)
     const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id')!;
+    const id = searchParams.get('id') || searchParams.get('tid');
+    
+    if (!id) {
+      return createErrorResponse('validation', '缺少必需參數: id 或 tid', 400);
+    }
     
     // Validate ID format
     if (!/^[0-9]+$/.test(id)) {

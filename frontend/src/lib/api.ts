@@ -11,7 +11,7 @@ export interface ThreadDetailResponse {
 
 export async function fetchThreadDetail(threadId: string): Promise<ThreadDetailResponse> {
   try {
-    const response = await apiGet(`/api/thread?id=${threadId}`);
+    const response = await apiGet(`/api/thread?tid=${threadId}`);
     
     // Handle new API response format
     if (response.success && response.data) {
