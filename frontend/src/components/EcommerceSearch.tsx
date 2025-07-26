@@ -32,14 +32,7 @@ export function EcommerceSearch() {
     };
     message: string;
     status: number;
-  } | null>({
-    intent: {
-      title: 'Blazer',
-      attrs: ['Lightweight', 'Professional', 'Wrinkle-Resistant', 'Linen']
-    },
-    message: 'Based on your search for work attire that balances packability with professional style.',
-    status: 200
-  })
+  } | null>(null)
 
 // Initialize with shuffled products
 useEffect(() => {
@@ -72,12 +65,12 @@ useEffect(() => {
             ? '鞋履系列'
             : '精選商品',
           attrs: query.toLowerCase().includes('jacket') || query.toLowerCase().includes('coat')
-            ? ['保暖', '防風', '時尚', '多層次']
+            ? ['保暖', '防風', '時尚', '多層次', 'Lightweight', 'Professional', 'Wrinkle-Resistant', 'Versatile']
             : query.toLowerCase().includes('dress')
-            ? ['優雅', '舒適', '百搭', '氣質']
+            ? ['優雅', '舒適', '百搭', '氣質', 'Elegant', 'Breathable', 'Flowy', 'Feminine']
             : query.toLowerCase().includes('shoes') || query.toLowerCase().includes('boot')
-            ? ['舒適', '耐磨', '時尚', '透氣']
-            : ['精選', '品質', '設計', '實用']
+            ? ['舒適', '耐磨', '時尚', '透氣', 'Durable', 'Non-slip', 'Cushioned', 'Flexible']
+            : ['精選', '品質', '設計', '實用', 'Premium', 'Stylish', 'Modern', 'Essential']
         },
         message: `為您找到 ${filtered.length > 0 ? filtered.length : mockProducts.length} 個相關商品，根據您的搜尋「${query}」為您推薦最適合的選擇。`,
         status: 200
@@ -98,7 +91,7 @@ useEffect(() => {
       const defaultBackendResponse = {
         intent: {
           title: '精選商品',
-          attrs: ['精選', '品質', '設計', '實用']
+          attrs: ['精選', '品質', '設計', '實用', 'Premium', 'Curated', 'Trending', 'Best-seller']
         },
         message: `為您精選 ${mockProducts.length} 個優質商品，涵蓋各種風格與需求。`,
         status: 200
@@ -145,7 +138,7 @@ useEffect(() => {
     const defaultBackendResponse = {
       intent: {
         title: '精選商品',
-        attrs: ['精選', '品質', '設計', '實用']
+        attrs: ['精選', '品質', '設計', '實用', 'Premium', 'Curated', 'Trending', 'Best-seller']
       },
       message: `為您精選 ${mockProducts.length} 個優質商品，涵蓋各種風格與需求。`,
       status: 200
@@ -190,7 +183,7 @@ useEffect(() => {
       </div>
       
       {/* Backend Response Display */}
-      {backendResponse && (
+      {backendResponse && searchState.hasSearched && (
         <div className="relative z-40 mt-20">
         <div className="flex justify-between items-start flex-wrap gap-6 px-6 py-8 bg-gray-50">
           {/* 左側：Title + Tags */}
