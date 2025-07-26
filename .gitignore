@@ -10,3 +10,4 @@ htmlcov
 .env
 qwen_embeddings_cache.pkl
 *.egg-info
+frontend/.next/
