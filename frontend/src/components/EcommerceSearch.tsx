@@ -86,8 +86,17 @@ useEffect(() => {
       
       setDisplayProducts(shuffleArray(filtered.length > 0 ? filtered : mockProducts))
     } else {
-      // Clear backend response for empty queries
-      setBackendResponse(null)
+      // Show default backend response for empty queries
+      const defaultBackendResponse = {
+        intent: {
+          title: '精選商品',
+          attrs: ['精選', '品質', '設計', '實用']
+        },
+        message: `為您精選 ${mockProducts.length} 個優質商品，涵蓋各種風格與需求。`,
+        status: 200
+      }
+      
+      setBackendResponse(defaultBackendResponse)
       
       setSearchState(prev => ({
         ...prev,
@@ -165,7 +174,7 @@ useEffect(() => {
       
       {/* Backend Response Display */}
       {backendResponse && searchState.hasSearched && (
-        <div className="flex justify-between items-center mt-4 mx-8 py-4">
+        <div className="relative z-20 flex justify-between items-center mt-4 mx-8 py-4">
           <div className="flex items-center gap-4">
             <h3 className="text-lg font-semibold text-gray-900">
               {backendResponse.intent.title}
