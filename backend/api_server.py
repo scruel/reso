@@ -157,7 +157,7 @@ async def thread(tid: int):
           "price": good['price'],
           "dchain": {
               "id": tid,
-              "descpriton": good['detail']
+              "description": good['detail']
           },
           "reference_links": [],
           "status": 0
