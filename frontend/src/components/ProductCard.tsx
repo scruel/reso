@@ -6,7 +6,9 @@ import { formatPrice } from '@/lib/utils'
 import { Star } from 'lucide-react'
 import Image from 'next/image'
 import { ProductReviewPreview } from './ProductReviewPreview'
-import * as jsCookie from 'js-cookie'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import Cookies from 'js-cookie'
 
 interface ProductCardProps {
   product: Product
@@ -18,6 +20,7 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
   const [isImageError, setIsImageError] = useState(false)
   const [cardWidth, setCardWidth] = useState<number | undefined>(undefined)
   const cardRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
   
   // 使用後端提供的顏色或預設顏色
   const categoryColor = product.categoryColor || '#6B7280' // 預設為灰色
@@ -39,8 +42,11 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
     return () => resizeObserver.disconnect()
   }, [])
 
-  const handleVisit = () => {
-    const userUuid = jsCookie.get('reso_user_uuid') || 'anonymous';
+  const handleClick = () => {
+    console.log('ProductCard clicked, navigating to product:', product.id);
+    
+    // Log click in background
+    const userUuid = Cookies.get('reso_user_uuid') || 'anonymous';
     fetch('/api/log-click', {
       method: 'POST',
       headers: {
@@ -57,20 +63,23 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
         uuid: userUuid
       }),
     }).catch((err) => console.error('Failed to log click:', err))
-
-    window.open(product.url, '_blank')
+    
+    // Force navigation using window.location
+    if (typeof window !== 'undefined') {
+      window.location.href = `/product/${product.id}`;
+    }
   }
 
   return (
-    <div
-      ref={cardRef}
-      className="w-full group cursor-pointer animate-fade-in transition-transform hover:scale-[1.015]"
-      style={{ animationDelay: `${delay}ms` }}
-      onClick={handleVisit}
-    >
+      <div
+        ref={cardRef}
+        className="w-full group cursor-pointer animate-fade-in transition-transform hover:scale-[1.015]"
+        style={{ animationDelay: `${delay}ms` }}
+        onClick={handleClick}
+      >
       <div className="rounded-2xl overflow-visible">
         {/* Top product info */}
-        <div className="rounded-2xl bg-white/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-shadow duration-300 relative z-10">
+        <div className="rounded-2xl bg-white/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-shadow duration-300 relative z-50">
           <div className="w-full h-full flex items-center justify-center text-6xl text-gray-300">
             {!isImageError ? (
               <Image

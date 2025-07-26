@@ -151,7 +151,7 @@ useEffect(() => {
       Cookies.set(COOKIE_KEY, uuid, { 
         expires: 365, 
         sameSite: 'Lax',
-        secure: window.location.protocol === 'https:'
+        secure: typeof window !== 'undefined' && window.location.protocol === 'https:'
       });
     }
     
@@ -165,7 +165,7 @@ useEffect(() => {
       uuid,
       actionType,
       timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent,
+      userAgent: typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
       sessionId: uuid, // Use same UUID as session ID
       ...data
     };
@@ -260,7 +260,7 @@ useEffect(() => {
       
       {/* Backend Response Display */}
       {backendResponse && searchState.hasSearched && (
-        <div className="relative z-40 mt-4">
+        <div className="relative z-20 mt-4">
           <div className="flex justify-between items-start gap-6 px-6 py-8 flex-wrap">
             {/* 左區：Title + Tags 區塊 */}
             <div className="px-6 py-4 w-full max-w-[60%] flex items-start gap-6">
