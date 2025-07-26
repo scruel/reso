@@ -39,7 +39,10 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   if (!product) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="animate-pulse text-gray-500">載入中...</div>
+        <div className="flex flex-col items-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-purple-600 border-t-transparent"></div>
+          <div className="animate-pulse text-gray-500 text-lg">載入中...</div>
+        </div>
       </div>
     )
   }
@@ -47,28 +50,32 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   // Use the backend-provided color or default color
   const categoryColor = product.categoryColor || '#6B7280'
 
-  // AI Insight message
-  const aiInsight = "Based on your search for work attire that balances packability with professional style."
+  // Generate AI Insight based on product category and title
+  const generateAIInsight = (product: Product) => {
+    const category = product.category.toLowerCase()
+    const title = product.title.toLowerCase()
+    
+    if (category.includes('手機') || category.includes('電子')) {
+      return `Based on your search for ${product.category} that combines cutting-edge technology with user-friendly design.`
+    } else if (category.includes('配件') || category.includes('keyboard')) {
+      return `Based on your search for professional ${product.category} that enhances productivity and comfort.`
+    } else if (category.includes('耳機') || title.includes('headphone')) {
+      return `Based on your search for premium audio equipment that delivers exceptional sound quality.`
+    } else if (category.includes('健康') || title.includes('health')) {
+      return `Based on your search for health monitoring devices that seamlessly integrate into your daily routine.`
+    } else {
+      return `Based on your search for ${product.category} that balances quality, functionality, and style.`
+    }
+  }
 
-  // Recommendation tags
-  const recommendationTags = [
-    'Top 8 brands for blazers',
-    'Brook\'s Brother',
-    'Ralph Lauren men blazer',
-    'what you\'ll need for absolute comfort in business trip'
-  ]
+  const aiInsight = generateAIInsight(product)
+
 
   return (
     <>
-      {/* 1. 頁首 Logo 導覽列（固定頂部） */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-purple-600 h-12 flex items-center px-6">
-        <Link 
-          href="/" 
-          className="flex items-center gap-3 text-white hover:text-purple-200 transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <div className="text-xl font-medium tracking-wide">Reso</div>
-        </Link>
+      {/* 1. 頁首 Logo 導覽列（固定頂部） - 商品頁面反白樣式 */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gray-100 backdrop-blur-sm h-12 flex items-center px-6">
+          <div className="text-xl font-medium tracking-wide text-purple">Reso</div>
       </div>
 
       {/* Main Content */}
@@ -105,10 +112,16 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
               
               {/* 3. 右欄上半區：標題與 AI Insight */}
               <div className="space-y-6">
-                {/* 標題區 */}
+                {/* 標題區 - 使用商品分類作為主標題 */}
                 <div className="flex items-center gap-4">
-                  <div className="text-5xl">🧥</div>
-                  <h1 className="text-4xl font-bold text-gray-900">Blazer</h1>
+                  <div className="text-5xl">
+                    {product.category.includes('手機') ? '📱' : 
+                     product.category.includes('耳機') ? '🎧' : 
+                     product.category.includes('配件') ? '⌨️' : 
+                     product.category.includes('健康') ? '💍' : 
+                     product.category.includes('筆電') ? '💻' : '🧥'}
+                  </div>
+                  <h1 className="text-4xl font-bold text-gray-900">{product.category}</h1>
                 </div>
                 
                 {/* AI Insight 卡片 */}
@@ -122,7 +135,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
               {/* 4. 右欄中段：資訊卡片 + 價格 + 建議標籤 */}
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className={`grid gap-6 ${product.flowImage ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
                   
                   {/* 左側資訊卡 */}
                   <div className="space-y-4">
@@ -142,17 +155,14 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                       </span>
                     </div>
 
-                    {/* 商品名稱 */}
+                    {/* 商品名稱 - 使用實際商品標題 */}
                     <div className="space-y-1">
                       <h2 className="text-xl font-semibold text-gray-900">
-                        Blue navy light jacket
-                      </h2>
-                      <p className="text-lg text-gray-700">
-                        light jacket
-                      </p>
-                      {/* 原始商品名稱作為參考 */}
-                      <p className="text-sm text-gray-500 line-through">
                         {product.title}
+                      </h2>
+                      {/* 如果有副標題可以在這裡顯示 */}
+                      <p className="text-lg text-gray-700">
+                        {product.brand} 精選商品
                       </p>
                     </div>
 
@@ -188,20 +198,14 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                 </div>
               </div>
 
-              {/* 5. 右欄下半區：推薦標籤區（Tag Buttons） */}
+              {/* 5. 右欄下半區：購買按鈕 */}
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">延伸搜尋建議</h3>
-                <div className="flex flex-wrap gap-2">
-                  {recommendationTags.map((tag, index) => (
-                    <Link
-                      key={index}
-                      href={`/?q=${encodeURIComponent(tag)}`}
-                      className="inline-block bg-blue-600 text-white text-sm px-4 py-2 rounded-full hover:bg-blue-700 transition-colors"
-                    >
-                      {tag}
-                    </Link>
-                  ))}
-                </div>
+                <button 
+                  className="w-full bg-green-500 text-white text-lg font-semibold px-6 py-4 rounded-xl shadow-lg hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+                  onClick={() => window.open(product.url, '_blank')}
+                >
+                  購買連結（跳轉到第三方）
+                </button>
               </div>
             </div>
           </div>
