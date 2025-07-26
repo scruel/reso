@@ -15,6 +15,32 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+class KimiEmbeddingService:
+    """
+    Kimi文本嵌入服务
+    
+    使用Kimi的text-embedding模型生成文本嵌入向量
+    支持缓存机制，避免重复计算
+    """
+    
+    def __init__(self, api_key: Optional[str] = None, cache_path: str = "kimi_embeddings_cache.pkl"):
+        """
+        初始化Kimi嵌入服务
+        
+        Args:
+            api_key: Kimi API密钥，如果为None则从环境变量KIMI_API_KEY获取
+            cache_path: 嵌入缓存文件路径
+        """
+        # 设置API密钥
+        self.api_key = api_key or os.getenv("KIMI_API_KEY")
+        if not self.api_key:
+            raise ValueError("Kimi API密钥未设置，请设置KIMI_API_KEY环境变量或传入api_key参数")
+        
+        self.api_key = self.api_key
+        self.cache_path = cache_path
+        self.embedding_cache = self._load_cache()
+        self.base_url = "https://api.moonshot.cn/v1"
+
 class QwenEmbeddingService:
     """
     Qwen文本嵌入服务
@@ -38,7 +64,9 @@ class QwenEmbeddingService:
         
         dashscope.api_key = self.api_key
         self.cache_path = cache_path
-        self.embedding_cache = self._load_cache()
+        self.embedding_cache = self._load_cache()    
+      
+      
         
     def _load_cache(self) -> Dict[str, List[float]]:
         """加载嵌入缓存"""
