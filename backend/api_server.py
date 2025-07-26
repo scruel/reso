@@ -18,15 +18,10 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from tools.rag.qwen_embedding import QwenEmbeddingService
+from dotenv import load_dotenv
 
 load_dotenv()
 key = os.getenv("DASHSCOPE_API_KEY")
-
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
