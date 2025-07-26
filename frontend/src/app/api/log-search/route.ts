@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// 強制動態渲染
+// Force dynamic rendering
 export const dynamic = 'force-dynamic';
 
-// 模擬數據庫存儲
+// Mock database storage
 let searchLogs: any[] = [];
 
 export async function POST(request: NextRequest) {
@@ -19,15 +19,15 @@ export async function POST(request: NextRequest) {
       sessionId: request.headers.get('x-session-id') || 'anonymous'
     };
     
-    // 存儲搜索日誌
+    // Store search log
     searchLogs.push(logEntry);
     
-    // 保持最近 100 筆記錄
+    // Keep only the most recent 100 records
     if (searchLogs.length > 100) {
       searchLogs = searchLogs.slice(-100);
     }
     
-    console.log('🔍 搜索日誌:', logEntry);
+    console.log('🔍 Search log:', logEntry);
     
     return NextResponse.json({ 
       success: true, 
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       logId: logEntry.id
     });
   } catch (error) {
-    console.error('搜索日誌錯誤:', error);
+    console.error('Search log error:', error);
     return NextResponse.json({ 
       success: false, 
       error: 'Failed to log search' 

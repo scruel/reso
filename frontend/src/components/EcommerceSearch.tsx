@@ -23,17 +23,25 @@ export function EcommerceSearch() {
   }, []);
 
   const [displayProducts, setDisplayProducts] = useState<Product[]>([])
+  const [backendResponse, setBackendResponse] = useState<{
+    intent: {
+      title: string;
+      attrs: string[];
+    };
+    message: string;
+    status: number;
+  } | null>(null)
 
-  // Initialize with shuffled products
-  useEffect(() => {
-    setDisplayProducts(shuffleArray(mockProducts))
-  }, [])
+// Initialize with shuffled products
+useEffect(() => {
+  setDisplayProducts(shuffleArray(mockProducts));
+}, [])
 
   // Debounced search function
   const debouncedSearch = debounce(async (query: string) => {
     setSearchState(prev => ({ ...prev, isSearching: true }))
     
-    // Simulate API call delay
+    // Simulate API call delay for both search and backend response
     await new Promise(resolve => setTimeout(resolve, 800))
     
     if (query.trim()) {
@@ -44,6 +52,30 @@ export function EcommerceSearch() {
         product.brand.toLowerCase().includes(query.toLowerCase())
       )
       
+      // Simulate backend response based on query
+      const mockBackendResponse = {
+        intent: {
+          title: query.toLowerCase().includes('jacket') || query.toLowerCase().includes('coat') 
+            ? '外套系列' 
+            : query.toLowerCase().includes('dress') 
+            ? '連身裙系列'
+            : query.toLowerCase().includes('shoes') || query.toLowerCase().includes('boot')
+            ? '鞋履系列'
+            : '精選商品',
+          attrs: query.toLowerCase().includes('jacket') || query.toLowerCase().includes('coat')
+            ? ['保暖', '防風', '時尚', '多層次']
+            : query.toLowerCase().includes('dress')
+            ? ['優雅', '舒適', '百搭', '氣質']
+            : query.toLowerCase().includes('shoes') || query.toLowerCase().includes('boot')
+            ? ['舒適', '耐磨', '時尚', '透氣']
+            : ['精選', '品質', '設計', '實用']
+        },
+        message: `為您找到 ${filtered.length > 0 ? filtered.length : mockProducts.length} 個相關商品，根據您的搜尋「${query}」為您推薦最適合的選擇。`,
+        status: 200
+      }
+      
+      setBackendResponse(mockBackendResponse)
+      
       setSearchState(prev => ({
         ...prev,
         isSearching: false,
@@ -53,6 +85,9 @@ export function EcommerceSearch() {
       
       setDisplayProducts(shuffleArray(filtered.length > 0 ? filtered : mockProducts))
     } else {
+      // Clear backend response for empty queries
+      setBackendResponse(null)
+      
       setSearchState(prev => ({
         ...prev,
         isSearching: false,
@@ -66,7 +101,7 @@ export function EcommerceSearch() {
 
   const handleSearch = (query: string) => {
     setSearchState(prev => ({ ...prev, query, hasSearched: true }))
-    debouncedSearch(query)
+    debouncedSearch(query);
   
     fetch('/api/log-search', {
       method: 'POST',
@@ -116,13 +151,48 @@ export function EcommerceSearch() {
       )}
       
       {/* Search Box */}
-      <SearchBox
-        onSearch={handleSearch}
-        onReset={handleReset}
-        isSearching={searchState.isSearching}
-        hasSearched={searchState.hasSearched}
-        query={searchState.query}
-      />
+      <div>
+        <SearchBox
+          onSearch={handleSearch}
+          onReset={handleReset}
+          isSearching={searchState.isSearching}
+          hasSearched={searchState.hasSearched}
+          query={searchState.query}
+        />
+      </div>
+      
+      {/* Backend Response Display */}
+{backendResponse && (
+        <div className="flex justify-between items-start mt-4 mx-8">
+          <div className="flex flex-col">
+            <h3 className="text-lg font-semibold text-gray-900">
+              {backendResponse.intent.title}
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {backendResponse.intent.attrs.map((attr, index) => (
+                <button
+                  key={index}
+                  className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full hover:bg-blue-200 transition-colors cursor-pointer"
+                >
+                  {attr}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="ml-auto bg-white rounded-lg shadow-lg border border-gray-200 p-4">
+            <p className="text-sm text-gray-700 mb-2">{backendResponse.message}</p>
+            <div className="flex justify-between items-center text-xs text-gray-500">
+              <span>Status: {backendResponse.status}</span>
+              <button 
+                onClick={() => setBackendResponse(null)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Products Grid */}
       {searchState.hasSearched && (

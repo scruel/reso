@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// 強制動態渲染
+// Force dynamic rendering
 export const dynamic = 'force-dynamic';
 
-// 模擬數據庫存儲
+// Simulate database storage
 let clientLogs: any[] = [];
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
-    // 處理批量日誌（來自 tracker.ts）
+    // Handle batch logs (from tracker.ts)
     if (Array.isArray(body)) {
       const processedLogs = body.map(log => ({
         id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       
       clientLogs.push(...processedLogs);
       
-      // 記錄每種類型的行為
+      // Log each type of behavior
       processedLogs.forEach(log => {
         const emoji = {
           'pageview': '📄',
@@ -36,10 +36,10 @@ export async function POST(request: NextRequest) {
           'search': '🔍'
         }[log.type] || '📊';
         
-        console.log(`${emoji} 客戶端行為 [${log.type}]:`, log.payload || '頁面瀏覽');
+        console.log(`${emoji} Client behavior [${log.type}]:`, log.payload || 'Page view');
       });
       
-      // 保持最近 200 筆記錄
+      // Keep latest 200 records
       if (clientLogs.length > 200) {
         clientLogs = clientLogs.slice(-200);
       }
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       });
     }
     
-    // 單一日誌處理
+    // Single log processing
     const logEntry = {
       id: Date.now().toString(),
       ...body,
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       clientLogs = clientLogs.slice(-200);
     }
     
-    console.log('📊 客戶端日誌:', logEntry);
+    console.log('📊 Client log:', logEntry);
     
     return NextResponse.json({ 
       success: true, 
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
       logId: logEntry.id
     });
   } catch (error) {
-    console.error('客戶端日誌錯誤:', error);
+    console.error('Client log error:', error);
     return NextResponse.json({ 
       success: false, 
       error: 'Failed to log client event' 
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  // 統計各種行為類型
+  // Statistics for various behavior types
   const stats = clientLogs.reduce((acc, log) => {
     const type = log.type || 'unknown';
     acc[type] = (acc[type] || 0) + 1;
