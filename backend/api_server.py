@@ -236,7 +236,6 @@ async def products():
             prompt += "\n\n## 原有意图识别结果\n子类目：" + intent_info['intend_title']
             prompt += '\n属性：' + ','.join(intent_info['intend_attrs'])
             prompt += '\停用词：' + ','.join(intent_info['intend_stop_words'])
-        prompt += '\n\n===' + query
         res = kimi.generate(prompt)
         res = json.loads(res)
         # check if format good
