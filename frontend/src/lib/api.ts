@@ -10,20 +10,56 @@ export interface ThreadDetailResponse {
 }
 
 export async function fetchThreadDetail(threadId: string): Promise<ThreadDetailResponse> {
-  const response = await apiGet(`/api/thread?id=${threadId}`);
-  
-  // Transform backend response to match frontend interface
-  if (response.dchain && response.dchain.descpriton) {
-    response.dchain.description = response.dchain.descpriton;
-    delete response.dchain.descpriton;
+  try {
+    const response = await apiGet(`/api/thread?id=${threadId}`);
+    
+    // Handle new API response format
+    if (response.success && response.data) {
+      const data = response.data;
+      
+      // Transform backend response to match frontend interface
+      if (data.dchain && data.dchain.descpriton) {
+        data.dchain.description = data.dchain.descpriton;
+        delete data.dchain.descpriton;
+      }
+      
+      // Convert id to string if it's a number
+      if (data.dchain && typeof data.dchain.id === 'number') {
+        data.dchain.id = data.dchain.id.toString();
+      }
+      
+      return data;
+    }
+    
+    // Handle old format for backward compatibility
+    if (!response.success && !response.error) {
+      // Transform backend response to match frontend interface
+      if (response.dchain && response.dchain.descpriton) {
+        response.dchain.description = response.dchain.descpriton;
+        delete response.dchain.descpriton;
+      }
+      
+      // Convert id to string if it's a number
+      if (response.dchain && typeof response.dchain.id === 'number') {
+        response.dchain.id = response.dchain.id.toString();
+      }
+      
+      return response;
+    }
+    
+    // Handle error response
+    if (response.error) {
+      const error = new Error(response.error.message || 'API錯誤');
+      error.name = response.error.type || 'ApiError';
+      throw error;
+    }
+    
+    throw new Error('無效的API響應格式');
+    
+  } catch (error) {
+    console.error('Failed to fetch thread detail:', error);
+    throw error;
   }
-  
-  // Convert id to string if it's a number
-  if (response.dchain && typeof response.dchain.id === 'number') {
-    response.dchain.id = response.dchain.id.toString();
-  }
-  
-  return response;
 }
 
 // API utility functions with environment variable support

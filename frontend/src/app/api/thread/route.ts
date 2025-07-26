@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { handleApiError, createErrorResponse, validateRequest } from '@/lib/errorHandler';
 
 // Mock data that simulates the new backend API response format
 const mockThreadDetails: Record<string, any> = {
@@ -43,28 +44,49 @@ const mockThreadDetails: Record<string, any> = {
 };
 
 export async function GET(request: NextRequest) {
-  // Get the thread ID from query parameters
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
-  
-  if (!id) {
-    return NextResponse.json(
-      { error: 'Thread ID is required as query parameter' },
-      { status: 400 }
-    );
+  try {
+    // Validate required parameters
+    const validationError = validateRequest(request, ['id']);
+    if (validationError) {
+      return createErrorResponse('validation', validationError, 400);
+    }
+
+    // Get the thread ID from query parameters
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id')!;
+    
+    // Validate ID format
+    if (!/^[0-9]+$/.test(id)) {
+      return createErrorResponse(
+        'validation',
+        '產品ID格式無效，必須是數字',
+        400,
+        { providedId: id }
+      );
+    }
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const threadDetail = mockThreadDetails[id];
+    
+    if (!threadDetail) {
+      return createErrorResponse(
+        'not_found',
+        `找不到ID為 "${id}" 的產品詳情`,
+        404,
+        { requestedId: id, availableIds: Object.keys(mockThreadDetails) }
+      );
+    }
+    
+    // Return successful response
+    return NextResponse.json({
+      success: true,
+      data: threadDetail,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    return handleApiError(error);
   }
-  
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  const threadDetail = mockThreadDetails[id];
-  
-  if (!threadDetail) {
-    return NextResponse.json(
-      { error: 'Thread not found' },
-      { status: 404 }
-    );
-  }
-  
-  return NextResponse.json(threadDetail);
 }

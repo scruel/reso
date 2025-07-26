@@ -55,7 +55,7 @@ useEffect(() => {
       );
       
       if (productsResponse && productsResponse.threads && Array.isArray(productsResponse.threads)) {
-        const backendThreads = productsResponse.threads.map((item: any) => ({
+        let backendThreads = productsResponse.threads.map((item: any) => ({
           id: item.id,
           good: {
             id: item.good.id,
@@ -73,8 +73,15 @@ useEffect(() => {
           } : undefined
         }));
         
+        // 檢查是否少於30個產品，如果是則填充假數據
+        if (backendThreads.length < 30) {
+          const mockThreadsToAdd = mockThreads.slice(0, 30 - backendThreads.length);
+          backendThreads = [...backendThreads, ...mockThreadsToAdd];
+          console.log(`📦 Backend returned ${productsResponse.threads.length} products, filled with ${mockThreadsToAdd.length} mock products to reach 30`);
+        }
+        
         setDisplayThreads(shuffleArray(backendThreads));
-        console.log(`🚀 Initialized with ${backendThreads.length} products from backend`);
+        console.log(`🚀 Initialized with ${backendThreads.length} products (backend + mock fill)`);
       } else {
         setDisplayThreads(shuffleArray(mockThreads));
         console.log('🔄 Initialized with mock data - backend not available');
@@ -149,7 +156,14 @@ useEffect(() => {
           } : undefined
         }));
         
-        console.log(`📦 Loaded ${threadsToDisplay.length} products from backend`);
+        // 檢查是否少於30個產品，如果是則填充假數據
+        if (threadsToDisplay.length < 30) {
+          const mockThreadsToAdd = mockThreads.slice(0, 30 - threadsToDisplay.length);
+          threadsToDisplay = [...threadsToDisplay, ...mockThreadsToAdd];
+          console.log(`📦 Backend returned ${productsResponse.threads.length} products, filled with ${mockThreadsToAdd.length} mock products in search`);
+        }
+        
+        console.log(`📦 Loaded ${threadsToDisplay.length} products from backend (with fill if needed)`);
       } else {
         console.log('⚠️ Using fallback mock data - backend products not available');
       }
