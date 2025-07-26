@@ -10,6 +10,7 @@ import { Product, SearchState } from '@/types/product'
 import { shuffleArray, debounce } from '@/lib/utils'
 import { initTracker } from '@/lib/tracker';
 import { useInfiniteScroll } from '@/lib/useInfiniteScroll';
+import { v4 as uuidv4 } from 'uuid';
 
 export function EcommerceSearch() {
   const [searchState, setSearchState] = useState<SearchState>({
@@ -110,20 +111,43 @@ useEffect(() => {
     }
   }, 500)
 
+  // Async logging function with UUID
+  const logUserAction = async (actionType: string, data: any = {}) => {
+    const uuid = uuidv4();
+    const payload = {
+      uuid,
+      actionType,
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      ...data
+    };
+
+    try {
+      // Don't await - fire and forget for better UX
+      fetch('/api/log-search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      }).catch((err) => console.error('Failed to log action:', err));
+      
+      return uuid; // Return UUID for potential use
+    } catch (error) {
+      console.error('Logging error:', error);
+      return null;
+    }
+  };
+
   const handleSearch = (query: string) => {
     setSearchState(prev => ({ ...prev, query, hasSearched: true }))
     debouncedSearch(query);
   
-    fetch('/api/log-search', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query,
-        timestamp: new Date().toISOString(),
-      }),
-    }).catch((err) => console.error('Failed to log search:', err))
+    // Log search action with UUID asynchronously
+    logUserAction('search', {
+      query,
+      searchType: query.trim() ? 'text_search' : 'empty_search'
+    });
   }
   
 
