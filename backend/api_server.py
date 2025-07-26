@@ -12,13 +12,15 @@ import logging
 from datetime import datetime
 from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
+from tools.weaviate.weaviate_query import query_good
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from tools.rag.qwen_embedding import QwenEmbeddingService
 
-# 添加项目根目录到Python路径
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+load_dotenv()
+key = os.getenv("DASHSCOPE_API_KEY")
 
 try:
     from dotenv import load_dotenv
@@ -148,19 +150,22 @@ async def clear():
     }
 
 @app.get("/api/thread")
-async def vibe(id: int = None):
+async def thread(id: int = None):
+    good = query_good(id)
+    # kimi = QwenEmbeddingService(key)
     return {
-      "title": "string",
-      "pic_url": "string",
+      "title": good['name'],
+      "pic_url": good['picUrl'],
+      "price": good['price'],
       "dchain": {
           "id": id,
-          "description": "string"
+          "descpriton": good['detail']
       },
-      "reference_links": "string"
+      "reference_links": None
   }
 
 @app.get("/api/products")
-async def vibe():
+async def products():
     return {
         "threads": [
             {

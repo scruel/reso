@@ -1,0 +1,152 @@
+小米充电宝25000
+212W 充沛能量
+疾速闪充 
+*可上飞机：小米充电宝25000212W内置5颗5000mAh电芯，额定容量为14000mAh（5V/6A），电池典型能量为90.8Wh，根据国际航空标准，单个移动电源产品电池能量小于100Wh可上飞机。
+多口212WMAX疾速输出支持三台设备同时大功率快充
+单口PD3.1 140W MAX
+	品质电芯超大容量 90.8Wh，长效续航有保障
+支持小米手机最高120W充电
+USB-C
+双向快充 9重安全保护
+兼容主流设备 
+特别外观
+精妙美学 
+特别外观设计
+硬核，更亮眼
+三面透壳，透出极客内饰，硬核科技感呼之欲出。外壳棱角硬朗圆润不硌手，握持更舒适。酷感硬核科技范儿，由内至外，为你呈现。
+搭载彩色显示屏
+此时此刻，了然于心
+彩色智能数显屏可显示剩余电量、充电速度等信息。当前状态全显示，补电过程清晰感知。
+70 %
+ELECTRICITY Screen
+HO210FMAT-A
+HIGHSPEED
+444 IN
+OUT
+充/放电协议界面 
+PD 3.1(5V-28V)
+PD PPS(5V-20V) %
+QC 3.0(5V-20V)
+Samsung AFC REMAINING
+Huawei FCP
+Apple 2.4A mAh
+mAh
+mAh/min
+DCP 1.5A 
+
+
+强大内芯 振奋人心
+单口140WMAX
+充电加速，体验疾速
+PD3.1充电协议带来140W MAX单口大功率，可满足MacBook Pro充电需求。支持小米手机以最高120W大功率充电，充满一部小米14 Pro仅需约20分钟*。
+90W MAX	 Xiaomi 14
+120W MAX 	Xiaomi 14 Pro
+120W MAX Redmi K70 Pro 
+67W MAX 	Xiaomi MIX fold 4
+100W MAX 	Redmi Book Pro
+140W MAX MacBook Pro 16
+
+
+*以上充电功率数据均为特定充电场景下可达到的理论最大值，充电时间数据来源于小米实验室，均在特定实验条件下测得，可能因实验条件、客观环境（设备软件版本、环境温度等）不同而存在差异，请以实际使用体验为准。
+三口同充212WMAX
+充电功率智能分配
+可同时为三台设备提供65W+27W+120WMAX充电功率。双口同充模式下，功率高达65W+120W。智能分配功率，多样补电场景，轻松应对。
+140W MAX USB-C1输出*
+	45W MAX USB-C2输出
+	120W MAX USB-A输出*
+
+
+*140W MAX USB-C1需使用支持PD3.1协议线材
+*120W MAX USB-A需使用小米 6A Type-C快充数据线
+
+
+品质电芯超大容量
+充沛能量，保障续航
+5颗5000mAh电池，组成超大容量，等效25000mAh电池能量*，为长久外出带来续航保证。能量充沛，才能使用无忧。
+
+
+25000
+Xiaomi 14 Pro
+20分钟充电100% 可充3.88次
+
+
+iPhone 15
+30分钟充电60%
+1H18min充满可充4.91次
+Xiaomi Pad 6 Pro
+30分钟充电69% 54min充满可充2次
+Redmi Book 2024 i7 30分钟充电42% 可充0.65次 
+Macbook Pro 30分钟充电40% 可充0.69次
+*等效25000mAh电池能量：本品内置5颗标称电压为3.63V、典型容量为5000mAh的电芯，等效一颗标称电压3.63V、典型容量25000mAh的电芯所能提供的电池能量。
+充电时间数据来源于小米实验室，均在特定实验条件下测得，可能因实验条件、客观环境（设备软件版本、环境温度等）不同而存在差异，请以实际使用体验为准。
+耳机、手环放心充
+小电流放电模式切换自如
+正常使用状态下，连续短按两次按键，即进入小电流放电模式。支持蓝牙耳机、手环等小电流设备持续充电，智能断电。
+
+
+USB-C双向快充 满电快，少等待
+USB—C1输入功率100W MAX，最快2.5小时即可完成自充电*。疾速补电，满满安全感。
+100W MAX USB-C1输入
+	45W MAX USB-C2输入
+
+
+多重保护 安心之选
+高品质电路芯片
+使用更放心
+高精度温度监测器与先进控制管理芯片强强联合，放电稳定，安全有效提升电能转化。多重贴心保护，品质可靠耐用之选。
+温度保护
+短路保护
+RESET保护 
+输入过压保护
+输入过流保护
+输出过压保护
+输出过流保护
+过充过放保护
+金属异物保护
+*小电流设备充电：也支持为非小米品牌的蓝牙耳机、手环等设备进行小电流充电。
+*2.5小时完成自充：测试方法参照GB/T35590放电方法放空移动电源，空置30min，需搭配100W充电器和包装内USB—C充电线，通过IN1接口2.5小时完成自充；若使用18W充电器和包装内USB—C充电线，通过IN1接口，则需要约5.5小时。
+手机兼容性列表
+*兼容表：仅展示部分热门型号，更多适用机型可联系在线客服确认。品牌
+型号 Xiaomi MIX Fold 4
+Redmi K70至尊版 Xiaomi MIX Fold 3
+Redmi K70系列 Xiaomi MIX Fold 2
+Redmi K60系列 Xiaomi MIX Flip
+Redmi K50 Xiaomi 14 Ultra
+Redmi K40 5G Xiaomi 14 Pro
+Redmi K30 5G Xiaomi
+Xiaomi 14
+Redmi K20 Pro Xiaomi 13 Ultra
+Redmi Turbo 3 兼容协议
+小米私有快充协议
+Xiaomi 13 Pro
+Redmi Note 13 Pro+ 功率
+Xiaomi 13
+Redmi Note 13 120W MAX
+向下兼容
+Xiaomi 12系列
+Redmi Note 12 Turbo 100W/90W/67W
+Xiaomi 11系列
+Redmi Note 12 5G 等多个挡位
+Xiaomi 10系列
+Redmi Note 11T Pro Xiaomi 9 Pro
+Redmi Note 10 Pro Xiaomi Civi 4 Pro
+Redmi Note 10 Xiaomi Civi 3
+Redmi Note 9 5G Xiaomi Civi 2
+Redmi 13C Redmi 12 5G
+Redmi 9 iPhone 15系列
+iPhone 14系列 Apple
+iPhone 13 Pro iPhone 13 mini iPhone 12 Pro OPPO K9
+OPPO Reno 6 OPPO Reno 7 OPPO Reno10Pro+ OPPO Find X6 Pro OPPO K12X OPPO Find X7 Ultra OPPO A1 Pro
+一加Ace 3 Pro vivo X70 Pro+
+vivo X90 Pro
+vivo Y78+ vivo
+vivo S19 Pro vivo Y200 GT iQOO 12 pro
+HUAWEI P40 Pro+ HUAWEI P60 Pro
+HUAWEI Mate 50 Pro 华为
+HUAWEI Mate 60 Pro HUAWEI Pura 70 Pro HUAWEl nova 12系列
+华为畅享70Pro
+Samsung Galaxy S21 Samsung Galaxy S21 Ultra
+Samsung Galaxy S22 Ultra 三星
+Samsung Galaxy S23 Ultra Samsung Galaxy S24 Ultra
+Samsung Galaxy Z Flip5 荣耀Magic5
+荣耀Magic V3系列 荣耀Magic 6 

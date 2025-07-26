@@ -126,8 +126,6 @@ def process_goods_directory(base_path="/home/scruel/reso/resource/good"):
             print(f"成功插入商品 {subdir}")
         except Exception as e:
             raise e
-            print(f"处理文件夹 {subdir} 时出错: {str(e)}")
-            continue
 
 process_goods_directory()
 client.close()  # Free up resources

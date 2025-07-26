@@ -52,5 +52,15 @@ def query(text: str):
     return response.objects
 
 
+def query_good(good_id: int):
+    article_collection = client.collections.get(collection_name)
+    from weaviate.classes.query import Filter
+    existing_items = article_collection.query.fetch_objects(
+        filters=Filter.by_property("goodId").equal(good_id),
+        limit=1
+    )
+    return existing_items.objects[0].properties
+  
 if __name__ == "__main__":
-    query("小米充电宝")
+    # query("小米充电宝")
+    print(query_good(1))
