@@ -113,6 +113,15 @@ async def health_check():
         "timestamp": datetime.now().isoformat()
     }
 
+@app.get("/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "ai_system_ready": orchestrator is not None,
+        "timestamp": datetime.now().isoformat()
+    }
+    
+    
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
