@@ -1,16 +1,16 @@
 
 # Web API框架
-fastapi==0.116.0
-uvicorn==0.35.0
+fastapi>=0.116.0
+uvicorn>=0.35.0
 
 # 核心AI框架
-camel-ai==0.2.0
+camel-ai>=0.2.0
 dashscope>=1.14.0
-python-dotenv
+python-dotenv>=1.0.0
 
 # 网络请求
 requests>=2.28.0
-weaviate-client
+weaviate-client>=4.16.4
 
 # 开发和测试
 # pytest>=7.0.0
@@ -20,9 +20,8 @@ weaviate-client
 # structlog>=22.0.0
 
 # 可选：如果需要处理更多文档格式
-beautifulsoup4
-lxml
+beautifulsoup4>=4.12.2
+lxml>=6.0.0
 
 # JSON处理
-pydantic
-
+pydantic>=2.11.7
