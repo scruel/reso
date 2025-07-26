@@ -5,7 +5,14 @@
 ## 文件说明
 
 - `create_dialog_table.py` - 创建 dialog 表的脚本
-- `dialog_operations.py` - dialog 表的 CRUD 操作示例
+- `dialog_operations.py` - dialog 表的 CRUD 操作示例（已废弃，推荐使用新版本）
+- `dialog_crud.py` - 专门针对 dialog 表的四个核心 CRUD 操作
+- `db_manager.py` - 完整的数据库管理器，包含连接池和高级 CRUD 功能
+- `advanced_crud.py` - 高级 CRUD 操作，包含复杂查询、数据分析、导入导出等
+- `config.py` - 配置管理模块，统一管理环境变量和数据库配置
+- `example_usage.py` - 完整的使用示例，展示所有功能
+- `test_dialog_crud.py` - 单元测试文件，验证所有功能
+- `.env.example` - 环境变量配置模板
 - `README.md` - 本说明文件
 
 ## 表结构
@@ -26,11 +33,34 @@
 
 ## 使用方法
 
-### 1. 创建表
+### 1. 配置环境变量
+
+复制环境变量模板并配置：
 
 ```bash
 cd /home/scruel/reso/tools/psql
+cp .env.example .env
+# 编辑 .env 文件，填入实际的数据库连接信息
+```
+
+### 2. 创建表
+
+```bash
 python create_dialog_table.py
+```
+
+### 3. 运行示例
+
+```bash
+# 查看完整功能演示
+python example_usage.py
+```
+
+### 4. 运行测试
+
+```bash
+# 验证所有功能是否正常
+python test_dialog_crud.py
 ```
 
 这个脚本会：
@@ -39,29 +69,57 @@ python create_dialog_table.py
 - 创建自动更新 `updated_at` 字段的触发器
 - 显示表结构信息
 
-### 2. 使用 CRUD 操作
+### 2. 使用核心 CRUD 操作
 
 ```bash
-python dialog_operations.py
+python dialog_crud.py
 ```
 
-这个脚本包含一个演示程序，展示如何：
-- 插入新的对话记录
-- 根据 UUID 查询记录
-- 更新现有记录
-- 删除记录
-- 列出所有记录
+这个脚本提供四个核心操作：
+- 录入 dialog 记录
+- 清空 dialog 表
+- 获取所有的 message
+- 获取最后一行 intend_title 及 intend_attrs
 
-### 3. 在代码中使用
+### 3. 使用完整数据库管理器
+
+```bash
+python db_manager.py
+```
+
+这个脚本提供完整的数据库管理功能：
+- 连接池管理
+- 事务处理
+- 完整的 CRUD 操作
+- 批量操作
+- 统计信息
+
+### 4. 使用高级 CRUD 操作
+
+```bash
+python advanced_crud.py
+```
+
+这个脚本提供高级功能：
+- 按日期范围搜索
+- 按意图搜索
+- 按属性搜索
+- 对话分析
+- 数据导入导出
+- 重复记录检测
+
+### 5. 在代码中使用
+
+#### 使用核心 CRUD 操作
 
 ```python
-from dialog_operations import DialogManager
+from dialog_crud import DialogCRUD
 
-# 创建管理器实例
-manager = DialogManager()
+# 创建 CRUD 实例
+crude = DialogCRUD()
 
-# 插入新记录
-uuid = manager.insert_dialog(
+# 录入 dialog
+success = crud.insert_dialog(
     message="用户的问题",
     reply="系统的回答",
     intend_title="问答",
@@ -69,28 +127,110 @@ uuid = manager.insert_dialog(
     intend_stop_words=["的", "了", "吗"]
 )
 
-# 查询记录
-dialog = manager.get_dialog_by_uuid(uuid)
+# 获取所有消息
+messages = crud.get_all_messages()
 
-# 更新记录
-manager.update_dialog(uuid, reply="更新后的回答")
+# 获取最后一行意图信息
+last_intent = crud.get_last_intent_info()
 
-# 删除记录
-manager.delete_dialog(uuid)
-
-# 列出记录
-dialogs = manager.list_dialogs(limit=10)
+# 清空表（谨慎使用）
+# crud.clear_dialog()
 ```
 
-## 依赖要求
+#### 使用完整数据库管理器
+
+```python
+from db_manager import DatabaseManager, DialogCRUD
+
+# 创建数据库管理器
+db_manager = DatabaseManager()
+dialog_crud = DialogCRUD(db_manager)
+
+# 创建记录
+success = dialog_crud.create(
+    uuid_str="your-uuid",
+    message="用户消息",
+    reply="系统回复",
+    intend_title="意图标题",
+    intend_attrs={"confidence": 0.95},
+    intend_stop_words=["停用词"]
+)
+
+# 读取记录
+record = dialog_crud.read_by_uuid("your-uuid")
+
+# 更新记录
+dialog_crud.update("your-uuid", message="更新的消息")
+
+# 删除记录
+dialog_crud.delete("your-uuid")
+
+# 批量创建
+records = [{"uuid": "uuid1", "message": "msg1"}, ...]
+dialog_crud.batch_create(records)
+
+# 关闭连接池
+db_manager.close_pool()
+```
+
+## 环境配置
+
+### 1. 依赖要求
 
 确保已安装以下 Python 包：
 
 ```bash
-pip install psycopg2-binary
+pip install psycopg2-binary python-dotenv
 ```
 
-这个依赖已经包含在 `tools/requirements.txt` 中。
+或者在项目根目录运行：
+
+```bash
+pip install -r requirements.txt
+```
+
+## 项目结构
+
+```
+tools/psql/
+├── create_dialog_table.py    # 创建表脚本
+├── dialog_crud.py            # 基础 CRUD 操作
+├── db_manager.py             # 数据库管理器
+├── advanced_crud.py          # 高级 CRUD 操作
+├── config.py                 # 配置管理
+├── example_usage.py          # 使用示例
+├── test_dialog_crud.py       # 单元测试
+├── .env.example              # 环境变量模板
+└── README.md                 # 说明文档
+```
+
+### 2. 环境变量配置
+
+在项目根目录创建 `.env` 文件，或设置以下环境变量：
+
+```bash
+# PostgreSQL 数据库配置
+POSTGRESQL_HOST=localhost
+POSTGRESQL_PORT=5432
+POSTGRESQL_NAME=postgres
+POSTGRESQL_USER=postgres
+POSTGRESQL_PASSWORD=password
+POSTGRESQL_MIN_CONN=1
+POSTGRESQL_MAX_CONN=10
+POSTGRESQL_TIMEOUT=30
+
+# 应用配置（可选）
+DEBUG=False
+LOG_LEVEL=INFO
+MAX_RECORDS_PER_QUERY=1000
+DEFAULT_PAGE_SIZE=50
+```
+
+可以使用 `config.py` 生成配置模板：
+
+```bash
+python config.py
+```
 
 ## 注意事项
 

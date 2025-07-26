@@ -37,8 +37,6 @@ def create_dialog_table():
     # 可以通过环境变量配置，或者直接修改这些值
     
     try:
-        # 连接数据库
-        print(f"正在连接数据库: {db_config['host']}:{db_config['port']}/{db_config['database']}")
         conn = psycopg2.connect(**db_config)
         conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cursor = conn.cursor()
@@ -51,7 +49,7 @@ def create_dialog_table():
             message TEXT,
             reply TEXT,
             intend_title VARCHAR(255),
-            intend_attrs JSONB,
+            intend_attrs TEXT[],
             intend_stop_words TEXT[],
             created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
