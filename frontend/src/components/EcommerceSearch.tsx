@@ -256,7 +256,7 @@ useEffect(() => {
       
       {/* Backend Response Display */}
       {backendResponse && searchState.hasSearched && (
-        <div className="relative z-40 mt-20">
+        <div className="relative z-40 mt-4">
           <div className="flex justify-between items-start gap-6 px-6 py-8 flex-wrap">
             {/* 左區：Title + Tags 區塊 */}
             <div className="px-6 py-4 w-full max-w-[60%] flex items-start gap-6">
