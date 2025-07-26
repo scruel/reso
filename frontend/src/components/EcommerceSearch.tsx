@@ -163,8 +163,8 @@ useEffect(() => {
       
       {/* Backend Response Display */}
 {backendResponse && (
-        <div className="flex justify-between items-start mt-4 mx-8">
-          <div className="flex flex-col">
+        <div className="flex justify-between items-center mt-4 mx-8">
+          <div className="flex items-center gap-4">
             <h3 className="text-lg font-semibold text-gray-900">
               {backendResponse.intent.title}
             </h3>
