@@ -260,9 +260,9 @@ useEffect(() => {
           <div className="flex justify-between items-start gap-6 px-6 py-8 bg-gray-50 flex-wrap">
             {/* 左區：Title + Tags 區塊（白底卡） */}
             <div className="bg-white rounded-2xl shadow-sm px-6 py-4 w-full max-w-[60%] flex items-start gap-6">
-              {/* 左側：Icon + Title 垂直排列 */}
-              <div className="flex-shrink-0 flex flex-col items-start">
-                <div className="w-12 h-12 flex items-center justify-center text-3xl mb-1">🧥</div>
+              {/* 左側：Icon + Title 水平排列 */}
+              <div className="flex-shrink-0 flex items-center gap-3">
+                <div className="w-12 h-12 flex items-center justify-center text-3xl">🧥</div>
                 <h1 className="text-2xl font-bold text-gray-800">{backendResponse.intent.title}</h1>
               </div>
 
