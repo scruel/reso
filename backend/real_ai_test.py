@@ -88,7 +88,7 @@ class RealAITester:
     async def start_interactive_session(self):
         """开始强制真实AI交互"""
         print("\n" + "="*60)
-        print("🎯 真实AI Agents油烟机推荐系统")
+        print("🎯 Reso")
         print("="*60)
         print("💡 系统特点:")
         print("   ✅ 使用真实AI模型分析")
