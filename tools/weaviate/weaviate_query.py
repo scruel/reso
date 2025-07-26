@@ -15,22 +15,25 @@ load_dotenv()
 weaviate_url = os.getenv("WEAVIATE_URL")
 weaviate_api_key = os.getenv("WEAVIATE_API_KEY")
 
-client = weaviate.connect_to_custom(
-    http_host='weaviate-http.zeabur.app',
-    http_port=443,
-    http_secure=True,
-    grpc_host='weaviate-grpc.zeabur.app',
-    grpc_port=443,
-    grpc_secure=True,
-    auth_credentials=Auth.api_key('P0pQ5zi27awJM1ht968rUWbDm4lHCA3V'),
+def get_client():
+    client = weaviate.connect_to_custom(
+        http_host='weaviate-http.zeabur.app',
+        http_port=443,
+        http_secure=True,
+        grpc_host='weaviate-grpc.zeabur.app',
+        grpc_port=443,
+        grpc_secure=True,
+        auth_credentials=Auth.api_key(weaviate_api_key),
     additional_config=AdditionalConfig(
         timeout=Timeout(init=30, query=60, insert=120)),
-)
+    )
+    return client
 
 collection_name = "ResoGoods"
 qwen = QwenEmbeddingService()
 
 def query(text: str):
+    client = get_client()
     article_collection = client.collections.get(collection_name)
     vector = qwen.get_embedding(text)
     response = article_collection.query.near_vector(
@@ -51,6 +54,7 @@ def query(text: str):
 
 
 def query_good(good_id: int):
+    client = get_client()
     article_collection = client.collections.get(collection_name)
     from weaviate.classes.query import Filter
     existing_items = article_collection.query.fetch_objects(

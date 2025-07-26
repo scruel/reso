@@ -220,6 +220,7 @@ class DialogCRUD:
                 'uuid': str,
                 'intend_title': str,
                 'intend_attrs': dict,
+                'intend_stop_words': str,
                 'created_at': datetime
             }
             如果没有记录则返回 None

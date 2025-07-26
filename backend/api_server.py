@@ -6,12 +6,15 @@ AI Agents系统的FastAPI后端接口
 """
 
 import asyncio
+import json
 import os
 import sys
 import logging
 from datetime import datetime
 from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
+from tools.psql.dialog_crud import DialogCRUD
+from tools.weaviate import weaviate_query
 from tools.weaviate.weaviate_query import query_good
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
@@ -34,6 +37,7 @@ from agents.orchestrator.enhanced_multi_agent_orchestrator import (
 )
 from agents.recorder_agent.camel_behavior_recorder import BehaviorRecorderAgent
 
+kimi = KimiGPTService()
 # Pydantic模型定义
 class ItemInfo(BaseModel):
     title: str = Field(..., description="产品标题")
@@ -110,33 +114,64 @@ async def health_check():
         "timestamp": datetime.now().isoformat()
     }
 
-@app.post("/api/home")
-async def home():
-    return {
-        "intent": {
-            "title": "string",
-            "attrs": [
-                "string"
-            ],
-            "pic_url": "string"
-        },
-        "message": "string",
-        "status": 0
-    }
-
-@app.post("/api/vibe")
+@app.get("/api/vibe")
 async def vibe(query: Optional[str] = None):
-    return {
+    crud = DialogCRUD()
+    try:
+      # agent
+      pass
+    except:
+      pass
+    try:
+        prompt = """
+你是一位专业的商品导购，你需要识别用户的选购意图以帮助用户决策，用户会给你提供原有意图识别结果和历史对话信息。无非必要，请绝对不能更改原有的意图标题。你还需要生成一句 message，用于提示用户一些挑选中的关键缺失信息，不多于 200 字。最后用户会给出最新的文本消息。
+
+## 输出示例及格式
+```
+{
         "intent": {
-            "title": "string",
-            "attrs": [
-                "string"
-            ],
-            "pic_url": "string"
+            "title": "充电宝",
+            "attrs": ["安全", "可靠", "白色"],
+            "stop_words": ["黑色"]
         },
-        "message": f"查询参数: {query}" if query else "string",
-        "status": 0
-    }
+        "message": f"结合近期的新闻信息，建议需要进一步确定充电宝是否有 3C 标识，有需要你可以直接告诉我！",
+}
+```
+
+## 注意事项
+- 请严格按照输出示例的格式输出，不能有任何额外的内容。
+- 保持意图的连贯性和一致性。
+""".strip()
+        all_messages = '\n'.join(crud.get_all_messages())
+        if all_messages:
+            prompt += "\n\n## 历史对话信息" + all_messages
+        intent_info = crud.get_last_intent_info()
+        if intent_info:
+            prompt += "\n\n## 原有意图识别结果\n子类目：" + intent_info['intend_title']
+            prompt += '\n属性：' + ','.join(intent_info['intend_attrs'])
+            prompt += '\停用词：' + ','.join(intent_info['intend_stop_words'])
+        prompt += '\n\n===' + query
+        res = kimi.generate(prompt)
+        res = json.loads(res)
+        # check if format good
+        if 'intent' not in res or 'message' not in res:
+            raise Exception('生成格式错误...')
+        if 'title' not in res['intent']:
+            raise Exception('生成格式错误...')
+        if 'attrs' not in res['intent']:
+            raise Exception('生成格式错误...')
+        crud.insert_dialog(
+            message=query,
+            intend_title=res['intent']['title'],
+            intend_attrs=res['intent']['attrs'],
+            intend_stop_words=res['intent']['stop_words'],
+            reply=res['message']
+        )
+        res['status'] = 0
+        return res
+    except Exception as e:
+      print(e)
+      return {'status': 500, 'message': "vibe 不了一点，请再试试吧！"}
 
 @app.post("/api/clear")
 async def clear():
@@ -153,7 +188,6 @@ async def thread(tid: int):
 """.strip()
         print(tid)
         good = query_good(tid)
-        kimi = KimiGPTService()
         desc = kimi.generate(good['detail'] + prompt)
         
         return {
@@ -173,28 +207,68 @@ async def thread(tid: int):
 
 @app.get("/api/products")
 async def products():
-    return {
-        "threads": [
-            {
-                "id": "string",
-                "good": {
-                    "id": 0,
-                    "title": "string",
-                    "pic_url": "string",
-                    "brand": "string",
-                    "category": "string",
-                    "categoryColor": "string",
-                    "price": "string"
-                },
-                "dchain": {
-                    "tbn_url": "string",
-                    "user_nick": "string",
-                    "user_pic_url": "string"
+    crud = DialogCRUD()
+    try:
+      # agent
+      pass
+    except:
+      pass
+    try:
+        prompt = """
+你是一位 weaviate 专家，正在辅助一位电商导购筛选和获取商品列表。weaviate 中存储的是商品的详细描述信息，导购会将用户的历史对话信息提供给你，其中包含短关键词及长句。导购也可能会为你提供当前用户的子类目，你需要理解并识别用户的主要选购意图，并且拆解出用于执行 weaviate 的 query，并且解析出一些关键词，用于过滤用户不想要的商品。
+
+## 输出示例及格式
+```
+{
+  "query": "小米充电宝白色"
+  "stop_words": ["黑色"]
+}
+```
+
+## 注意事项
+请严格按照输出示例的格式输出，不能有任何额外的内容。
+""".strip()
+        all_messages = '\n'.join(crud.get_all_messages())
+        if all_messages:
+            prompt += "\n\n## 历史对话信息" + all_messages
+        intent_info = crud.get_last_intent_info()
+        if intent_info:
+            prompt += "\n\n## 原有意图识别结果\n子类目：" + intent_info['intend_title']
+            prompt += '\n属性：' + ','.join(intent_info['intend_attrs'])
+            prompt += '\停用词：' + ','.join(intent_info['intend_stop_words'])
+        prompt += '\n\n===' + query
+        res = kimi.generate(prompt)
+        res = json.loads(res)
+        # check if format good
+        if 'query' not in res or 'stop_words' not in res:
+            raise Exception('生成格式错误...')
+        res_list = weaviate_query.query(res['query'])
+        res["threas"] = []
+        for item in res_list:
+            res["threas"].append(
+                {
+                    "id": item['goodId'],
+                    "good": {
+                        "id": 0,
+                        "title": item['name'],
+                        "pic_url": item['picUrl'],
+                        "brand": item['brandName'],
+                        "category": item['catagory'],
+                        "categoryColor": item['subCatagory'],
+                        "price": item['price']
+                    },
+                    "dchain": {
+                        "tbn_url": "",
+                        "user_nick": "test_user",
+                        "user_pic_url": ""
+                    }
                 }
-            }
-        ],
-        "status": "string"
-    }
+            )
+        res['status'] = 0
+        return res
+    except Exception as e:
+      print(e)
+      return {'status': 500, 'message': "vibe 不了一点，请再试试吧！"}
     
 if __name__ == "__main__":
     import uvicorn
