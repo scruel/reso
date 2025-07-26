@@ -145,24 +145,25 @@ async def clear():
     }
 
 @app.get("/api/thread")
-async def thread(id: int = None):
+async def thread(tid: int):
     try:
-        good = query_good(id)
+        print(tid)
+        good = query_good(tid)
         # kimi = KimiService(key)
         return {
           "title": good['name'],
           "pic_url": good['picUrl'],
           "price": good['price'],
           "dchain": {
-              "id": id,
+              "id": tid,
               "descpriton": good['detail']
           },
           "reference_links": [],
-          status: 0
+          "status": 0
       }
     except Exception as e:
         print(e)
-        return {'status': 200, 'message': "商品不存在"}
+        return {'status': 500, 'message': "商品不存在"}
 
 @app.get("/api/products")
 async def products():

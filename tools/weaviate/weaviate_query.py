@@ -60,7 +60,7 @@ def query_good(good_id: int):
         limit=1
     )
     return existing_items.objects[0].properties
-  
+
 if __name__ == "__main__":
     # query("小米充电宝")
     print(query_good(1))
