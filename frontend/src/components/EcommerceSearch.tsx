@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { SearchBox } from './SearchBox'
 import { ProductGrid } from './ProductGrid'
 import { TypewriterText } from './TypewriterText'
+import { Sparkles } from 'lucide-react'
 import { mockProducts } from '@/data/products'
 import { Product, SearchState } from '@/types/product'
 import { shuffleArray, debounce } from '@/lib/utils'
@@ -174,28 +175,35 @@ useEffect(() => {
       
       {/* Backend Response Display */}
       {backendResponse && searchState.hasSearched && (
-        <div className="relative z-20 flex justify-between items-center mt-4 mx-8 py-4">
-          <div className="flex items-center gap-4">
-            <h3 className="text-lg font-semibold text-gray-900">
-              {backendResponse.intent.title}
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {backendResponse.intent.attrs.map((attr, index) => (
-                <button
-                  key={index}
-                  className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full hover:bg-blue-200 transition-colors cursor-pointer"
-                >
-                  {attr}
-                </button>
-              ))}
+        <div className="flex justify-between items-start flex-wrap gap-6 px-6 py-8 bg-gray-50">
+          {/* 左側：Title + Tags */}
+          <div className="flex flex-wrap items-center gap-3 max-w-[65%]">
+            {/* 標題卡片 */}
+            <div className="flex items-center bg-white px-4 py-2 rounded-xl shadow-sm">
+              <span className="text-4xl mr-2">🧥</span>
+              <span className="text-2xl font-bold text-gray-800">{backendResponse.intent.title}</span>
             </div>
+
+            {/* 標籤群 */}
+            {backendResponse.intent.attrs.map((attr, index) => (
+              <span
+                key={index}
+                className="bg-white text-gray-700 text-sm px-3 py-1 rounded-full shadow-sm border border-gray-200"
+              >
+                {attr}
+              </span>
+            ))}
           </div>
-          <div className="ml-auto bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-md">
-            <TypewriterText text={backendResponse.message} speed={30} />
+
+          {/* 右側：Insight 提示框 */}
+          <div className="bg-white p-4 rounded-xl shadow-md max-w-[30%] min-w-[280px] text-sm text-gray-700 leading-relaxed flex gap-2">
+            <Sparkles className="text-purple-500 mt-0.5 shrink-0" size={18} />
+            <div>
+              <TypewriterText text={backendResponse.message} speed={30} />
+            </div>
           </div>
         </div>
       )}
-      
       {/* Products Grid */}
       {searchState.hasSearched && (
         <div className="relative z-10 pt-24 pb-32">
