@@ -1,27 +1,32 @@
 import { Thread } from '@/types/product';
+import { phoneThreads } from './phone-threads';
 
-export const mockThreads: Thread[] = [
+// 使用手机相关数据用于MVP录制
+export const mockThreads: Thread[] = phoneThreads;
+
+// 原始多样化数据（备用）
+export const originalMockThreads: Thread[] = [
   {
-    id: '1',
+    id: '999',
     good: {
-      id: 1,
-      title: 'Apple iPhone 15 Pro Max 256GB',
-      pic_url: 'https://source.unsplash.com/400x400?iphone,smartphone&sig=1',
+      id: 999,
+      title: 'iPhone 15 Pro Max 1TB 钛金属',
+      pic_url: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop&crop=center',
       brand: 'Apple',
-      category: '手機',
-      categoryColor: '#3B82F6',
-      price: '42990'
+      category: '智慧型手機',
+      categoryColor: '#007AFF',
+      price: '59900'
     },
     dchain: {
-      tbn_url: 'https://source.unsplash.com/600x300?phone,workflow&sig=flow1',
-      user_nick: 'TechReviewer Alex',
-      user_pic_url: 'https://source.unsplash.com/100x100?avatar&sig=alex'
+      tbn_url: '/images/phone-search-flowchart.png',
+      user_nick: '科技達人小李',
+      user_pic_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=center'
     }
   },
   {
-    id: '2',
+    id: '1000',
     good: {
-      id: 2,
+      id: 1000,
       title: 'Keychron K8 機械鍵盤',
       pic_url: 'https://source.unsplash.com/400x400?keyboard,mechanical&sig=2',
       brand: 'Keychron',
@@ -31,9 +36,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '3',
+    id: '1001',
     good: {
-      id: 3,
+      id: 1001,
       title: 'Sony WH-1000XM5 無線降噪耳機',
       pic_url: 'https://source.unsplash.com/400x400?headphones,sony&sig=3',
       brand: 'Sony',
@@ -42,15 +47,15 @@ export const mockThreads: Thread[] = [
       price: '8990'
     },
     dchain: {
-      tbn_url: 'https://source.unsplash.com/600x300?headphones,review&sig=flow2',
+      tbn_url: '/images/phone-search-flowchart.png',
       user_nick: 'AudioExpert Sarah',
       user_pic_url: 'https://source.unsplash.com/100x100?avatar&sig=sarah'
     }
   },
   {
-    id: '4',
+    id: '1002',
     good: {
-      id: 4,
+      id: 1002,
       title: 'Samsung Galaxy S24 Ultra 1TB',
       pic_url: 'https://source.unsplash.com/400x400?samsung,smartphone&sig=4',
       brand: 'Samsung',
@@ -60,9 +65,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '5',
+    id: '1003',
     good: {
-      id: 5,
+      id: 1003,
       title: 'Dell XPS 13 Plus 觸控筆電',
       pic_url: 'https://source.unsplash.com/400x400?laptop,dell&sig=5',
       brand: 'Dell',
@@ -71,15 +76,15 @@ export const mockThreads: Thread[] = [
       price: '45000'
     },
     dchain: {
-      tbn_url: 'https://source.unsplash.com/600x300?laptop,review&sig=flow5',
+      tbn_url: '/images/phone-search-flowchart.png',
       user_nick: 'TechGuru Mike',
       user_pic_url: 'https://source.unsplash.com/100x100?avatar&sig=mike'
     }
   },
   {
-    id: '6',
+    id: '1004',
     good: {
-      id: 6,
+      id: 1004,
       title: 'Nintendo Switch OLED 白色主機',
       pic_url: 'https://source.unsplash.com/400x400?nintendo,gaming&sig=6',
       brand: 'Nintendo',
@@ -89,9 +94,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '7',
+    id: '1005',
     good: {
-      id: 7,
+      id: 1005,
       title: 'iPad Pro 12.9吋 M2晶片',
       pic_url: 'https://source.unsplash.com/400x400?ipad,tablet&sig=7',
       brand: 'Apple',
@@ -100,15 +105,15 @@ export const mockThreads: Thread[] = [
       price: '35900'
     },
     dchain: {
-      tbn_url: 'https://source.unsplash.com/600x300?tablet,workflow&sig=flow7',
+      tbn_url: '/images/phone-search-flowchart.png',
       user_nick: 'Creative Pro',
       user_pic_url: 'https://source.unsplash.com/100x100?avatar&sig=creative'
     }
   },
   {
-    id: '8',
+    id: '1006',
     good: {
-      id: 8,
+      id: 1006,
       title: 'AirPods Pro 第二代',
       pic_url: 'https://source.unsplash.com/400x400?airpods,wireless&sig=8',
       brand: 'Apple',
@@ -118,9 +123,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '9',
+    id: '1007',
     good: {
-      id: 9,
+      id: 1007,
       title: 'MacBook Air M2 13吋',
       pic_url: 'https://source.unsplash.com/400x400?macbook,laptop&sig=9',
       brand: 'Apple',
@@ -129,15 +134,15 @@ export const mockThreads: Thread[] = [
       price: '37900'
     },
     dchain: {
-      tbn_url: 'https://source.unsplash.com/600x300?macbook,review&sig=flow9',
+      tbn_url: '/images/phone-search-flowchart.png',
       user_nick: 'Apple Specialist',
       user_pic_url: 'https://source.unsplash.com/100x100?avatar&sig=apple'
     }
   },
   {
-    id: '10',
+    id: '1008',
     good: {
-      id: 10,
+      id: 1008,
       title: 'Google Pixel 8 Pro',
       pic_url: 'https://source.unsplash.com/400x400?pixel,google&sig=10',
       brand: 'Google',
@@ -147,9 +152,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '11',
+    id: '1009',
     good: {
-      id: 11,
+      id: 1009,
       title: 'Microsoft Surface Pro 9',
       pic_url: 'https://source.unsplash.com/400x400?surface,microsoft&sig=11',
       brand: 'Microsoft',
@@ -159,9 +164,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '12',
+    id: '1010',
     good: {
-      id: 12,
+      id: 1010,
       title: 'Logitech MX Master 3S 滑鼠',
       pic_url: 'https://source.unsplash.com/400x400?mouse,logitech&sig=12',
       brand: 'Logitech',
@@ -171,9 +176,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '13',
+    id: '1011',
     good: {
-      id: 13,
+      id: 1011,
       title: 'ASUS ROG Strix 電競筆電',
       pic_url: 'https://source.unsplash.com/400x400?gaming,laptop&sig=13',
       brand: 'ASUS',
@@ -182,15 +187,15 @@ export const mockThreads: Thread[] = [
       price: '65000'
     },
     dchain: {
-      tbn_url: 'https://source.unsplash.com/600x300?gaming,review&sig=flow13',
+      tbn_url: '/images/phone-search-flowchart.png',
       user_nick: 'Gaming Expert',
       user_pic_url: 'https://source.unsplash.com/100x100?avatar&sig=gaming'
     }
   },
   {
-    id: '14',
+    id: '1012',
     good: {
-      id: 14,
+      id: 1012,
       title: 'Canon EOS R5 無反相機',
       pic_url: 'https://source.unsplash.com/400x400?camera,canon&sig=14',
       brand: 'Canon',
@@ -200,9 +205,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '15',
+    id: '1013',
     good: {
-      id: 15,
+      id: 1013,
       title: 'Bose QuietComfort 45',
       pic_url: 'https://source.unsplash.com/400x400?bose,headphones&sig=15',
       brand: 'Bose',
@@ -211,15 +216,15 @@ export const mockThreads: Thread[] = [
       price: '10900'
     },
     dchain: {
-      tbn_url: 'https://source.unsplash.com/600x300?audio,bose&sig=flow15',
+      tbn_url: '/images/phone-search-flowchart.png',
       user_nick: 'Audio Reviewer',
       user_pic_url: 'https://source.unsplash.com/100x100?avatar&sig=audio'
     }
   },
   {
-    id: '16',
+    id: '1014',
     good: {
-      id: 16,
+      id: 1014,
       title: 'Razer DeathAdder V3 電競滑鼠',
       pic_url: 'https://source.unsplash.com/400x400?razer,gaming&sig=16',
       brand: 'Razer',
@@ -229,9 +234,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '17',
+    id: '1015',
     good: {
-      id: 17,
+      id: 1015,
       title: 'LG 27吋 4K 顯示器',
       pic_url: 'https://source.unsplash.com/400x400?monitor,4k&sig=17',
       brand: 'LG',
@@ -241,9 +246,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '18',
+    id: '1016',
     good: {
-      id: 18,
+      id: 1016,
       title: 'SteelSeries Apex Pro 機械鍵盤',
       pic_url: 'https://source.unsplash.com/400x400?steelseries,keyboard&sig=18',
       brand: 'SteelSeries',
@@ -252,15 +257,15 @@ export const mockThreads: Thread[] = [
       price: '6990'
     },
     dchain: {
-      tbn_url: 'https://source.unsplash.com/600x300?keyboard,gaming&sig=flow18',
+      tbn_url: '/images/phone-search-flowchart.png',
       user_nick: 'Pro Gamer',
       user_pic_url: 'https://source.unsplash.com/100x100?avatar&sig=progamer'
     }
   },
   {
-    id: '19',
+    id: '1017',
     good: {
-      id: 19,
+      id: 1017,
       title: 'Dyson V15 Detect 無線吸塵器',
       pic_url: 'https://source.unsplash.com/400x400?dyson,vacuum&sig=19',
       brand: 'Dyson',
@@ -270,9 +275,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '20',
+    id: '1018',
     good: {
-      id: 20,
+      id: 1018,
       title: 'Tesla Model Y 行車記錄器',
       pic_url: 'https://source.unsplash.com/400x400?dashcam,tesla&sig=20',
       brand: 'Tesla',
@@ -282,9 +287,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '21',
+    id: '1019',
     good: {
-      id: 21,
+      id: 1019,
       title: 'Garmin Fenix 7 運動手錶',
       pic_url: 'https://source.unsplash.com/400x400?garmin,watch&sig=21',
       brand: 'Garmin',
@@ -293,15 +298,15 @@ export const mockThreads: Thread[] = [
       price: '19900'
     },
     dchain: {
-      tbn_url: 'https://source.unsplash.com/600x300?fitness,watch&sig=flow21',
+      tbn_url: '/images/phone-search-flowchart.png',
       user_nick: 'Fitness Coach',
       user_pic_url: 'https://source.unsplash.com/100x100?avatar&sig=fitness'
     }
   },
   {
-    id: '22',
+    id: '1020',
     good: {
-      id: 22,
+      id: 1020,
       title: 'Herman Miller Aeron 人體工學椅',
       pic_url: 'https://source.unsplash.com/400x400?chair,office&sig=22',
       brand: 'Herman Miller',
@@ -311,9 +316,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '23',
+    id: '1021',
     good: {
-      id: 23,
+      id: 1021,
       title: 'Philips Hue 智慧燈泡組',
       pic_url: 'https://source.unsplash.com/400x400?smart,lights&sig=23',
       brand: 'Philips',
@@ -323,9 +328,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '24',
+    id: '1022',
     good: {
-      id: 24,
+      id: 1022,
       title: 'Anker PowerBank 20000mAh',
       pic_url: 'https://source.unsplash.com/400x400?powerbank,anker&sig=24',
       brand: 'Anker',
@@ -335,9 +340,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '25',
+    id: '1023',
     good: {
-      id: 25,
+      id: 1023,
       title: 'Corsair 32GB DDR5 記憶體',
       pic_url: 'https://source.unsplash.com/400x400?ram,memory&sig=25',
       brand: 'Corsair',
@@ -347,9 +352,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '26',
+    id: '1024',
     good: {
-      id: 26,
+      id: 1024,
       title: 'Samsung 980 PRO 2TB SSD',
       pic_url: 'https://source.unsplash.com/400x400?ssd,storage&sig=26',
       brand: 'Samsung',
@@ -358,15 +363,15 @@ export const mockThreads: Thread[] = [
       price: '8900'
     },
     dchain: {
-      tbn_url: 'https://source.unsplash.com/600x300?storage,tech&sig=flow26',
+      tbn_url: '/images/phone-search-flowchart.png',
       user_nick: 'Tech Builder',
       user_pic_url: 'https://source.unsplash.com/100x100?avatar&sig=techbuilder'
     }
   },
   {
-    id: '27',
+    id: '1025',
     good: {
-      id: 27,
+      id: 1025,
       title: 'NVIDIA RTX 4070 顯示卡',
       pic_url: 'https://source.unsplash.com/400x400?graphics,card&sig=27',
       brand: 'NVIDIA',
@@ -376,9 +381,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '28',
+    id: '1026',
     good: {
-      id: 28,
+      id: 1026,
       title: 'Xiaomi 小米13 Ultra',
       pic_url: 'https://source.unsplash.com/400x400?xiaomi,phone&sig=28',
       brand: 'Xiaomi',
@@ -388,9 +393,9 @@ export const mockThreads: Thread[] = [
     }
   },
   {
-    id: '29',
+    id: '1027',
     good: {
-      id: 29,
+      id: 1027,
       title: 'JBL Charge 5 藍牙喇叭',
       pic_url: 'https://source.unsplash.com/400x400?jbl,speaker&sig=29',
       brand: 'JBL',
@@ -399,15 +404,15 @@ export const mockThreads: Thread[] = [
       price: '4990'
     },
     dchain: {
-      tbn_url: 'https://source.unsplash.com/600x300?speaker,music&sig=flow29',
+      tbn_url: '/images/phone-search-flowchart.png',
       user_nick: 'Music Lover',
       user_pic_url: 'https://source.unsplash.com/100x100?avatar&sig=musiclover'
     }
   },
   {
-    id: '30',
+    id: '1028',
     good: {
-      id: 30,
+      id: 1028,
       title: 'GoPro HERO12 Black 運動攝影機',
       pic_url: 'https://source.unsplash.com/400x400?gopro,action&sig=30',
       brand: 'GoPro',

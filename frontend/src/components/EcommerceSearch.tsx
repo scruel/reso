@@ -12,6 +12,8 @@ import { initTracker } from '@/lib/tracker';
 import { useInfiniteScroll } from '@/lib/useInfiniteScroll';
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'js-cookie';
+import StatusMessage from './StatusMessage';
+import { useStatusMessage } from '@/hooks/useStatusMessage';
 
 export function EcommerceSearch() {
   const [searchState, setSearchState] = useState<SearchState>({
@@ -21,19 +23,64 @@ export function EcommerceSearch() {
     results: []
   })
   const { items, hasMore, lastRef } = useInfiniteScroll();
+  const { statusMessage, showStatusMessage, hideStatusMessage, showError, showSuccess } = useStatusMessage();
 
   useEffect(() => {
     initTracker();
   }, []);
 
   const [displayThreads, setDisplayThreads] = useState<Thread[]>([])
-  // Dynamic messages that change every 5 seconds
-  const dynamicMessages = [
-    'Based on your search for work attire that balances packability with professional style.',
-    'Analyzing fashion intent for professional occasions...',
-    'AI is selecting versatile blazers for work and travel.',
-    'Recommending wrinkle-resistant styles based on your taste...',
-  ];
+  // Dynamic messages that change every 5 seconds - 根據搜尋類別動態生成
+  const getDynamicMessages = (query: string) => {
+    const lowerQuery = query?.toLowerCase() || '';
+    
+    if (lowerQuery.includes('手機') || lowerQuery.includes('phone') || lowerQuery.includes('iphone')) {
+      return [
+        'AI正在分析您對智慧型手機的偏好與需求...',
+        '基於您的搜索歷史，為您推薦最適合的手機型號...',
+        '正在比較不同品牌手機的規格與性價比...',
+        '根據您的使用習慣，篩選出最符合需求的手機產品...'
+      ];
+    }
+    
+    if (lowerQuery.includes('耳機') || lowerQuery.includes('headphone') || lowerQuery.includes('airpods')) {
+      return [
+        'AI正在分析您的音樂偏好與聆聽習慣...',
+        '根據您的需求，為您推薦最適合的音頻設備...',
+        '正在比較不同耳機的音質表現與降噪效果...',
+        '基於您的使用場景，篩選最合適的耳機產品...'
+      ];
+    }
+    
+    if (lowerQuery.includes('筆電') || lowerQuery.includes('laptop') || lowerQuery.includes('macbook')) {
+      return [
+        'AI正在分析您對筆記型電腦的性能需求...',
+        '根據您的工作類型，為您推薦最適合的筆電配置...',
+        '正在比較不同品牌筆電的規格與續航表現...',
+        '基於您的預算與需求，篩選最合適的筆電產品...'
+      ];
+    }
+    
+    if (lowerQuery.includes('遊戲') || lowerQuery.includes('gaming') || lowerQuery.includes('switch')) {
+      return [
+        'AI正在分析您的遊戲偏好與遊玩習慣...',
+        '根據您喜愛的遊戲類型，為您推薦最適合的遊戲設備...',
+        '正在比較不同遊戲平台的獨占遊戲與性能表現...',
+        '基於您的遊戲需求，篩選最合適的娛樂設備...'
+      ];
+    }
+    
+    // 預設消息
+    return [
+      'AI正在分析您的購物偏好與需求...',
+      '根據您的搜索意圖，為您推薦最適合的產品...',
+      '正在比較不同產品的品質與性價比...',
+      '基於您的需求，篩選最符合期望的商品...'
+    ];
+  };
+  
+  const [currentQuery, setCurrentQuery] = useState('');
+  const dynamicMessages = getDynamicMessages(currentQuery);
   
   const [messageIndex, setMessageIndex] = useState(0);
   const [backendResponse, setBackendResponse] = useState<{
@@ -54,8 +101,9 @@ useEffect(() => {
         apiGet('/api/products')
       );
       
-      if (productsResponse && productsResponse.threads && Array.isArray(productsResponse.threads)) {
-        let backendThreads = productsResponse.threads.map((item: any) => ({
+      if (productsResponse && (productsResponse.threads || productsResponse.threas) && Array.isArray(productsResponse.threads || productsResponse.threas)) {
+        const threadsData = productsResponse.threads || productsResponse.threas;
+        let backendThreads = threadsData.map((item: any) => ({
           id: item.id,
           good: {
             id: item.good.id,
@@ -77,7 +125,7 @@ useEffect(() => {
         if (backendThreads.length < 30) {
           const mockThreadsToAdd = mockThreads.slice(0, 30 - backendThreads.length);
           backendThreads = [...backendThreads, ...mockThreadsToAdd];
-          console.log(`📦 Backend returned ${productsResponse.threads.length} products, filled with ${mockThreadsToAdd.length} mock products to reach 30`);
+          console.log(`📦 Backend returned ${threadsData.length} products, filled with ${mockThreadsToAdd.length} mock products to reach 30`);
         }
         
         setDisplayThreads(shuffleArray(backendThreads));
@@ -86,8 +134,9 @@ useEffect(() => {
         setDisplayThreads(shuffleArray(mockThreads));
         console.log('🔄 Initialized with mock data - backend not available');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to load initial products:', error);
+      showError('后端连接失败，使用模拟数据', 500);
       setDisplayThreads(shuffleArray(mockThreads));
       console.log('🔄 Initialized with mock data - backend error');
     }
@@ -115,158 +164,90 @@ useEffect(() => {
   }
 }, [messageIndex, backendResponse])
 
-  // Debounced search function
-  const debouncedSearch = debounce(async (query: string) => {
-    setSearchState(prev => ({ ...prev, isSearching: true }))
+  // 生成模擬的AI意圖識別響應
+  const generateMockVibeResponse = (query: string, resultCount: number) => {
+    const lowerQuery = query.toLowerCase();
     
-    try {
-      // Call real backend API for search intent
-      const uuid = getUserUuid();
-      const vibeResponse = await import('../lib/api').then(({ apiPost }) => 
-        apiPost('/api/vibe', { uuid, query: query.trim() || '精選商品' })
-      );
-      
-      if (vibeResponse && vibeResponse.status === 0) {
-        setBackendResponse(vibeResponse);
-      }
-      
-      // Get products from backend
-      const productsResponse = await import('../lib/api').then(({ apiGet }) => 
-        apiGet('/api/products')
-      );
-      
-      let threadsToDisplay = mockThreads; // fallback to mock data
-      if (productsResponse && productsResponse.threads && Array.isArray(productsResponse.threads)) {
-        // Backend format matches frontend Thread format perfectly
-        threadsToDisplay = productsResponse.threads.map((item: any) => ({
-          id: item.id,
-          good: {
-            id: item.good.id,
-            title: item.good.title,
-            pic_url: item.good.pic_url,
-            brand: item.good.brand,
-            category: item.good.category,
-            categoryColor: item.good.categoryColor || '#3B82F6',
-            price: item.good.price
-          },
-          dchain: item.dchain ? {
-            tbn_url: item.dchain.tbn_url,
-            user_nick: item.dchain.user_nick,
-            user_pic_url: item.dchain.user_pic_url
-          } : undefined
-        }));
-        
-        // 檢查是否少於30個產品，如果是則填充假數據
-        if (threadsToDisplay.length < 30) {
-          const mockThreadsToAdd = mockThreads.slice(0, 30 - threadsToDisplay.length);
-          threadsToDisplay = [...threadsToDisplay, ...mockThreadsToAdd];
-          console.log(`📦 Backend returned ${productsResponse.threads.length} products, filled with ${mockThreadsToAdd.length} mock products in search`);
-        }
-        
-        console.log(`📦 Loaded ${threadsToDisplay.length} products from backend (with fill if needed)`);
-      } else {
-        console.log('⚠️ Using fallback mock data - backend products not available');
-      }
-    
-    if (query.trim()) {
-      // Filter threads based on query
-      const filtered = threadsToDisplay.filter(thread => 
-        thread.good.title.toLowerCase().includes(query.toLowerCase()) ||
-        thread.good.category.toLowerCase().includes(query.toLowerCase()) ||
-        thread.good.brand.toLowerCase().includes(query.toLowerCase())
-      )
-      
-      // Simulate backend response based on query
-      const mockBackendResponse = {
+    // 手機相關搜索的專門假資料
+    if (lowerQuery.includes('手機') || lowerQuery.includes('phone') || lowerQuery.includes('iphone') || lowerQuery.includes('android')) {
+      return {
         intent: {
-          title: query.toLowerCase().includes('jacket') || query.toLowerCase().includes('coat') 
-            ? '外套系列' 
-            : query.toLowerCase().includes('dress') 
-            ? '連身裙系列'
-            : query.toLowerCase().includes('shoes') || query.toLowerCase().includes('boot')
-            ? '鞋履系列'
-            : query.toLowerCase().includes('手機') || query.toLowerCase().includes('phone')
-            ? '手機系列'
-            : query.toLowerCase().includes('耳機') || query.toLowerCase().includes('headphone')
-            ? '耳機系列'
-            : query.toLowerCase().includes('配件') || query.toLowerCase().includes('keyboard')
-            ? '配件系列'
-            : '精選商品',
-          attrs: query.toLowerCase().includes('jacket') || query.toLowerCase().includes('coat')
-            ? ['保暖', '防風', '時尚', '多層次', 'Lightweight', 'Professional', 'Wrinkle-Resistant', 'Versatile']
-            : query.toLowerCase().includes('dress')
-            ? ['優雅', '舒適', '百搭', '氣質', 'Elegant', 'Breathable', 'Flowy', 'Feminine']
-            : query.toLowerCase().includes('shoes') || query.toLowerCase().includes('boot')
-            ? ['舒適', '耐磨', '時尚', '透氣', 'Durable', 'Non-slip', 'Cushioned', 'Flexible']
-            : query.toLowerCase().includes('手機') || query.toLowerCase().includes('phone')
-            ? ['高效', '創新', '智能', '便攜', 'Advanced', 'High-Performance', 'User-Friendly', 'Cutting-Edge']
-            : query.toLowerCase().includes('耳機') || query.toLowerCase().includes('headphone')
-            ? ['音質', '降噪', '舒適', '無線', 'Premium Audio', 'Noise-Cancelling', 'Wireless', 'Comfortable']
-            : query.toLowerCase().includes('配件') || query.toLowerCase().includes('keyboard')
-            ? ['效率', '人體工學', '響應', '耐用', 'Ergonomic', 'Responsive', 'Durable', 'Professional']
-            : ['精選', '品質', '設計', '實用', 'Premium', 'Stylish', 'Modern', 'Essential'],
-          pic_url: query.toLowerCase().includes('手機') || query.toLowerCase().includes('phone')
-            ? 'https://source.unsplash.com/400x300?smartphone,technology&sig=intent1'
-            : query.toLowerCase().includes('耳機') || query.toLowerCase().includes('headphone')
-            ? 'https://source.unsplash.com/400x300?headphones,audio&sig=intent2'
-            : query.toLowerCase().includes('配件') || query.toLowerCase().includes('keyboard')
-            ? 'https://source.unsplash.com/400x300?keyboard,workspace&sig=intent3'
-            : query.toLowerCase().includes('jacket') || query.toLowerCase().includes('coat')
-            ? 'https://source.unsplash.com/400x300?jacket,fashion&sig=intent4'
-            : 'https://source.unsplash.com/400x300?shopping,products&sig=intent5'
+          title: '智慧型手機',
+          attrs: [
+            '5G連網', '高解析相機', '快速充電', '大容量電池',
+            '旗艦處理器', '無線充電', '防水防塵', '多鏡頭系統',
+            'AI拍照', '臉部辨識', '指紋解鎖', '螢幕指紋',
+            '高刷新率', 'OLED顯示', '立體聲喇叭', '遊戲模式'
+          ],
+          pic_url: '/images/phone-search-flowchart.png'
         },
-        message: `為您找到 ${filtered.length > 0 ? filtered.length : mockThreads.length} 個相關商品，根據您的搜尋「${query}」為您推薦最適合的選擇。`,
+        message: `AI分析您對「${query}」的搜尋意圖，為您精選了 ${resultCount} 款最新智慧型手機。這些產品都具備先進的拍照功能、強大的處理性能，以及出色的電池續航力，完美滿足您的日常使用需求。`,
         status: 0
-      }
-      
-      setBackendResponse(mockBackendResponse)
-      
-      setSearchState(prev => ({
-        ...prev,
-        isSearching: false,
-        hasSearched: true,
-        results: shuffleArray(filtered)
-      }))
-      
-      setDisplayThreads(shuffleArray(filtered.length > 0 ? filtered : threadsToDisplay))
-    } else {
-      // For empty query, show all threads from backend or fallback to mock
-      setSearchState(prev => ({
-        ...prev,
-        isSearching: false,
-        hasSearched: true,
-        results: threadsToDisplay
-      }))
-      
-      setDisplayThreads(shuffleArray(threadsToDisplay))
+      };
     }
     
-    } catch (error) {
-      console.error('Search error:', error);
-      // Fallback to mock data and mock backend response on error
-      // Show default backend response for empty queries
-      const defaultBackendResponse = {
+    // 耳機相關搜索
+    if (lowerQuery.includes('耳機') || lowerQuery.includes('headphone') || lowerQuery.includes('airpods')) {
+      return {
         intent: {
-          title: '精選商品',
-          attrs: ['精選', '品質', '設計', '實用', 'Premium', 'Curated', 'Trending', 'Best-seller'],
-          pic_url: 'https://source.unsplash.com/400x300?shopping,curated&sig=default'
+          title: '高品質耳機',
+          attrs: [
+            '主動降噪', '高音質', '無線連接', '長續航',
+            '舒適佩戴', '快速配對', '通話清晰', '運動防汗',
+            '環境音模式', '觸控操作', '語音助手', '多設備連接'
+          ],
+          pic_url: '/images/phone-search-flowchart.png'
         },
-        message: `為您精選 ${mockThreads.length} 個優質商品，涵蓋各種風格與需求。`,
+        message: `根據您對「${query}」的搜尋，AI為您推薦 ${resultCount} 款頂級耳機產品。這些耳機都擁有卓越的音質表現、先進的降噪技術，讓您享受純淨的音樂體驗。`,
         status: 0
-      }
-      
-      setBackendResponse(defaultBackendResponse)
-      
-      setSearchState(prev => ({
-        ...prev,
-        isSearching: false,
-        hasSearched: true,
-        results: mockThreads
-      }))
-      
-      setDisplayThreads(shuffleArray(mockThreads))
+      };
     }
-  }, 200)
+    
+    // 筆電相關搜索
+    if (lowerQuery.includes('筆電') || lowerQuery.includes('laptop') || lowerQuery.includes('macbook')) {
+      return {
+        intent: {
+          title: '高效能筆記型電腦',
+          attrs: [
+            '輕薄設計', '長效電池', '高效處理器', '大容量記憶體',
+            '快速SSD', '高解析螢幕', '多端口連接', '背光鍵盤',
+            '指紋辨識', '快速開機', '靜音散熱', '專業顯卡'
+          ],
+          pic_url: '/images/phone-search-flowchart.png'
+        },
+        message: `AI理解您對「${query}」的需求，精選了 ${resultCount} 款專業筆記型電腦。這些產品結合了強大的運算能力與便攜性，適合工作、學習和娛樂等多種使用場景。`,
+        status: 0
+      };
+    }
+    
+    // 遊戲相關搜索
+    if (lowerQuery.includes('遊戲') || lowerQuery.includes('gaming') || lowerQuery.includes('switch') || lowerQuery.includes('ps5')) {
+      return {
+        intent: {
+          title: '遊戲娛樂設備',
+          attrs: [
+            '4K遊戲', '高幀率', '快速載入', '多人遊戲',
+            '手柄震動', '沉浸體驗', '豐富遊戲庫', '線上對戰',
+            '便攜遊戲', '大螢幕輸出', '雲端存檔', '向下相容'
+          ],
+          pic_url: '/images/phone-search-flowchart.png'
+        },
+        message: `AI分析了您對「${query}」的興趣，為您推薦 ${resultCount} 款頂級遊戲設備。這些產品能帶來極致的遊戲體驗，讓您盡情享受各種精彩遊戲。`,
+        status: 0
+      };
+    }
+    
+    // 預設響應（精選商品）
+    return {
+      intent: {
+        title: '精選商品',
+        attrs: ['精選', '品質', '設計', '實用', 'Premium', 'Stylish', 'Modern', 'Essential'],
+          pic_url: '/images/phone-search-flowchart.png'
+      },
+      message: `為您找到 ${resultCount} 個相關商品，根據您的搜尋「${query}」為您推薦最適合的選擇。`,
+      status: 0
+    };
+  };
 
   // Get or create persistent user UUID
   const getUserUuid = () => {
@@ -319,11 +300,110 @@ useEffect(() => {
     }
   };
 
-  const handleSearch = (query: string) => {
-    setSearchState(prev => ({ ...prev, query, hasSearched: true }))
-    debouncedSearch(query);
-  
-    // Log search action with UUID asynchronously
+  const handleSearch = async (query: string) => {
+    setSearchState(prev => ({ ...prev, query, hasSearched: true, isSearching: true }))
+    setCurrentQuery(query); // 更新当前查询，用于动态消息生成
+    
+    try {
+      // Call real backend API for search intent
+      const uuid = getUserUuid();
+      const vibeResponse = await import('../lib/api').then(({ apiGet }) => 
+        apiGet(`/api/vibe?query=${encodeURIComponent(query.trim() || '精選商品')}`)
+      );
+      
+      if (vibeResponse && vibeResponse.status === 0) {
+        setBackendResponse(vibeResponse);
+        showSuccess('AI意图识别成功');
+      } else if (vibeResponse && vibeResponse.status !== 0) {
+        showError(vibeResponse.message || 'AI意图识别失败', vibeResponse.status);
+      }
+      
+      // Get products from backend
+      const productsResponse = await import('../lib/api').then(({ apiGet }) => 
+        apiGet('/api/products')
+      );
+      
+      // 检查产品API响应状态
+      if (productsResponse && productsResponse.status && productsResponse.status !== 0) {
+        showError(productsResponse.message || '获取产品列表失败', productsResponse.status);
+      }
+      
+      let threadsToDisplay = mockThreads; // fallback to mock data
+      if (productsResponse && (productsResponse.threads || productsResponse.threas) && Array.isArray(productsResponse.threads || productsResponse.threas)) {
+        const threadsData = productsResponse.threads || productsResponse.threas;
+        threadsToDisplay = threadsData.map((item: any) => ({
+          id: item.id,
+          good: {
+            id: item.good.id,
+            title: item.good.title,
+            pic_url: item.good.pic_url,
+            brand: item.good.brand,
+            category: item.good.category,
+            categoryColor: item.good.categoryColor || '#3B82F6',
+            price: item.good.price
+          },
+          dchain: item.dchain ? {
+            tbn_url: item.dchain.tbn_url,
+            user_nick: item.dchain.user_nick,
+            user_pic_url: item.dchain.user_pic_url
+          } : undefined
+        }));
+        
+        if (threadsToDisplay.length < 30) {
+          const mockThreadsToAdd = mockThreads.slice(0, 30 - threadsToDisplay.length);
+          threadsToDisplay = [...threadsToDisplay, ...mockThreadsToAdd];
+        }
+      }
+      
+      if (query.trim()) {
+        const filtered = threadsToDisplay.filter(thread => 
+          thread.good.title.toLowerCase().includes(query.toLowerCase()) ||
+          thread.good.category.toLowerCase().includes(query.toLowerCase()) ||
+          thread.good.brand.toLowerCase().includes(query.toLowerCase())
+        )
+        
+        // 根據搜尋詞生成不同的AI意圖識別響應
+        const mockBackendResponse = generateMockVibeResponse(query, filtered.length > 0 ? filtered.length : threadsToDisplay.length)
+        
+        setBackendResponse(mockBackendResponse)
+        setSearchState(prev => ({
+          ...prev,
+          isSearching: false,
+          results: shuffleArray(filtered)
+        }))
+        setDisplayThreads(shuffleArray(filtered.length > 0 ? filtered : threadsToDisplay))
+      } else {
+        setSearchState(prev => ({
+          ...prev,
+          isSearching: false,
+          results: threadsToDisplay
+        }))
+        setDisplayThreads(shuffleArray(threadsToDisplay))
+      }
+    } catch (error: any) {
+      console.error('Search error:', error);
+      showError('搜索过程中发生错误，使用本地数据', 500);
+      
+      const defaultBackendResponse = {
+        intent: {
+          title: '精選商品',
+          attrs: ['精選', '品質', '設計', '實用'],
+          pic_url: '/images/phone-search-flowchart.png'
+        },
+        message: `為您精選 ${mockThreads.length} 個優質商品。`,
+        status: 0
+      }
+      
+      setBackendResponse(defaultBackendResponse)
+      setSearchState(prev => ({
+        ...prev,
+        isSearching: false,
+        results: mockThreads
+      }))
+      setDisplayThreads(shuffleArray(mockThreads))
+    }
+    
+    // Log search action
     logUserAction('search', {
       query,
       searchType: query.trim() ? 'text_search' : 'empty_search'
@@ -343,7 +423,7 @@ useEffect(() => {
       intent: {
         title: '精選商品',
         attrs: ['精選', '品質', '設計', '實用', 'Premium', 'Curated', 'Trending', 'Best-seller'],
-        pic_url: 'https://source.unsplash.com/400x300?shopping,curated&sig=default'
+        pic_url: '/images/phone-search-flowchart.png'
       },
       message: `為您精選 ${mockThreads.length} 個優質商品，涵蓋各種風格與需求。`,
       status: 0
@@ -354,11 +434,36 @@ useEffect(() => {
 
   return (
     <>
+      {/* Status Message Component */}
+      {statusMessage.show && (
+        <StatusMessage
+          status={statusMessage.status}
+          message={statusMessage.message}
+          show={statusMessage.show}
+          onClose={hideStatusMessage}
+        />
+      )}
+      
       {/* Light Blue Top Navigation Bar - Separate from page content */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-sky-500 h-12 flex items-center">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="text-white text-xl font-medium tracking-wide">
             Reso
+          </div>
+          {/* 测试按钮 */}
+          <div className="flex gap-2">
+            <button 
+              onClick={() => showError('测试错误消息', 500)}
+              className="bg-red-500/20 text-white text-xs px-2 py-1 rounded hover:bg-red-500/30"
+            >
+              测试错误
+            </button>
+            <button 
+              onClick={() => showSuccess('测试成功消息')}
+              className="bg-green-500/20 text-white text-xs px-2 py-1 rounded hover:bg-green-500/30"
+            >
+              测试成功
+            </button>
           </div>
         </div>
       </div>

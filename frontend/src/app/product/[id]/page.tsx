@@ -231,11 +231,29 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
       const detail = await fetchThreadDetail(id);
       setThreadDetail(detail);
       setRetryCount(0);
+      setError(null); // 清除之前的错误
     } catch (err) {
       console.error('Failed to load thread detail:', err);
-      setError(err);
-      if (isRetry) {
-        setRetryCount(prev => prev + 1);
+      
+      // 如果是首次加载失败且存在本地thread数据，则创建一个基本的详情响应
+      if (!isRetry && thread) {
+        const fallbackDetail: ThreadDetailResponse = {
+          title: thread.good.title,
+          pic_url: thread.good.pic_url,
+          reference_links: '',
+          dchain: {
+            id: thread.id,
+            description: '由於網路問題，暫時無法載入完整的產品詳情。以下為基本產品資訊。'
+          }
+        };
+        setThreadDetail(fallbackDetail);
+        setError(null); // 不设置为错误状态，而是显示降级内容
+        console.log('🔄 Using fallback product detail due to API error');
+      } else {
+        setError(err);
+        if (isRetry) {
+          setRetryCount(prev => prev + 1);
+        }
       }
     } finally {
       setIsLoading(false);
