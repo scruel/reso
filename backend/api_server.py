@@ -78,28 +78,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# # 初始化函数
-# @app.on_event("startup")
-# async def startup_event():
-#     """应用启动时初始化AI Agents系统"""
-#     global orchestrator, behavior_recorder
+# 初始化函数
+@app.on_event("startup")
+async def startup_event():
+    """应用启动时初始化AI Agents系统"""
+    global orchestrator, behavior_recorder
 
-#     try:
-#         logger.info("正在初始化增强版AI Agents系统...")
+    try:
+        logger.info("正在初始化增强版AI Agents系统...")
 
-#         # 创建增强版协调器
-#         orchestrator = await create_enhanced_orchestrator(mode="enhanced")
-#         behavior_recorder = BehaviorRecorderAgent()
+        # 创建增强版协调器
+        orchestrator = await create_enhanced_orchestrator(mode="enhanced")
+        behavior_recorder = BehaviorRecorderAgent()
 
-#         # 记录新Agent状态
-#         if hasattr(orchestrator, 'new_agents'):
-#             logger.info(f"已注册的新Agent: {list(orchestrator.new_agents.keys())}")
+        # 记录新Agent状态
+        if hasattr(orchestrator, 'new_agents'):
+            logger.info(f"已注册的新Agent: {list(orchestrator.new_agents.keys())}")
 
-#         logger.info("增强版AI Agents系统初始化完成")
+        logger.info("增强版AI Agents系统初始化完成")
 
-#     except Exception as e:
-#         logger.error(f"AI Agents系统初始化失败: {e}")
-#         logger.warning("系统将以降级模式运行，使用mock数据")
+    except Exception as e:
+        logger.error(f"AI Agents系统初始化失败: {e}")
+        logger.warning("系统将以降级模式运行，使用mock数据")
 
 # 路由定义
 @app.get("/")
