@@ -119,30 +119,35 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
           </div>
         </div>
 
-        {/* Review preview with connector */}
-        {/* 細線 + 節點（疊在同一條線） */}
-        {/* 線 + 節點（一條線中央有節點） */}
-        <div 
-          className="mx-auto w-px h-4 relative"
-          style={{ backgroundColor: `${categoryColor}80` }} // 50% 透明度的連接線
-        >
-          <div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
-            style={{ backgroundColor: categoryColor }} // 節點使用完整顏色
-          />
-        </div>
+        {/* 流程圖 + 作者 - 僅在有 flowImage 時顯示 */}
+        {product.flowImage && (
+          <>
+            {/* Review preview with connector */}
+            {/* 細線 + 節點（疊在同一條線） */}
+            {/* 線 + 節點（一條線中央有節點） */}
+            <div 
+              className="mx-auto w-px h-4 relative"
+              style={{ backgroundColor: `${categoryColor}80` }} // 50% 透明度的連接線
+            >
+              <div 
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
+                style={{ backgroundColor: categoryColor }} // 節點使用完整顏色
+              />
+            </div>
 
-        {/* 流程圖 + 作者 */}
-        <div className="mt-2 bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm overflow-hidden">
-          <img
-            src={product.flowImage}
-            alt={`${product.title} 流程示意`}
-            className="w-full h-auto object-cover"
-          />
-          <div className="px-3 py-2 text-sm font-semibold text-gray-800">
-            by {product.author}
-          </div>
-        </div>
+            {/* 流程圖 + 作者 */}
+            <div className="mt-2 bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm overflow-hidden">
+              <img
+                src={product.flowImage}
+                alt={`${product.title} 流程示意`}
+                className="w-full h-auto object-cover"
+              />
+              <div className="px-3 py-2 text-sm font-semibold text-gray-800">
+                by {product.author}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   )
