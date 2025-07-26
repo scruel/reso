@@ -165,24 +165,37 @@ useEffect(() => {
       
       {/* Backend Response Display */}
       {backendResponse && searchState.hasSearched && (
-        <div className="relative z-20 flex justify-between items-center mt-4 mx-8 py-4">
-          <div className="flex items-center gap-4">
-            <h3 className="text-lg font-semibold text-gray-900">
-              {backendResponse.intent.title}
-            </h3>
+        <div className="flex justify-between items-start w-full px-6 py-8 bg-gray-50 relative z-20">
+          {/* 左側 Intent + tags 區塊 */}
+          <div className="flex flex-col gap-4 max-w-[50%]">
+            {/* Intent 圖示與文字 */}
+            <div className="flex items-center gap-3 bg-white p-4 rounded-xl shadow-sm w-fit">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <span className="text-blue-600 text-xl">🏷️</span>
+              </div>
+              <span className="text-2xl font-bold text-gray-800">{backendResponse.intent.title}</span>
+            </div>
+            {/* 標籤群 */}
             <div className="flex flex-wrap gap-2">
               {backendResponse.intent.attrs.map((attr, index) => (
-                <button
+                <span
                   key={index}
-                  className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full hover:bg-blue-200 transition-colors cursor-pointer"
+                  className="text-sm bg-white text-gray-700 px-3 py-1 rounded-full shadow-sm border border-gray-200"
                 >
                   {attr}
-                </button>
+                </span>
               ))}
             </div>
           </div>
-          <div className="ml-auto bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-md">
-            <TypewriterText text={backendResponse.message} speed={30} />
+
+          {/* 右側 Insight 區塊 */}
+          <div className="bg-white rounded-xl shadow-sm p-4 max-w-[45%] text-gray-700 leading-relaxed text-sm">
+            <div className="flex items-start gap-2">
+              <span className="text-purple-500 text-xl">✨</span>
+              <div>
+                <TypewriterText text={backendResponse.message} speed={30} />
+              </div>
+            </div>
           </div>
         </div>
       )}
