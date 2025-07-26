@@ -259,15 +259,15 @@ useEffect(() => {
         <div className="relative z-40 mt-20">
           <div className="flex justify-between items-start gap-6 px-6 py-8 bg-gray-50 flex-wrap">
             {/* 左區：Title + Tags 區塊（白底卡） */}
-            <div className="bg-white rounded-2xl shadow-sm px-6 py-4 flex w-full max-w-[60%]">
-              {/* 左側 Icon + Title */}
-              <div className="flex-shrink-0 flex flex-col items-start pt-1">
-                <div className="w-12 h-12 mb-1 flex items-center justify-center text-3xl">🧥</div>
+            <div className="bg-white rounded-2xl shadow-sm px-6 py-4 w-full max-w-[60%]">
+              {/* Icon + Title 在同一行 */}
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 flex items-center justify-center text-3xl">🧥</div>
                 <h1 className="text-2xl font-bold text-gray-800">{backendResponse.intent.title}</h1>
               </div>
 
-              {/* 右側 Tags - 對齊 Title 的上緣 */}
-              <div className="ml-6 flex flex-wrap items-start gap-2">
+              {/* Tags 自動換行 */}
+              <div className="flex flex-wrap gap-2">
                 {backendResponse.intent.attrs.map((tag, i) => (
                   <span
                     key={i}
