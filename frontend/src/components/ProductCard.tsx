@@ -126,24 +126,36 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
             {/* 細線 + 節點（疊在同一條線） */}
             {/* 線 + 節點（一條線中央有節點） */}
             <div 
-              className="mx-auto w-px h-4 relative"
-              style={{ backgroundColor: `${categoryColor}80` }} // 50% 透明度的連接線
+              className="mx-auto w-px h-4 relative animate-fade-in"
+              style={{ 
+                backgroundColor: `${categoryColor}80`,
+                animationDelay: `${delay}ms`
+              }} // 50% 透明度的連接線
             >
               <div 
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
-                style={{ backgroundColor: categoryColor }} // 節點使用完整顏色
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full animate-fade-in"
+                style={{ 
+                  backgroundColor: categoryColor,
+                  animationDelay: `${delay}ms`
+                }} // 節點使用完整顏色
               />
             </div>
 
             {/* 流程圖 + 作者 */}
-            <div className="bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm group-hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+            <div className="bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm group-hover:shadow-lg transition-shadow duration-300 overflow-hidden animate-fade-in relative" style={{ animationDelay: `${delay}ms` }}>
               <img
                 src={product.flowImage}
                 alt={`${product.title} 流程示意`}
                 className="w-full h-auto object-cover"
               />
-              <div className="px-3 py-2 text-sm font-semibold text-gray-800">
-                by {product.author}
+              {/* Author avatar and name overlay */}
+              <div className="absolute bottom-2 right-2 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 shadow-sm">
+                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-medium">
+                  {product.author ? product.author.charAt(0).toUpperCase() : 'A'}
+                </div>
+                <span className="text-xs font-medium text-gray-700 pr-1">
+                  {product.author || 'Anonymous'}
+                </span>
               </div>
             </div>
           </>
