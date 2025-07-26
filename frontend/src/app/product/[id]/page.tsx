@@ -79,15 +79,15 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
       </div>
 
       {/* Main Content */}
-      <div className="min-h-screen bg-gray-100 pt-12">
-        <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="min-h-screen bg-gray-100 pt-12 flex items-center justify-center">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-6 -mt-16">
           {/* 左右雙欄 Grid 排版 */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             
             {/* 2. 左欄：商品圖片 */}
             <div className="flex justify-center">
-              <div className="w-full max-w-lg">
-                <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
+              <div className="w-full max-w-sm sm:max-w-md">
+                <div className="bg-white rounded-2xl shadow-md overflow-hidden">
                   <div className="aspect-square relative">
                     {/* 漸層 loading 效果 */}
                     {!isImageLoaded && (
@@ -108,26 +108,26 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             </div>
 
             {/* 右欄：文字資訊與互動區塊 */}
-            <div className="space-y-8">
+            <div className="space-y-6 max-w-lg">
               
               {/* 3. 右欄上半區：標題與 AI Insight */}
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {/* 標題區 - 使用商品分類作為主標題 */}
-                <div className="flex items-center gap-4">
-                  <div className="text-5xl">
+                <div className="flex items-center gap-3">
+                  <div className="text-3xl">
                     {product.category.includes('手機') ? '📱' : 
                      product.category.includes('耳機') ? '🎧' : 
                      product.category.includes('配件') ? '⌨️' : 
                      product.category.includes('健康') ? '💍' : 
                      product.category.includes('筆電') ? '💻' : '🧥'}
                   </div>
-                  <h1 className="text-4xl font-bold text-gray-900">{product.category}</h1>
+                  <h1 className="text-2xl font-bold text-gray-900">{product.category}</h1>
                 </div>
                 
                 {/* AI Insight 卡片 */}
-                <div className="bg-white p-4 rounded-2xl shadow-sm flex gap-2">
-                  <span className="text-purple-500 text-xl">✨</span>
-                  <p className="text-lg text-gray-600 leading-relaxed">
+                <div className="bg-white p-3 rounded-xl shadow-sm flex gap-2">
+                  <span className="text-purple-500 text-lg">✨</span>
+                  <p className="text-sm text-gray-600 leading-relaxed">
                     {aiInsight}
                   </p>
                 </div>
@@ -138,11 +138,11 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                 <div className={`grid gap-6 ${product.flowImage ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
                   
                   {/* 左側資訊卡 */}
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {/* 分類和品牌 badges */}
                     <div className="flex items-center justify-between">
                       <span 
-                        className="text-sm font-medium px-3 py-1.5 rounded-full"
+                        className="text-xs font-medium px-2 py-1 rounded-full"
                         style={{
                           color: categoryColor,
                           backgroundColor: `${categoryColor}15`
@@ -150,25 +150,25 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                       >
                         {product.category}
                       </span>
-                      <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full">
+                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                         {product.brand || 'Keychron'}
                       </span>
                     </div>
 
                     {/* 商品名稱 - 使用實際商品標題 */}
                     <div className="space-y-1">
-                      <h2 className="text-xl font-semibold text-gray-900">
+                      <h2 className="text-lg font-semibold text-gray-900">
                         {product.title}
                       </h2>
                       {/* 如果有副標題可以在這裡顯示 */}
-                      <p className="text-lg text-gray-700">
+                      <p className="text-sm text-gray-700">
                         {product.brand} 精選商品
                       </p>
                     </div>
 
                     {/* 價格 */}
                     <div className="text-right">
-                      <div className="text-3xl font-bold text-blue-600">
+                      <div className="text-2xl font-bold text-blue-600">
                         {formatPrice(product.price)}
                       </div>
                     </div>
@@ -201,10 +201,10 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
               {/* 5. 右欄下半區：購買按鈕 */}
               <div className="space-y-3">
                 <button 
-                  className="w-full bg-green-500 text-white text-lg font-semibold px-6 py-4 rounded-xl shadow-lg hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-green-500 text-white text-base font-semibold px-4 py-3 rounded-lg shadow-md hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
                   onClick={() => window.open(product.url, '_blank')}
                 >
-                  購買連結（跳轉到第三方）
+                  購買商品
                 </button>
               </div>
             </div>
