@@ -393,4 +393,266 @@ export const mockProducts: Product[] = [
     "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow1',
     "author": 'Alex'
   }
+,
+  // 新增更多測試商品用於無限滾動
+  {
+    "id": "31",
+    "title": "AirPods Pro 第 3 代",
+    "price": 245678,
+    "image": "https://source.unsplash.com/random/400x400?sig=31",
+    "category": "耳機",
+    "categoryColor": "#8B5CF6", // 紫色
+    "brand": "Apple",
+    "rating": 4.8,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow31',
+    "author": 'Sarah'
+  },
+  {
+    "id": "32",
+    "title": "MacBook Pro M3 Max 16吋",
+    "price": 889900,
+    "image": "https://source.unsplash.com/random/400x400?sig=32",
+    "category": "筆電",
+    "categoryColor": "#EF4444", // 紅色
+    "brand": "Apple",
+    "rating": 4.9,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow32',
+    "author": 'Mike'
+  },
+  {
+    "id": "33",
+    "title": "Steam Deck OLED 1TB",
+    "price": 165432,
+    "image": "https://source.unsplash.com/random/400x400?sig=33",
+    "category": "遊戲",
+    "categoryColor": "#F59E0B", // 橙色
+    "brand": "Valve",
+    "rating": 4.7,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow33',
+    "author": 'Gaming Pro'
+  },
+  {
+    "id": "34",
+    "title": "Herman Miller Embody 人體工學椅",
+    "price": 198765,
+    "image": "https://source.unsplash.com/random/400x400?sig=34",
+    "category": "家具",
+    "categoryColor": "#06B6D4", // 青色
+    "brand": "Herman Miller",
+    "rating": 4.6,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow34',
+    "author": 'Office Expert'
+  },
+  {
+    "id": "35",
+    "title": "Canon RF 24-70mm F2.8L IS USM",
+    "price": 298765,
+    "image": "https://source.unsplash.com/random/400x400?sig=35",
+    "category": "攝影",
+    "categoryColor": "#EC4899", // 粉紅色
+    "brand": "Canon",
+    "rating": 4.8,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow35',
+    "author": 'Photo Pro'
+  },
+  {
+    "id": "36",
+    "title": "Secretlab TITAN Evo 2022",
+    "price": 154321,
+    "image": "https://source.unsplash.com/random/400x400?sig=36",
+    "category": "家具",
+    "categoryColor": "#06B6D4", // 青色
+    "brand": "Secretlab",
+    "rating": 4.7,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow36',
+    "author": 'Gaming Setup'
+  },
+  {
+    "id": "37",
+    "title": "ThinkPad X1 Carbon Gen 11",
+    "price": 432109,
+    "image": "https://source.unsplash.com/random/400x400?sig=37",
+    "category": "筆電",
+    "categoryColor": "#EF4444", // 紅色
+    "brand": "Lenovo",
+    "rating": 4.5,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow37',
+    "author": 'Business Tech'
+  },
+  {
+    "id": "38",
+    "title": "ASUS ProArt Display PA32UCG",
+    "price": 876543,
+    "image": "https://source.unsplash.com/random/400x400?sig=38",
+    "category": "顯示器",
+    "categoryColor": "#7C3AED", // 深紫色
+    "brand": "ASUS",
+    "rating": 4.9,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow38',
+    "author": 'Design Pro'
+  },
+  {
+    "id": "39",
+    "title": "Rode PodMic USB 動態麥克風",
+    "price": 76543,
+    "image": "https://source.unsplash.com/random/400x400?sig=39",
+    "category": "音響",
+    "categoryColor": "#14B8A6", // 藍綠色
+    "brand": "Rode",
+    "rating": 4.8,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow39',
+    "author": 'Podcast Master'
+  },
+  {
+    "id": "40",
+    "title": "Elgato Stream Deck XL",
+    "price": 87654,
+    "image": "https://source.unsplash.com/random/400x400?sig=40",
+    "category": "配件",
+    "categoryColor": "#10B981", // 綠色
+    "brand": "Elgato",
+    "rating": 4.6,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow40',
+    "author": 'Streamer Pro'
+  },
+  {
+    "id": "41",
+    "title": "Framework Laptop 13",
+    "price": 345678,
+    "image": "https://source.unsplash.com/random/400x400?sig=41",
+    "category": "筆電",
+    "categoryColor": "#EF4444", // 紅色
+    "brand": "Framework",
+    "rating": 4.4,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow41',
+    "author": 'Tech Innovator'
+  },
+  {
+    "id": "42",
+    "title": "Bambu Lab X1 Carbon 3D 印表機",
+    "price": 456789,
+    "image": "https://source.unsplash.com/random/400x400?sig=42",
+    "category": "3D列印",
+    "categoryColor": "#F97316", // 橙紅色
+    "brand": "Bambu Lab",
+    "rating": 4.7,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow42',
+    "author": '3D Master'
+  },
+  {
+    "id": "43",
+    "title": "Oura Ring Gen3 健康追蹤戒指",
+    "price": 123456,
+    "image": "https://source.unsplash.com/random/400x400?sig=43",
+    "category": "健康",
+    "categoryColor": "#22C55E", // 亮綠色
+    "brand": "Oura",
+    "rating": 4.3,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow43',
+    "author": 'Health Guru'
+  },
+  {
+    "id": "44",
+    "title": "Teenage Engineering OP-1 field",
+    "price": 654321,
+    "image": "https://source.unsplash.com/random/400x400?sig=44",
+    "category": "音樂",
+    "categoryColor": "#A855F7", // 亮紫色
+    "brand": "Teenage Engineering",
+    "rating": 4.9,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow44',
+    "author": 'Music Producer'
+  },
+  {
+    "id": "45",
+    "title": "Nothing Phone (2) 256GB",
+    "price": 234567,
+    "image": "https://source.unsplash.com/random/400x400?sig=45",
+    "category": "手機",
+    "categoryColor": "#3B82F6", // 藍色
+    "brand": "Nothing",
+    "rating": 4.2,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow45',
+    "author": 'Tech Reviewer'
+  },
+  {
+    "id": "46",
+    "title": "Analogue Pocket 復古掌機",
+    "price": 87654,
+    "image": "https://source.unsplash.com/random/400x400?sig=46",
+    "category": "遊戲",
+    "categoryColor": "#F59E0B", // 橙色
+    "brand": "Analogue",
+    "rating": 4.8,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow46',
+    "author": 'Retro Gamer'
+  },
+  {
+    "id": "47",
+    "title": "IKEA FREDDE 電競桌",
+    "price": 98765,
+    "image": "https://source.unsplash.com/random/400x400?sig=47",
+    "category": "家具",
+    "categoryColor": "#06B6D4", // 青色
+    "brand": "IKEA",
+    "rating": 4.4,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow47',
+    "author": 'Setup Master'
+  },
+  {
+    "id": "48",
+    "title": "Shure SM7B 動態麥克風",
+    "price": 156789,
+    "image": "https://source.unsplash.com/random/400x400?sig=48",
+    "category": "音響",
+    "categoryColor": "#14B8A6", // 藍綠色
+    "brand": "Shure",
+    "rating": 4.9,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow48',
+    "author": 'Audio Expert'
+  },
+  {
+    "id": "49",
+    "title": "Peak Design Everyday Backpack V2",
+    "price": 67890,
+    "image": "https://source.unsplash.com/random/400x400?sig=49",
+    "category": "攝影",
+    "categoryColor": "#EC4899", // 粉紅色
+    "brand": "Peak Design",
+    "rating": 4.7,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow49',
+    "author": 'Travel Photo'
+  },
+  {
+    "id": "50",
+    "title": "CalDigit TS4 Thunderbolt 4 擴充座",
+    "price": 123789,
+    "image": "https://source.unsplash.com/random/400x400?sig=50",
+    "category": "配件",
+    "categoryColor": "#10B981", // 綠色
+    "brand": "CalDigit",
+    "rating": 4.6,
+    "url": "#",
+    "flowImage": 'https://source.unsplash.com/random/500x280?sig=flow50',
+    "author": 'Connectivity Pro'
+  }
 ]

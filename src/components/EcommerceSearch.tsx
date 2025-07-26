@@ -140,6 +140,7 @@ export function EcommerceSearch() {
             <ProductGrid 
               products={displayProducts} 
               isLoading={searchState.isSearching}
+              searchQuery={searchState.query}
             />
           </div>
         </div>
