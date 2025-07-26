@@ -9,3 +9,4 @@ htmlcov
 .venv
 .env
 qwen_embeddings_cache.pkl
+*.egg-info
