@@ -154,7 +154,7 @@ async def vibe(id: int = None):
       "pic_url": "string",
       "dchain": {
           "id": id,
-          "descpriton": "string"
+          "description": "string"
       },
       "reference_links": "string"
   }
