@@ -4,6 +4,7 @@ export interface Product {
   price: number;
   image: string;
   category: string;
+  categoryColor?: string; // 後端提供的 category 顏色
   brand: string;
   rating: number;
   url: string;

@@ -7,6 +7,7 @@ export const mockProducts: Product[] = [
     price: 42990,
     image: 'https://source.unsplash.com/random/400x400?sig=1',
     category: '手機',
+    categoryColor: '#3B82F6', // 藍色
     brand: 'Apple',
     rating: 4.9,
     url: '#',
@@ -20,6 +21,7 @@ export const mockProducts: Product[] = [
     price: 2990,
     image: 'https://source.unsplash.com/random/400x400?sig=2',
     category: '配件',
+    categoryColor: '#10B981', // 綠色
     brand: 'Keychron',
     rating: 4.8,
     url: '#',
@@ -33,6 +35,7 @@ export const mockProducts: Product[] = [
     price: 8990,
     image: 'https://source.unsplash.com/random/400x400?sig=3',
     category: '耳機',
+    categoryColor: '#8B5CF6', // 紫色
     brand: 'Sony',
     rating: 4.7,
     url: '#',

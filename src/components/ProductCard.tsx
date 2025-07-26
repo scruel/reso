@@ -17,6 +17,9 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
   const [isImageError, setIsImageError] = useState(false)
   const [cardWidth, setCardWidth] = useState<number | undefined>(undefined)
   const cardRef = useRef<HTMLDivElement>(null)
+  
+  // 使用後端提供的顏色或預設顏色
+  const categoryColor = product.categoryColor || '#6B7280' // 預設為灰色
 
   useEffect(() => {
     if (!cardRef.current) return
@@ -91,7 +94,13 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
 
           <div className="p-3">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] text-primary-600 font-medium bg-primary-50 px-2 py-0.5 rounded">
+              <span 
+                className="text-[11px] font-medium px-2 py-0.5 rounded"
+                style={{
+                  color: categoryColor,
+                  backgroundColor: `${categoryColor}15` // 15% 透明度背景
+                }}
+              >
                 {product.category}
               </span>
               <span className="text-[11px] text-gray-500">{product.brand}</span>
@@ -123,9 +132,14 @@ export function ProductCard({ product, delay = 0 }: ProductCardProps) {
         {/* Review preview with connector */}
         {/* 細線 + 節點（疊在同一條線） */}
         {/* 線 + 節點（一條線中央有節點） */}
-        <div className="mx-auto w-px h-4 bg-gray-200 relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                          w-1.5 h-1.5 bg-gray-400 rounded-full" />
+        <div 
+          className="mx-auto w-px h-4 relative"
+          style={{ backgroundColor: `${categoryColor}80` }} // 50% 透明度的連接線
+        >
+          <div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
+            style={{ backgroundColor: categoryColor }} // 節點使用完整顏色
+          />
         </div>
 
         {/* 流程圖 + 作者 */}
