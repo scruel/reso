@@ -17,8 +17,6 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from backend.agent_util import initialize_agents
-
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -74,7 +72,6 @@ async def root():
         "version": "1.0.0",
         "status": "running",
         "agents_ready": orchestrator is not None,
-        "mock_products_count": len(MOCK_PRODUCTS)
     }
 
 @app.get("/health")
