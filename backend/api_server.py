@@ -17,7 +17,7 @@ from tools.weaviate.weaviate_query import query_good
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from tools.rag.qwen_embedding import QwenEmbeddingService
+from tools.rag.qwen_embedding import KimiGPTService, QwenEmbeddingService
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -147,10 +147,14 @@ async def clear():
 @app.get("/api/thread")
 async def thread(tid: int):
     try:
+        prompt  = """
+        ===
+        请你担任一名专业的商品导购，商场提出两点和场景点，我会给你商品的详细描述，请根据描述生成一个商品的简要概述，其中请考虑用户会如何做决策，不多于 50 字。
+""".strip()
         print(tid)
         good = query_good(tid)
-        # kimi = KimiGPTService()
-        desc = good['detail']
+        kimi = KimiGPTService()
+        desc = kimi.generate(good['detail'] + prompt)
         
         return {
           "title": good['name'],

@@ -5,6 +5,7 @@ Qwen文本嵌入服务封装
 
 import os
 import pickle
+import requests
 from dotenv import load_dotenv
 import pandas as pd
 import numpy as np
@@ -40,7 +41,8 @@ class KimiGPTService:
         self.api_key = self.api_key
         self.cache_path = cache_path
         self.base_url = "https://api.moonshot.cn/v1"
-    def generate_embeddings(self, text: Union[str, List[str]]) -> Union[List[float], List[List[float]]]:
+      
+    def generate(self, text: str) -> str:
         """
         生成文本嵌入向量
         
