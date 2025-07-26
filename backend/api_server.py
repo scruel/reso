@@ -244,6 +244,7 @@ async def products():
         res_list = weaviate_query.query(res['query'])
         res["threas"] = []
         for item in res_list:
+            item = item.properties
             res["threas"].append(
                 {
                     "id": item['goodId'],
