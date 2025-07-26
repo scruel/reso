@@ -292,7 +292,7 @@ class DocAsAgent:
         context = self.memory.get_context_summary()
         
         reasoning_prompt = f"""
-        你是DocAsAgent，正在执行第{step_num}步。
+        你是电商消费导购专家，专门解析用户的选购需求，辅助用户快速决策，正在执行第{step_num}步。
         
         当前观察: {observation}
         
