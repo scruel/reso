@@ -115,10 +115,14 @@ useEffect(() => {
             price: item.good?.price || item.price || '0'
           },
           dchain: (item.dchain && typeof item.dchain === 'object') ? {
-            tbn_url: item.dchain.tbn_url || '',
+            tbn_url: item.dchain.tbn_url || '/images/phone-search-flowchart.png',
             user_nick: item.dchain.user_nick || 'Anonymous',
             user_pic_url: item.dchain.user_pic_url || ''
-          } : null
+          } : {
+            tbn_url: '/images/phone-search-flowchart.png',
+            user_nick: 'Anonymous',
+            user_pic_url: ''
+          }
         }));
         
         // 檢查是否少於30個產品，如果是則填充假數據
@@ -364,10 +368,14 @@ useEffect(() => {
             price: item.good?.price || item.price || '0'
           },
           dchain: (item.dchain && typeof item.dchain === 'object') ? {
-            tbn_url: item.dchain.tbn_url || '',
+            tbn_url: item.dchain.tbn_url || '/images/phone-search-flowchart.png',
             user_nick: item.dchain.user_nick || 'Anonymous',
             user_pic_url: item.dchain.user_pic_url || ''
-          } : null
+          } : {
+            tbn_url: '/images/phone-search-flowchart.png',
+            user_nick: 'Anonymous',
+            user_pic_url: ''
+          }
         }));
         
         if (threadsToDisplay.length < 30) {
