@@ -10,5 +10,5 @@ htmlcov
 .env
 qwen_embeddings_cache.pkl
 *.egg-info
-frontend/.next/
+# frontend/.next/ # Temporarily allow .next for easier deployment
 frontend_original/
