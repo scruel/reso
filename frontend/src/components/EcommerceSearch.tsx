@@ -111,7 +111,7 @@ useEffect(() => {
             pic_url: item.good?.pic_url || item.pic_url || '/placeholder.jpg',
             brand: item.good?.brand || item.brand || 'Unknown Brand',
             category: item.good?.category || item.category || 'General',
-            categoryColor: item.good?.categoryColor || '#3B82F6',
+            categoryColor: item.good?.categoryColor || '#6B7280',
             price: item.good?.price || item.price || '0'
           },
           dchain: (item.dchain && typeof item.dchain === 'object') ? {
@@ -364,7 +364,7 @@ useEffect(() => {
             pic_url: item.good?.pic_url || item.pic_url || '/placeholder.jpg',
             brand: item.good?.brand || item.brand || 'Unknown Brand',
             category: item.good?.category || item.category || 'General',
-            categoryColor: item.good?.categoryColor || '#3B82F6',
+            categoryColor: item.good?.categoryColor || '#6B7280',
             price: item.good?.price || item.price || '0'
           },
           dchain: (item.dchain && typeof item.dchain === 'object') ? {
@@ -480,21 +480,6 @@ useEffect(() => {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="text-white text-xl font-medium tracking-wide">
             Reso
-          </div>
-          {/* 测试按钮 */}
-          <div className="flex gap-2">
-            <button 
-              onClick={() => showError('测试错误消息', 500)}
-              className="bg-red-500/20 text-white text-xs px-2 py-1 rounded hover:bg-red-500/30"
-            >
-              测试错误
-            </button>
-            <button 
-              onClick={() => showSuccess('测试成功消息')}
-              className="bg-green-500/20 text-white text-xs px-2 py-1 rounded hover:bg-green-500/30"
-            >
-              测试成功
-            </button>
           </div>
         </div>
       </div>
