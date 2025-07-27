@@ -347,7 +347,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
               {/* 4. 右欄中段：簡單的商品資訊卡片 */}
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className={`grid gap-6 ${thread.dchain ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
+                <div className={`grid gap-6 ${thread?.dchain ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
                   {/* 左側資訊卡 */}
                   <div className="space-y-3">
                     {/* 分類和品牌 badges */}

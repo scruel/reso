@@ -11,9 +11,34 @@ export interface ThreadDetailResponse {
 
 export async function fetchThreadDetail(threadId: string): Promise<ThreadDetailResponse> {
   try {
+    console.log('🔍 调用后端 thread API，ID:', threadId);
     const response = await apiGet(`/api/thread?tid=${threadId}`);
+    console.log('📡 后端 thread API 原始响应:', response);
     
-    // Handle new API response format
+    // Check if response has status field (direct backend response)
+    if (response.status !== undefined) {
+      if (response.status === 0) {
+        // Success response from backend
+        const processedResponse = {
+          title: response.title,
+          pic_url: response.pic_url,
+          reference_links: Array.isArray(response.reference_links) 
+            ? response.reference_links.join(', ') 
+            : response.reference_links || '',
+          dchain: response.dchain ? {
+            id: response.dchain.id.toString(),
+            description: response.dchain.description
+          } : undefined
+        };
+        console.log('✅ 后端 thread API 响应已处理:', processedResponse);
+        return processedResponse;
+      } else {
+        // Error response from backend
+        throw new Error(`Backend error: ${response.message || 'Unknown error'}`);
+      }
+    }
+    
+    // Handle new API response format (wrapped)
     if (response.success && response.data) {
       const data = response.data;
       

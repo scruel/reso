@@ -106,19 +106,19 @@ useEffect(() => {
         let backendThreads = threadsData.map((item: any) => ({
           id: item.id,
           good: {
-            id: item.good.id,
-            title: item.good.title,
-            pic_url: item.good.pic_url,
-            brand: item.good.brand,
-            category: item.good.category,
-            categoryColor: item.good.categoryColor || '#3B82F6',
-            price: item.good.price
+            id: item.good?.id || item.id,
+            title: item.good?.title || item.title || 'Unknown Product',
+            pic_url: item.good?.pic_url || item.pic_url || '/placeholder.jpg',
+            brand: item.good?.brand || item.brand || 'Unknown Brand',
+            category: item.good?.category || item.category || 'General',
+            categoryColor: item.good?.categoryColor || '#3B82F6',
+            price: item.good?.price || item.price || '0'
           },
-          dchain: item.dchain ? {
-            tbn_url: item.dchain.tbn_url,
-            user_nick: item.dchain.user_nick,
-            user_pic_url: item.dchain.user_pic_url
-          } : undefined
+          dchain: (item.dchain && typeof item.dchain === 'object') ? {
+            tbn_url: item.dchain.tbn_url || '',
+            user_nick: item.dchain.user_nick || 'Anonymous',
+            user_pic_url: item.dchain.user_pic_url || ''
+          } : null
         }));
         
         // 檢查是否少於30個產品，如果是則填充假數據
@@ -154,12 +154,13 @@ useEffect(() => {
   return () => clearInterval(interval)
 }, [])
 
-// Update backend response message when index changes
+// Update dynamic messages but don't overwrite backend response messages
 useEffect(() => {
-  if (backendResponse) {
+  if (backendResponse && !backendResponse.message) {
+    // 只有当没有后端消息时才使用动态消息
     setBackendResponse((prev) => prev ? {
       ...prev,
-      message: dynamicMessages[messageIndex],
+      message: '',  // 保持为空，让动态消息在UI中显示
     } : null)
   }
 }, [messageIndex, backendResponse])
@@ -307,15 +308,35 @@ useEffect(() => {
     try {
       // Call real backend API for search intent
       const uuid = getUserUuid();
+      console.log('🔍 调用后端 vibe API，查询:', query.trim() || '精選商品');
       const vibeResponse = await import('../lib/api').then(({ apiGet }) => 
         apiGet(`/api/vibe?query=${encodeURIComponent(query.trim() || '精選商品')}`)
       );
       
+      console.log('📡 后端 vibe API 原始响应:', vibeResponse);
+      
+      // 处理后端AI意图识别响应
       if (vibeResponse && vibeResponse.status === 0) {
-        setBackendResponse(vibeResponse);
-        showSuccess('AI意图识别成功');
+        // 需要将后端响应格式转换为前端期望的格式
+        const adaptedResponse = {
+          intent: {
+            title: vibeResponse.intent?.title || '精選商品',
+            attrs: vibeResponse.intent?.attrs || [],
+            pic_url: '/images/phone-search-flowchart.png'
+          },
+          message: vibeResponse.message || `為您推薦相關商品`,
+          status: 0
+        };
+        
+        // 后端成功返回，使用后端数据（状态正常不显示消息）
+        setBackendResponse(adaptedResponse);
+        console.log('✅ 使用后端AI意图识别结果（已适配）:', adaptedResponse);
       } else if (vibeResponse && vibeResponse.status !== 0) {
+        // 后端返回错误状态
+        console.log('❌ 后端 vibe API 错误:', vibeResponse);
         showError(vibeResponse.message || 'AI意图识别失败', vibeResponse.status);
+      } else {
+        console.log('⚠️ 后端 vibe API 未返回有效响应:', vibeResponse);
       }
       
       // Get products from backend
@@ -334,19 +355,19 @@ useEffect(() => {
         threadsToDisplay = threadsData.map((item: any) => ({
           id: item.id,
           good: {
-            id: item.good.id,
-            title: item.good.title,
-            pic_url: item.good.pic_url,
-            brand: item.good.brand,
-            category: item.good.category,
-            categoryColor: item.good.categoryColor || '#3B82F6',
-            price: item.good.price
+            id: item.good?.id || item.id,
+            title: item.good?.title || item.title || 'Unknown Product',
+            pic_url: item.good?.pic_url || item.pic_url || '/placeholder.jpg',
+            brand: item.good?.brand || item.brand || 'Unknown Brand',
+            category: item.good?.category || item.category || 'General',
+            categoryColor: item.good?.categoryColor || '#3B82F6',
+            price: item.good?.price || item.price || '0'
           },
-          dchain: item.dchain ? {
-            tbn_url: item.dchain.tbn_url,
-            user_nick: item.dchain.user_nick,
-            user_pic_url: item.dchain.user_pic_url
-          } : undefined
+          dchain: (item.dchain && typeof item.dchain === 'object') ? {
+            tbn_url: item.dchain.tbn_url || '',
+            user_nick: item.dchain.user_nick || 'Anonymous',
+            user_pic_url: item.dchain.user_pic_url || ''
+          } : null
         }));
         
         if (threadsToDisplay.length < 30) {
@@ -362,10 +383,12 @@ useEffect(() => {
           thread.good.brand.toLowerCase().includes(query.toLowerCase())
         )
         
-        // 根據搜尋詞生成不同的AI意圖識別響應
-        const mockBackendResponse = generateMockVibeResponse(query, filtered.length > 0 ? filtered.length : threadsToDisplay.length)
-        
-        setBackendResponse(mockBackendResponse)
+        // 只有在没有后端vibe响应时才使用mock数据
+        if (!vibeResponse || vibeResponse.status !== 0) {
+          const mockBackendResponse = generateMockVibeResponse(query, filtered.length > 0 ? filtered.length : threadsToDisplay.length)
+          setBackendResponse(mockBackendResponse)
+          console.log('🎭 使用mock AI意图识别数据:', mockBackendResponse);
+        }
         setSearchState(prev => ({
           ...prev,
           isSearching: false,
@@ -542,8 +565,14 @@ useEffect(() => {
               <div className="bg-white p-4 rounded-2xl shadow-sm max-w-[35%] min-w-[280px] text-sm text-gray-700 leading-relaxed flex gap-2">
                 <span className="text-sky-500 text-xl">✨</span>
                 <p>
-                  <strong>{dynamicMessages[messageIndex]}</strong><br />
-                  {backendResponse.message}
+                  {/* 如果有后端消息就直接使用，没有才使用动态消息 */}
+                  {backendResponse.message ? (
+                    // 有后端消息，直接显示
+                    backendResponse.message
+                  ) : (
+                    // 没有后端消息，使用动态消息
+                    <strong>{dynamicMessages[messageIndex]}</strong>
+                  )}
                 </p>
               </div>
             </div>
