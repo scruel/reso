@@ -39,9 +39,9 @@ export function SearchBox({ onSearch, onReset, isSearching, hasSearched, query }
     setInputValue(value)
     
     // Auto-search as user types (with debouncing handled in parent)
-    if (hasSearched) {
-      onSearch(value)
-    }
+    // if (hasSearched) {
+    //   onSearch(value)
+    // }
   }
 
   return (
