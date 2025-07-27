@@ -220,7 +220,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   const thread = mockThreads.find((t) => t.id === id);
   
   // 獲取類別顏色
-  const categoryColor = thread?.good.categoryColor || '#3B82F6';
+  const categoryColor = thread?.good.categoryColor || '#6B7280';
 
   const loadThreadDetail = async (isRetry = false) => {
     try {
@@ -345,68 +345,126 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                 )}
               </div>
 
-              {/* 4. 右欄中段：簡單的商品資訊卡片 */}
+ {/* 4. 右欄中段：簡單的商品資訊卡片 */}
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className={`grid gap-6 ${thread?.dchain ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
-                  {/* 左側資訊卡 */}
-                  <div className="space-y-3">
-                    {/* 分類和品牌 badges */}
-                    <div className="flex items-center justify-between">
-                      <span 
-                        className="text-xs font-medium px-2 py-1 rounded-full"
-                        style={{
-                          color: categoryColor,
-                          backgroundColor: `${categoryColor}15`
-                        }}
-                      >
-                        {thread.good.category}
-                      </span>
-                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                        {thread.good.brand || 'Keychron'}
-                      </span>
-                    </div>
+                {/* 檢查是否有流程圖，決定布局 */}
+                {threadDetail.dchain && threadDetail.dchain.tbn_url ? (
+                  // 有流程圖時使用兩欄布局
+                  <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
+                    {/* 左側資訊卡 */}
+                    <div className="space-y-3">
+                      {/* 分類和品牌 badges */}
+                      <div className="flex items-center justify-between">
+                        <span 
+                          className="text-xs font-medium px-2 py-1 rounded-full"
+                          style={{
+                            color: categoryColor,
+                            backgroundColor: `${categoryColor}15`
+                          }}
+                        >
+                          {threadDetail.category || thread?.good.category || '數碼產品'}
+                        </span>
+                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                          {threadDetail.brand || thread?.good.brand || '倍思'}
+                        </span>
+                      </div>
 
-                    {/* 商品名稱 - 使用實際商品標題 */}
-                    <div className="space-y-1">
-                      <h2 className="text-lg font-semibold text-gray-900">
-                        {thread.good.title}
-                      </h2>
-                      {/* 如果有副標題可以在這裡顯示 */}
-                      <p className="text-sm text-gray-700">
-                        {thread.good.brand} 精選商品
-                      </p>
-                    </div>
+                      {/* 商品名稱 - 使用實際商品標題 */}
+                      <div className="space-y-1">
+                        <h2 className="text-lg font-semibold text-gray-900">
+                          {threadDetail.title || 'Unknown Product'}
+                        </h2>
+                        {/* 如果有副標題可以在這裡顯示 */}
+                        <p className="text-sm text-gray-700">
+                          {threadDetail.brand || 'Unknown Brand'} 精選商品
+                        </p>
+                      </div>
 
-                    {/* 價格 */}
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-blue-600">
-                        ${parseFloat(thread.good.price).toFixed(2)}
+                      {/* 價格 */}
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-blue-600">
+                          ${parseFloat(threadDetail.price || '0').toFixed(2)}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* 右側流程圖 */}
-                  {thread.dchain && (
+                    {/* 右側流程圖 */}
                     <div className="relative">
                       <div className="rounded-xl overflow-hidden relative">
                         <img
-                          src={thread.dchain.tbn_url}
-                          alt={`${thread.good.title} 使用流程`}
+                          src={threadDetail.dchain.tbn_url}
+                          alt={`${threadDetail.title} 使用流程`}
                           className="w-full h-auto object-cover"
                         />
                         {/* 作者資訊 badge */}
                         <div className="absolute bottom-2 right-2 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 shadow-sm">
                           <div className="w-5 h-5 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white text-xs font-medium">
-                            {thread.dchain.user_nick ? thread.dchain.user_nick.charAt(0).toUpperCase() : 'A'}
+                            {threadDetail.dchain.user_nick ? threadDetail.dchain.user_nick.charAt(0).toUpperCase() : 'A'}
                           </div>
                           <span className="text-xs font-medium text-gray-700">
-                            {thread.dchain.user_nick || 'Alex'}
+                            {threadDetail.dchain.user_nick || 'Anonymous'}
                           </span>
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  // 沒有流程圖時基本訊息填滿整個卡片
+                  <div className="space-y-4">
+                    {/* 分類和品牌 badges */}
+                    <div className="flex items-center justify-between">
+                      <span 
+                        className="text-sm font-medium px-3 py-2 rounded-full"
+                        style={{
+                          color: categoryColor,
+                          backgroundColor: `${categoryColor}15`
+                        }}
+                      >
+                        {threadDetail.category || thread?.good.category || '數碼產品'}
+                      </span>
+                      <span className="text-sm text-gray-500 bg-gray-100 px-3 py-2 rounded-full">
+                        {threadDetail.brand || thread?.good.brand || '倍思'}
+                      </span>
+                    </div>
+
+                    {/* 商品名稱和描述 */}
+                    <div className="text-center space-y-2">
+                      <h2 className="text-xl font-bold text-gray-900">
+                        {threadDetail.title || 'Unknown Product'}
+                      </h2>
+                      <p className="text-gray-600">
+                        {threadDetail.brand || 'Unknown Brand'} 精選商品
+                      </p>
+                    </div>
+
+                    {/* 價格 - 居中顯示 */}
+                    <div className="text-center py-4">
+                      <div className="text-3xl font-bold text-blue-600">
+                        ${parseFloat(threadDetail.price || '0').toFixed(2)}
+                      </div>
+                      <p className="text-sm text-gray-500 mt-1">建議售價</p>
+                    </div>
+
+                    {/* 產品特色或其他信息 */}
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <h3 className="text-sm font-medium text-gray-700 mb-2">產品特色</h3>
+                      <ul className="text-sm text-gray-600 space-y-1">
+                        <li className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+                          高品質設計與製造
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+                          優質用戶體驗
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+                          值得信賴的品牌
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* 5. 右欄下半區：購買按鈕 */}

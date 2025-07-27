@@ -2,9 +2,14 @@
 export interface ThreadDetailResponse {
   title: string;
   pic_url: string;
+  price?: string;
+  brand?: string;
+  category?: string;
   dchain?: {
     id: string;
     description: string;
+    tbn_url?: string;
+    user_nick?: string;
   };
   reference_links: string;
 }
@@ -22,12 +27,17 @@ export async function fetchThreadDetail(threadId: string): Promise<ThreadDetailR
         const processedResponse = {
           title: response.title,
           pic_url: response.pic_url,
+          price: response.price,
+          brand: response.brand,
+          category: response.category,
           reference_links: Array.isArray(response.reference_links) 
             ? response.reference_links.join(', ') 
             : response.reference_links || '',
           dchain: response.dchain ? {
             id: response.dchain.id.toString(),
-            description: response.dchain.description
+            description: response.dchain.description,
+            tbn_url: response.dchain.tbn_url,
+            user_nick: response.dchain.user_nick
           } : undefined
         };
         console.log('✅ 后端 thread API 响应已处理:', processedResponse);
