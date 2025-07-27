@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST='{"components/EcommerceSearch.tsx -> ../lib/api":{"id":5534,"files":[]},"components/ProductCard.tsx -> ../lib/api":{"id":5534,"files":[]}}';
+self.__REACT_LOADABLE_MANIFEST='{"components/EcommerceSearch.tsx -> ../lib/api":{"id":5731,"files":[]},"components/ProductCard.tsx -> ../lib/api":{"id":5731,"files":[]}}';

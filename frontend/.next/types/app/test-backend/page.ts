@@ -1,4 +1,4 @@
-// File: /Users/alichen/Downloads/agent_workspace/ecommerce-search-main/frontend/src/app/test-backend/page.tsx
+// File: /root/reso/frontend/src/app/test-backend/page.tsx
 import * as entry from '../../../../src/app/test-backend/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

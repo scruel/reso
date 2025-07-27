@@ -1,4 +1,4 @@
-// File: /Users/alichen/Downloads/agent_workspace/ecommerce-search-main/frontend/src/app/api/log-click/route.ts
+// File: /root/reso/frontend/src/app/api/log-click/route.ts
 import * as entry from '../../../../../src/app/api/log-click/route.js'
 import type { NextRequest } from 'next/server.js'
 

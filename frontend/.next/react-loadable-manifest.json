@@ -1,10 +1,10 @@
 {
   "components/EcommerceSearch.tsx -> ../lib/api": {
-    "id": 5534,
+    "id": 5731,
     "files": []
   },
   "components/ProductCard.tsx -> ../lib/api": {
-    "id": 5534,
+    "id": 5731,
     "files": []
   }
 }

@@ -1,4 +1,4 @@
-// File: /Users/alichen/Downloads/agent_workspace/ecommerce-search-main/frontend/src/app/api/vibe/route.ts
+// File: /root/reso/frontend/src/app/api/vibe/route.ts
 import * as entry from '../../../../../src/app/api/vibe/route.js'
 import type { NextRequest } from 'next/server.js'
 
